@@ -6,18 +6,7 @@ namespace POProjekt
     public class Kredytowa : Debetowa
     {
         public readonly decimal MaksymalnyKredyt;
-        public decimal AktualnyKredyt
-        {
-            get
-            {
-                if (saldo >= 0)
-                    return 0;
-                else
-                {
-                    return Math.Abs(Saldo);
-                }
-            }
-        }
+        public decimal AktualnyKredyt => saldo >= 0 ? 0 : Math.Abs(Saldo);
 
         public Kredytowa(int idBanku, int idKlienta, decimal kredyt)
             : this(idBanku, idKlienta, kredyt, 0) { }
