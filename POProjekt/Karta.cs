@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace POProjekt
 {
@@ -17,16 +13,16 @@ namespace POProjekt
         public decimal Saldo { get => saldo; }
 
         public Karta(int idBanku, int idKlienta)
-            :this(idBanku, idKlienta, 0) { }
+            : this(idBanku, idKlienta, 0) { }
         public Karta(int idBanku, int idKlienta, decimal saldo)
-            :this(idBanku, idKlienta, saldo, $"{ilosc}") { }
+            : this(idBanku, idKlienta, saldo, $"{ilosc}") { }
         public Karta(int idBanku, int idKlienta, decimal saldo, string num)
         {
             if (saldo < 0)
                 throw new Exception("Ujemne saldo");
-            if(idBanku < 0)
+            if (idBanku < 0)
                 throw new Exception("Ujemny identyfikator banku");
-            if(idKlienta < 0)
+            if (idKlienta < 0)
                 throw new Exception("Ujemny identyfikator klienta");
 
             IdBanku = idBanku;

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace POProjekt
 {
@@ -23,9 +20,9 @@ namespace POProjekt
         }
 
         public Kredytowa(int idBanku, int idKlienta, decimal kredyt)
-            :this(idBanku, idKlienta, kredyt, 0) { }
+            : this(idBanku, idKlienta, kredyt, 0) { }
         public Kredytowa(int idBanku, int idKlienta, decimal kredyt, decimal saldo)
-            :base(idBanku, idKlienta, 0)
+            : base(idBanku, idKlienta, 0)
         {
             if (kredyt <= 0)
                 throw new Exception("Niedodatni kredyt");
@@ -34,8 +31,10 @@ namespace POProjekt
             this.saldo = saldo;
             MaksymalnyKredyt = kredyt;
         }
+
+        [JsonConstructor]
         public Kredytowa(int idBanku, int idKlienta, decimal kredyt, decimal saldo, string num)
-            :base(idBanku, idKlienta, 0, num)
+            : base(idBanku, idKlienta, 0, num)
         {
             if (kredyt <= 0)
                 throw new Exception("Niedodatni kredyt");
@@ -57,7 +56,6 @@ namespace POProjekt
             }
             else
                 return false;
-
         }
     }
 }
