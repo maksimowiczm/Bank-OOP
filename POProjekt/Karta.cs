@@ -8,7 +8,7 @@ namespace POProjekt
 {
     public abstract class Karta
     {
-        public static int ilosc;
+        private static int ilosc;
 
         public readonly int IdBanku;
         public readonly int IdKlienta;
@@ -19,7 +19,7 @@ namespace POProjekt
         public Karta(int idBanku, int idKlienta)
             :this(idBanku, idKlienta, 0) { }
         public Karta(int idBanku, int idKlienta, decimal saldo)
-            :this(idBanku, idKlienta, saldo, $"{ilosc++}") { }
+            :this(idBanku, idKlienta, saldo, $"{ilosc}") { }
         public Karta(int idBanku, int idKlienta, decimal saldo, string num)
         {
             if (saldo < 0)
@@ -33,6 +33,7 @@ namespace POProjekt
             IdKlienta = idKlienta;
             this.saldo = saldo;
             Numer = num;
+            ilosc++;
         }
 
         protected bool zweryfikujKwote(decimal kwota)
