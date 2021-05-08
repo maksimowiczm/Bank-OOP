@@ -1,34 +1,59 @@
-﻿using System;
+﻿using Newtonsoft.Json; //do zapisu na dysk
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace POProjekt
 {
-	public class Bank
-	{
-		private static int ilosc;
-		private static List<Bank> banki;
-		public readonly int Id;
-		public readonly string Nazwa;
-		private List<Karta> karty;
+    public class Bank
+    {
+        private static int ilosc;
+        private static List<Bank> banki;
+        public readonly int Id;
+        public readonly string Nazwa;
+        private List<Karta> karty;
 
-		static Bank GetBank(int id)
-		{
-			return banki.Find(b => b.Id == id); 
-		}
+        static Bank GetBank(int id) => banki.Find(b => b.Id == id);
+        [JsonConstructor]
         public Bank(string nazwa, int id, List<Karta> karty)
         {
-			if (id < 0) throw new Exception("Id ujemne");
-			this.Nazwa = nazwa;
-			this.Id = id;
-			this.karty = karty;
-			ilosc++;
+            if (id < 0) throw new Exception("Id ujemne");
+            this.Nazwa = nazwa;
+            this.Id = id;
+            this.karty = karty;
+            ilosc++;
         }
-		public Bank(string nazwa) : this(nazwa, ilosc, new List<Karta>()) { }
+        public Bank(string nazwa) : this(nazwa, ilosc, new List<Karta>()) { }
 
-        
-       
-	}
+        public List<Karta> Karty { get => karty; }  //prop
+
+        private int mojaKarta(Karta karta) => karty.IndexOf(karta);
+
+        public Karta StworzKarteDebetowa(Klient klient, decimal saldo)
+        {
+            Karta karta = new Debetowa(this.Id, klient.Id, saldo);
+            karty.Add(karta);
+            return karta;
+        }
+        public Karta StworzKarteKredytowa(Klient klient, decimal kredyt, decimal saldo)
+        {
+            Karta karta = new Kredytowa(this.Id, klient.Id, kredyt, saldo);
+            karty.Add(karta);
+            return karta;
+        }
+        public bool UsunKarte(Karta karta)
+        {
+            if (mojaKarta(karta) > -1)
+            {
+                karty.Remove(karta);
+                return true;
+            }
+            return false;
+        }
+        public bool RealizujTransakcje(Karta karta, decimal kwota)
+        {
+            if (mojaKarta(karta) > -1)
+                return karta.Wyplac(kwota);
+            return false;
+        }
+    }
 }
