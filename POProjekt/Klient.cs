@@ -11,6 +11,8 @@ namespace POProjekt
         public readonly string Imie;
         public readonly string Nazwisko;
         private List<Karta> karty;
+        public List<Karta> Karty { get => karty; }
+
         [JsonConstructor]
         public Klient(string imie, string nazwisko, int id)
         {
