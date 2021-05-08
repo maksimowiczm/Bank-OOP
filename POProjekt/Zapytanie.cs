@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace POProjekt
 {
-	public class Zapytanie
+    public class Zapytanie
     {
         public readonly DateTime Data;
         public readonly Bank Bank;
