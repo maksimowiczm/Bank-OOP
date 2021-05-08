@@ -22,9 +22,5 @@ namespace POProjekt
             ilosc++;
         }
         public Klient(string imie, string nazwisko) : this(imie, nazwisko, ilosc) {}
-
-
-
-        
     }
 }
