@@ -7,7 +7,7 @@ namespace POProjekt
     public class Bank
     {
         private static int ilosc;
-        private static List<Bank> banki;
+        private static List<Bank> banki = new List<Bank>();
         public readonly int Id;
         public readonly string Nazwa;
         private List<Karta> karty;
@@ -21,6 +21,7 @@ namespace POProjekt
             this.Id = id;
             this.karty = karty;
             ilosc++;
+            banki.Add(this);
         }
         public Bank(string nazwa) : this(nazwa, ilosc, new List<Karta>()) { }
 
