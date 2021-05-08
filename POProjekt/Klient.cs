@@ -27,9 +27,7 @@ namespace POProjekt
         public bool DodajKarteDebetowa(Bank bank, decimal saldo)
         {
             if (saldo >= 0)
-            {
                 karty.Add(bank.StworzKarteDebetowa(this, saldo));
-            }
             return false;
         }
         public bool DodajKarteKredytowa(Bank bank, decimal maksymalnyKredyt, decimal saldo)
@@ -43,12 +41,9 @@ namespace POProjekt
         private int mojaKarta(Karta karta) => karty.IndexOf(karta);
         public bool UsunKarte(Karta karta)
         {
-            if (mojaKarta(karta) > -1)
-            {
-                karty.Remove(karta);
-                return true;
-            }
-            return false;
+            if (mojaKarta(karta) <= -1) return false;
+            karty.Remove(karta);
+            return true;
         }
     }
 }
