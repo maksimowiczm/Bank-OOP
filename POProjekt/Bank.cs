@@ -12,7 +12,7 @@ namespace POProjekt
         public readonly string Nazwa;
         private List<Karta> karty;
 
-        static Bank GetBank(int id) => banki.Find(b => b.Id == id);
+        public static Bank GetBank(int id) => banki.Find(b => b.Id == id);
         [JsonConstructor]
         public Bank(string nazwa, int id, List<Karta> karty)
         {
@@ -42,18 +42,10 @@ namespace POProjekt
         }
         public bool UsunKarte(Karta karta)
         {
-            if (mojaKarta(karta) > -1)
-            {
-                karty.Remove(karta);
-                return true;
-            }
-            return false;
+            if (mojaKarta(karta) < 0) return false;
+            karty.Remove(karta);
+            return true;
         }
-        public bool RealizujTransakcje(Karta karta, decimal kwota)
-        {
-            if (mojaKarta(karta) > -1)
-                return karta.Wyplac(kwota);
-            return false;
-        }
+        public bool RealizujTransakcje(Karta karta, decimal kwota) => mojaKarta(karta) > -1 && karta.Wyplac(kwota);
     }
 }
