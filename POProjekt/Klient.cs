@@ -41,7 +41,7 @@ namespace POProjekt
         private int mojaKarta(Karta karta) => karty.IndexOf(karta);
         public bool UsunKarte(Karta karta)
         {
-            if (mojaKarta(karta) <= -1) return false;
+            if (mojaKarta(karta) < 0) return false;
             karty.Remove(karta);
             return true;
         }
