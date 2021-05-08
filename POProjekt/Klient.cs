@@ -21,6 +21,7 @@ namespace POProjekt
             this.Nazwisko = nazwisko;
             this.Id = id;
             ilosc++;
+            this.karty = new List<Karta>();
         }
         public Klient(string imie, string nazwisko) : this(imie, nazwisko, ilosc) { }
 
