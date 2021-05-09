@@ -1,14 +1,14 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using Newtonsoft.Json;
 
 namespace POProjekt
 {
     public static class Centrum
     {
         private static List<Transakcja> transakcje = new List<Transakcja>();
-        public static List<Transakcja> Transakcje{ get => transakcje; }
+        public static List<Transakcja> Transakcje { get => transakcje; }
 
         public static bool AutoryzujTransakcje(Firma firma, Karta karta, decimal kwota)
         {
