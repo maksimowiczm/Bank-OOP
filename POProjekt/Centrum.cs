@@ -17,7 +17,7 @@ namespace POProjekt
                 return false;
 
             var sukces = bank.RealizujTransakcje(karta, kwota);
-            var transakcja = new Transakcja(DateTime.Now, sukces, bank.Id, bank.Nazwa, karta.IdKlienta, karta.Numer, kwota);
+            var transakcja = new Transakcja(DateTime.Now, sukces, bank.Id, bank.Nazwa, firma.Nazwa, karta.IdKlienta, karta.Numer, kwota);
             transakcje.Add(transakcja);
             return sukces;
         }
