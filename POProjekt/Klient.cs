@@ -7,6 +7,9 @@ namespace POProjekt
     public class Klient
     {
         private static int ilosc;
+        private static List<Klient> klienci = new List<Klient>();
+        public static Klient GetKlient(int id) => klienci.Find(k => k.Id == id);
+
         public readonly int Id;
         public readonly string Imie;
         public readonly string Nazwisko;
@@ -14,19 +17,19 @@ namespace POProjekt
         public List<Karta> Karty { get => karty; }
 
         [JsonConstructor]
-        public Klient(string imie, string nazwisko, int id)
+        public Klient(string imie, string nazwisko, int id, List<Karta>karty)
         {
             if (id < 0) throw new Exception("Id ujemne");
             this.Imie = imie;
             this.Nazwisko = nazwisko;
             this.Id = id;
             ilosc++;
-            this.karty = new List<Karta>();
+            this.karty = karty;
+            klienci.Add(this);
         }
-        public Klient(string imie, string nazwisko) : this(imie, nazwisko, ilosc) { }
+        public Klient(string imie, string nazwisko) : this(imie, nazwisko, ilosc, new List<Karta>()) { }
 
         public bool DodajKarteDebetowa(Bank bank) => DodajKarteDebetowa(bank, 0);
-
         public bool DodajKarteDebetowa(Bank bank, decimal saldo)
         {
             if (saldo >= 0)
