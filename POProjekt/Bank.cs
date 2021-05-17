@@ -15,24 +15,33 @@ namespace POProjekt
 
         public static Bank GetBank(int id) => banki.Find(b => b.Id == id);
         [JsonConstructor]
-        public Bank(string nazwa, int id, List<Karta> karty)
+        public Bank(string nazwa, int id, List<Karta> karty, List<Konto>konta)
         {
             if (id < 0) throw new Exception("Id ujemne");
             this.Nazwa = nazwa;
             this.Id = id;
             this.karty = karty;
+            this.konta = konta;
             ilosc++;
             banki.Add(this);
         }
-        public Bank(string nazwa) : this(nazwa, ilosc, new List<Karta>()) { }
+        public Bank(string nazwa) : this(nazwa, ilosc, new List<Karta>(), new List<Konto>()) { }
 
         public List<Karta> Karty { get => karty; }  //prop
         public List<Konto> Konta { get => konta; }
 
         private int mojaKarta(Karta karta) => karty.IndexOf(karta);
 
-        public Konto StworzKonto() => StworzKonto(0);
-        public Konto StworzKonto(decimal saldo) => new Konto(this, saldo);
+        public Konto StworzKonto(int idFirmy) => StworzKonto(idFirmy, 0);
+
+        public Konto StworzKonto(int idFirmy, decimal saldo)
+        {
+            if (saldo < 0)
+                throw new Exception("Ujemne saldo");
+            var konto = new Konto(Id, idFirmy, saldo);
+            konta.Add(konto);
+            return konto;
+        }
         public Karta StworzKarteDebetowa(Klient klient, decimal saldo)
         {
             Karta karta = new Debetowa(this.Id, klient.Id, saldo);
