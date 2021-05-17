@@ -11,6 +11,7 @@ namespace POProjekt
         public readonly int Id;
         public readonly string Nazwa;
         private List<Karta> karty;
+        private List<Konto> konta;
 
         public static Bank GetBank(int id) => banki.Find(b => b.Id == id);
         [JsonConstructor]
@@ -26,9 +27,12 @@ namespace POProjekt
         public Bank(string nazwa) : this(nazwa, ilosc, new List<Karta>()) { }
 
         public List<Karta> Karty { get => karty; }  //prop
+        public List<Konto> Konta { get => konta; }
 
         private int mojaKarta(Karta karta) => karty.IndexOf(karta);
 
+        public Konto StworzKonto() => StworzKonto(0);
+        public Konto StworzKonto(decimal saldo) => new Konto(this, saldo);
         public Karta StworzKarteDebetowa(Klient klient, decimal saldo)
         {
             Karta karta = new Debetowa(this.Id, klient.Id, saldo);

@@ -1,24 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace POProjekt
+﻿namespace POProjekt
 {
-	public class Firma
-	{
-		public readonly string Nazwa;
+    public class Firma
+    {
+        public readonly string Nazwa;
+        public Konto Konto { get; }
 
-		public Firma(string nazwa)
-		{
-			this.Nazwa = nazwa;
-		}
-		public bool PoprosOAutoryzacje(Karta karta, decimal kwota)
-		{
-			if (kwota > 0)
-				return Centrum.AutoryzujTransakcje(this, karta, kwota);
-			else return false;
-		}
-	}
+        public Firma(string nazwa, Konto konto)
+        {
+            Nazwa = nazwa;
+            this.Konto = konto;
+        }
+        public Firma(string nazwa, Bank bank) : this(nazwa, bank.StworzKonto()) { }
+        public Firma(string nazwa, Bank bank, decimal saldo) : this(nazwa, bank.StworzKonto(saldo)) { }
+        public bool PoprosOAutoryzacje(Karta karta, decimal kwota)
+        {
+            if (kwota > 0)
+            {
+                var sukces = Centrum.AutoryzujTransakcje(this, karta, kwota);
+                if (sukces)
+                    Konto.Wplac(kwota);
+                return sukces;
+            }
+            else return false;
+        }
+    }
 }
