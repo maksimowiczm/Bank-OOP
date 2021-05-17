@@ -15,7 +15,7 @@ namespace POProjekt
 
         public static Bank GetBank(int id) => banki.Find(b => b.Id == id);
         [JsonConstructor]
-        public Bank(string nazwa, int id, List<Karta> karty, List<Konto>konta)
+        public Bank(string nazwa, int id, List<Karta> karty, List<Konto> konta)
         {
             if (id < 0) throw new Exception("Id ujemne");
             this.Nazwa = nazwa;

@@ -17,7 +17,7 @@ namespace POProjekt
         public List<Karta> Karty { get => karty; }
 
         [JsonConstructor]
-        public Klient(string imie, string nazwisko, int id, List<Karta>karty)
+        public Klient(string imie, string nazwisko, int id, List<Karta> karty)
         {
             if (id < 0) throw new Exception("Id ujemne");
             this.Imie = imie;

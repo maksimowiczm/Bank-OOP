@@ -27,7 +27,7 @@ namespace POProjekt
             var json = JsonConvert.SerializeObject(transakcje, Formatting.Indented);
             File.WriteAllText($"{uri}.json", json);
         }
-        
+
         private static string getName(string zapytanie, ref int from)
         {
             var i = from;
@@ -88,7 +88,7 @@ namespace POProjekt
                     }
                 }
             }
-            
+
             var aktualna = new List<Transakcja>();
             switch (pokolei[0])
             {
@@ -124,15 +124,15 @@ namespace POProjekt
                 else if (connetors[i - 1] == "OR")
                 {
                     var nowe = new List<Transakcja>();
-                    if(pokolei[i] == "Firma")
+                    if (pokolei[i] == "Firma")
                         nowe = transakcje.FindAll(t => t.NazwaFirmy == pytanie["Firma"]);
-                    else if(pokolei[i]=="Bank")
+                    else if (pokolei[i] == "Bank")
                         nowe = transakcje.FindAll(t => t.NazwaBanku == pytanie["Bank"]);
-                    else if(pokolei[i]=="Num")
+                    else if (pokolei[i] == "Num")
                         nowe = transakcje.FindAll(t => t.NumKarty == pytanie["Num"]);
-                    else if(pokolei[i]=="Klient")
+                    else if (pokolei[i] == "Klient")
                         nowe = transakcje.FindAll(t => t.IdKLienta == int.Parse(pytanie["Klient"]));
-                    else if(pokolei[i]=="Kwota")
+                    else if (pokolei[i] == "Kwota")
                         nowe = transakcje.FindAll(t => t.Kwota == decimal.Parse(pytanie["Kwota"]));
                     aktualna.AddRange(nowe);
                     aktualna = UsunDuplikaty(aktualna);
