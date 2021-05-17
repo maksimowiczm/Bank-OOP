@@ -3,15 +3,17 @@
     public class Firma
     {
         public readonly string Nazwa;
+        public readonly string Kategoria;
         public Konto Konto { get; }
 
-        public Firma(string nazwa, Konto konto)
+        public Firma(string nazwa, string kategoria, Konto konto)
         {
             Nazwa = nazwa;
+            Kategoria = kategoria;
             this.Konto = konto;
         }
-        public Firma(string nazwa, Bank bank) : this(nazwa, bank.StworzKonto()) { }
-        public Firma(string nazwa, Bank bank, decimal saldo) : this(nazwa, bank.StworzKonto(saldo)) { }
+        public Firma(string nazwa, string kategoria, Bank bank) : this(nazwa, kategoria, bank.StworzKonto()) { }
+        public Firma(string nazwa, string kategoria, Bank bank, decimal saldo) : this(nazwa, kategoria, bank.StworzKonto(saldo)) { }
         public bool PoprosOAutoryzacje(Karta karta, decimal kwota)
         {
             if (kwota > 0)
