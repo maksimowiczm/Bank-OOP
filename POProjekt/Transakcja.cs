@@ -6,25 +6,23 @@ namespace POProjekt
     {
         private static int ilosc = 0;
         public readonly int Id;
-        public readonly string Data;
+        public readonly DateTime Data;
         public readonly bool Sukces;
-        public readonly int IdBanku;
-        public readonly string NazwaBanku;
-        public readonly string NazwaFirmy;
-        public readonly int IdKLienta;
-        public readonly string NumKarty;
+        public readonly Bank Bank;
+        public readonly Firma Firma;
+        public readonly Klient Klient;
+        public readonly Karta Karta;
         public readonly decimal Kwota;
 
-        public Transakcja(DateTime data, bool sukces, int idBanku, string nazwaBanku, string nazwaFirmy, int idKLienta, string numKarty, decimal kwota)
+        public Transakcja(DateTime data, bool sukces, Bank bank, Firma firma, Klient klient, Karta karta, decimal kwota)
         {
             Id = ilosc++;
-            Data = data.ToString("G");
+            Data = data;
             Sukces = sukces;
-            IdBanku = idBanku;
-            NazwaBanku = nazwaBanku;
-            NazwaFirmy = nazwaFirmy;
-            IdKLienta = idKLienta;
-            NumKarty = numKarty;
+            Bank = bank;
+            Firma = firma;
+            Klient = klient;
+            Karta = karta;
             Kwota = kwota;
         }
     }
