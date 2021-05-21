@@ -4,27 +4,22 @@ namespace POProjekt
 {
     public class Debetowa : Karta
     {
-        public Debetowa(int idBanku, int idKlienta)
-            : base(idBanku, idKlienta) { }
-        public Debetowa(int idBanku, int idKlienta, decimal saldo)
-            : base(idBanku, idKlienta, saldo) { }
-
+        private readonly Konto konto;
         [JsonConstructor]
-        public Debetowa(int idBanku, int idKlienta, decimal saldo, string num)
-            : base(idBanku, idKlienta, saldo, num) { }
+        public Debetowa(Bank bank, Klient klient, int numer, Konto konto) : base(bank, klient, numer)
+        {
+            this.konto = konto;
+        }
 
+        public void Wplac(decimal kwota)
+        {
+            ZweryfikujKwote(kwota);
+            konto.Wplac(kwota);
+        }
         public override bool Wyplac(decimal kwota)
         {
-            if (!zweryfikujKwote(kwota))
-                return false;
-
-            if (kwota <= saldo)
-            {
-                saldo -= kwota;
-                return true;
-            }
-            else
-                return false;
+            ZweryfikujKwote(kwota);
+            return konto.Wyplac(kwota);
         }
     }
 }
