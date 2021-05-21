@@ -6,6 +6,6 @@ namespace POProjekt
 {
 	public abstract class Klient
     {
-        public readonly Konto Konto;
+        public readonly List<Konto> Konta;
     }
 }
