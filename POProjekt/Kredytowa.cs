@@ -3,48 +3,39 @@ using System;
 
 namespace POProjekt
 {
-    public class Kredytowa : Debetowa
+    public class Kredytowa : Karta
     {
         public readonly decimal MaksymalnyKredyt;
-        public decimal AktualnyKredyt => saldo >= 0 ? 0 : Math.Abs(Saldo);
-
-        public Kredytowa(int idBanku, int idKlienta, decimal kredyt)
-            : this(idBanku, idKlienta, kredyt, 0) { }
-        public Kredytowa(int idBanku, int idKlienta, decimal kredyt, decimal saldo)
-            : base(idBanku, idKlienta, 0)
-        {
-            if (kredyt <= 0)
-                throw new Exception("Niedodatni kredyt");
-            if (saldo < -kredyt)
-                throw new Exception("Za niskie saldo");
-            this.saldo = saldo;
-            MaksymalnyKredyt = kredyt;
-        }
+        private decimal saldo;
 
         [JsonConstructor]
-        public Kredytowa(int idBanku, int idKlienta, decimal kredyt, decimal saldo, string num)
-            : base(idBanku, idKlienta, 0, num)
+        public Kredytowa(Bank bank, Klient klient, decimal kredyt, decimal saldo, int numer)
+            : base(bank, klient, numer)
         {
             if (kredyt <= 0)
                 throw new Exception("Niedodatni kredyt");
             if (saldo < -kredyt)
                 throw new Exception("Za niskie saldo");
-            this.saldo = saldo;
             MaksymalnyKredyt = kredyt;
+            this.saldo = saldo;
+        }
+        public Kredytowa(Bank bank, Klient klient, decimal kredyt) : this(bank, klient, kredyt, 0) { }
+        public Kredytowa(Bank bank, Klient klient, decimal kredyt, decimal saldo) : base(bank, klient)
+        {
+            if (kredyt <= 0)
+                throw new Exception("Niedodatni kredyt");
+            MaksymalnyKredyt = kredyt;
+            this.saldo = saldo;
         }
 
         public override bool Wyplac(decimal kwota)
         {
-            if (!zweryfikujKwote(kwota))
+            if (!ZweryfikujKwote(kwota))
                 return false;
+            if (saldo - kwota < -MaksymalnyKredyt) return false;
 
-            if (saldo - kwota >= -MaksymalnyKredyt)
-            {
-                saldo -= kwota;
-                return true;
-            }
-            else
-                return false;
+            saldo -= kwota;
+            return true;
         }
     }
 }
