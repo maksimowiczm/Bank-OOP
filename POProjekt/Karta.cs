@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace POProjekt
 {
@@ -6,31 +7,20 @@ namespace POProjekt
     {
         private static int ilosc;
 
-        public readonly int IdBanku;
-        public readonly int IdKlienta;
-        public readonly string Numer;
-        protected decimal saldo;
-        public decimal Saldo { get => saldo; }
+        public readonly Bank Bank;
+        public readonly Klient Klient;
+        public readonly int Numer;
 
-        public Karta(int idBanku, int idKlienta)
-            : this(idBanku, idKlienta, 0) { }
-        public Karta(int idBanku, int idKlienta, decimal saldo)
-            : this(idBanku, idKlienta, saldo, $"{ilosc}") { }
-        public Karta(int idBanku, int idKlienta, decimal saldo, string num)
+        [JsonConstructor]
+        protected Karta(Bank bank, Klient klient, int numer)
         {
-            if (saldo < 0)
-                throw new Exception("Ujemne saldo");
-            if (idBanku < 0)
-                throw new Exception("Ujemny identyfikator banku");
-            if (idKlienta < 0)
-                throw new Exception("Ujemny identyfikator klienta");
-
-            IdBanku = idBanku;
-            IdKlienta = idKlienta;
-            this.saldo = saldo;
-            Numer = num;
+            Bank = bank;
+            Klient = klient;
+            Numer = numer;
             ilosc++;
         }
+
+        protected Karta(Bank bank, Klient klient) : this(bank, klient, ilosc) { }
 
         protected bool zweryfikujKwote(decimal kwota)
         {
@@ -38,13 +28,6 @@ namespace POProjekt
                 throw new Exception("Niedodatnia kwota");
             return true;
         }
-
-        public void Wplac(decimal kwota)
-        {
-            zweryfikujKwote(kwota);
-            saldo += kwota;
-        }
-
         public abstract bool Wyplac(decimal kwota);
     }
 }
