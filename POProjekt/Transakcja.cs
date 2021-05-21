@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace POProjekt
 {
@@ -13,10 +14,11 @@ namespace POProjekt
         public readonly Klient Klient;
         public readonly Karta Karta;
         public readonly decimal Kwota;
-
-        public Transakcja(DateTime data, bool sukces, Bank bank, Firma firma, Klient klient, Karta karta, decimal kwota)
+        
+        [JsonConstructor]
+        public Transakcja(int id, DateTime data, bool sukces, Bank bank, Firma firma, Klient klient, Karta karta, decimal kwota)
         {
-            Id = ilosc++;
+            Id = id;
             Data = data;
             Sukces = sukces;
             Bank = bank;
@@ -25,5 +27,7 @@ namespace POProjekt
             Karta = karta;
             Kwota = kwota;
         }
+        public Transakcja(DateTime data, bool sukces, Bank bank, Firma firma, Klient klient, Karta karta, decimal kwota)
+            : this(ilosc++, data, sukces, bank, firma, klient, karta, kwota) { }
     }
 }
