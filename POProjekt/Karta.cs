@@ -19,10 +19,9 @@ namespace POProjekt
             Numer = numer;
             ilosc++;
         }
-
         protected Karta(Bank bank, Klient klient) : this(bank, klient, ilosc) { }
 
-        protected bool zweryfikujKwote(decimal kwota)
+        protected bool ZweryfikujKwote(decimal kwota)
         {
             if (kwota <= 0)
                 throw new Exception("Niedodatnia kwota");
