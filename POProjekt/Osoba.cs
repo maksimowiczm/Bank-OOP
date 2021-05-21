@@ -9,18 +9,19 @@ namespace POProjekt
         public readonly string Imie;
         public readonly string Nazwisko;
         private List<Karta> karty;
-        public List<Karta> Karty { get => new List<Karta>(karty); }
+        public List<Karta> Karty => new List<Karta>(karty);
 
         [JsonConstructor]
-        public Osoba(string imie, string nazwisko, List<Karta> karty)
+        public Osoba(string imie, string nazwisko, List<Karta> karty, List<Konto>konta)
         {
             this.Imie = imie;
             this.Nazwisko = nazwisko;
             this.karty = karty;
+            this.konta = konta;
         }
-        public Osoba(string imie, string nazwisko) : this(imie, nazwisko, new List<Karta>()) { }
+        public Osoba(string imie, string nazwisko) : this(imie, nazwisko, new List<Karta>(), new List<Konto>()) { }
 
-        public bool DodajKarteDebetowa(Konto konto)
+        public bool DodajKarteDebetowa()
         {
             throw new NotImplementedException();
         }
