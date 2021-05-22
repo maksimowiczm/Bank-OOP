@@ -19,6 +19,7 @@ namespace POProjekt
         public Transakcja(int id, DateTime data, bool sukces, Bank bank, Firma firma, Klient klient, Karta karta, decimal kwota)
         {
             Id = id;
+            ilosc++;
             Data = data;
             Sukces = sukces;
             Bank = bank;
@@ -28,6 +29,6 @@ namespace POProjekt
             Kwota = kwota;
         }
         public Transakcja(DateTime data, bool sukces, Bank bank, Firma firma, Klient klient, Karta karta, decimal kwota)
-            : this(ilosc++, data, sukces, bank, firma, klient, karta, kwota) { }
+            : this(ilosc, data, sukces, bank, firma, klient, karta, kwota) { }
     }
 }
