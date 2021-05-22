@@ -12,7 +12,7 @@ namespace POProjekt
         public List<Karta> Karty => new List<Karta>(karty);
 
         [JsonConstructor]
-        public Osoba(string imie, string nazwisko, List<Karta> karty, List<Konto>konta)
+        public Osoba(string imie, string nazwisko, List<Karta> karty, List<Konto> konta)
         {
             this.Imie = imie;
             this.Nazwisko = nazwisko;

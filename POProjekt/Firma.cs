@@ -2,16 +2,16 @@
 
 namespace POProjekt
 {
-	public class Firma: Klient
-	{
-		public readonly string Nazwa;
-		public readonly string Kategoria;
-		public readonly Centrum Centrum;
+    public class Firma : Klient
+    {
+        public readonly string Nazwa;
+        public readonly string Kategoria;
+        public readonly Centrum Centrum;
 
-		public Firma(string nazwa, string kategoria,Centrum centrum)
-		{
-			Nazwa = nazwa;
-			Kategoria = kategoria;
+        public Firma(string nazwa, string kategoria, Centrum centrum)
+        {
+            Nazwa = nazwa;
+            Kategoria = kategoria;
             Centrum = centrum;
         }
 

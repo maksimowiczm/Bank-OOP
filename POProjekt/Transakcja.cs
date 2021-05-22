@@ -14,7 +14,7 @@ namespace POProjekt
         public readonly Klient Klient;
         public readonly Karta Karta;
         public readonly decimal Kwota;
-        
+
         [JsonConstructor]
         public Transakcja(int id, DateTime data, bool sukces, Bank bank, Firma firma, Klient klient, Karta karta, decimal kwota)
         {
