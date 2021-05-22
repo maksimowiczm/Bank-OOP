@@ -7,6 +7,6 @@ namespace POProjekt
 	public abstract class Klient
     {
         protected List<Konto> konta;
-        public List<Konto> Konta => new List<Konto>(konta);
+        public IList<Konto> Konta => konta.AsReadOnly();
     }
 }

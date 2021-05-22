@@ -1,8 +1,5 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace POProjekt
 {
@@ -12,10 +9,10 @@ namespace POProjekt
         private List<Osoba> osoby;
         private List<Firma> firmy;
         private List<Bank> banki;
-        public List<Transakcja> Transakcje => new List<Transakcja>(transakcje);
-        public List<Osoba> Osoby => new List<Osoba>(osoby);
-        public List<Firma> Firmy => new List<Firma>(firmy);
-        public List<Bank> Banki => new List<Bank>(banki);
+        public IList<Transakcja> Transakcje => transakcje.AsReadOnly();
+        public IList<Osoba> Osoby => osoby.AsReadOnly();
+        public IList<Firma> Firmy => firmy.AsReadOnly();
+        public IList<Bank> Banki => banki.AsReadOnly();
 
         public Centrum() : this(new(), new(), new(), new())
         {

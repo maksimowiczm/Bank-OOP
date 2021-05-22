@@ -7,11 +7,11 @@ namespace POProjekt
     public class Bank
     {
         public readonly string Nazwa;
-        private List<Karta> karty;
-        private List<Konto> konta;
-        public List<Karta> Karty => new List<Karta>(karty);
-        public List<Konto> Konta => new List<Konto>(konta);
-        
+        private readonly List<Karta> karty;
+        private readonly List<Konto> konta;
+        public IList<Karta> Karty => karty.AsReadOnly();
+        public IList<Konto> Konta => konta.AsReadOnly();
+
         [JsonConstructor]
         public Bank(string nazwa, List<Karta> karty, List<Konto> konta)
         {
@@ -20,7 +20,7 @@ namespace POProjekt
             this.konta = konta;
         }
         public Bank(string nazwa) : this(nazwa, new List<Karta>(), new List<Konto>()) { }
-        
+
         private int mojaKarta(Karta karta) => karty.IndexOf(karta);
         public Karta StworzKarteDebetowa(Klient klient)
         {
