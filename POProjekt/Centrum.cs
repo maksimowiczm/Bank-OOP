@@ -5,10 +5,10 @@ namespace POProjekt
 {
     public class Centrum
     {
-        private List<Transakcja> transakcje;
-        private List<Osoba> osoby;
-        private List<Firma> firmy;
-        private List<Bank> banki;
+        private readonly List<Transakcja> transakcje;
+        private readonly List<Osoba> osoby;
+        private readonly List<Firma> firmy;
+        private readonly List<Bank> banki;
         public IList<Transakcja> Transakcje => transakcje.AsReadOnly();
         public IList<Osoba> Osoby => osoby.AsReadOnly();
         public IList<Firma> Firmy => firmy.AsReadOnly();
