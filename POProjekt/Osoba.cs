@@ -8,8 +8,8 @@ namespace POProjekt
     {
         public readonly string Imie;
         public readonly string Nazwisko;
-        private List<Karta> karty;
-        public List<Karta> Karty => new List<Karta>(karty);
+        private readonly List<Karta> karty;
+        public IList<Karta> Karty => karty.AsReadOnly();
 
         [JsonConstructor]
         public Osoba(string imie, string nazwisko, List<Karta> karty, List<Konto> konta)
