@@ -9,8 +9,8 @@ namespace POProjekt
         private decimal saldo;
 
         [JsonConstructor]
-        public Kredytowa(Bank bank, Klient klient, decimal kredyt, decimal saldo, int numer)
-            : base(bank, klient, numer)
+        public Kredytowa(Bank bank, Osoba osoba, decimal kredyt, decimal saldo, int numer)
+            : base(bank, osoba, numer)
         {
             if (kredyt <= 0)
                 throw new Exception("Niedodatni kredyt");
@@ -19,8 +19,8 @@ namespace POProjekt
             MaksymalnyKredyt = kredyt;
             this.saldo = saldo;
         }
-        public Kredytowa(Bank bank, Klient klient, decimal kredyt) : this(bank, klient, kredyt, 0) { }
-        public Kredytowa(Bank bank, Klient klient, decimal kredyt, decimal saldo) : base(bank, klient)
+        public Kredytowa(Bank bank, Osoba osoba, decimal kredyt) : this(bank, osoba, kredyt, 0) { }
+        public Kredytowa(Bank bank, Osoba osoba, decimal kredyt, decimal saldo) : base(bank, osoba)
         {
             if (kredyt <= 0)
                 throw new Exception("Niedodatni kredyt");

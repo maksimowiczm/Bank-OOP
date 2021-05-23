@@ -6,7 +6,7 @@ namespace POProjekt
     {
         private readonly Konto konto;
         [JsonConstructor]
-        public Debetowa(Bank bank, Klient klient, int numer, Konto konto) : base(bank, klient, numer)
+        public Debetowa(Bank bank, Osoba osoba, int numer, Konto konto) : base(bank, osoba, numer)
         {
             this.konto = konto;
         }

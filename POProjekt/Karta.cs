@@ -8,18 +8,18 @@ namespace POProjekt
         private static int ilosc;
 
         public readonly Bank Bank;
-        public readonly Klient Klient;
+        public readonly Osoba Osoba;
         public readonly int Numer;
 
         [JsonConstructor]
-        protected Karta(Bank bank, Klient klient, int numer)
+        protected Karta(Bank bank, Osoba osoba, int numer)
         {
             Bank = bank;
-            Klient = klient;
+            Osoba = osoba;
             Numer = numer;
             ilosc++;
         }
-        protected Karta(Bank bank, Klient klient) : this(bank, klient, ilosc) { }
+        protected Karta(Bank bank, Osoba osoba) : this(bank, osoba, ilosc) { }
 
         protected bool ZweryfikujKwote(decimal kwota)
         {
