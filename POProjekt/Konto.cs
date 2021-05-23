@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace POProjekt
 {
@@ -6,27 +7,27 @@ namespace POProjekt
     {
         public readonly Bank Bank;
         public readonly Klient Klient;
-        private decimal saldo;
+        public decimal Saldo { get; private set; }
 
-        public Konto(Bank bank, Klient klient) : this(bank, klient, 0) { }
+        [JsonConstructor]
         public Konto(Bank bank, Klient klient, decimal saldo)
         {
             Klient = klient;
             Bank = bank;
-            this.saldo = saldo;
+            this.Saldo = saldo;
         }
+        public Konto(Bank bank, Klient klient) : this(bank, klient, 0) { }
 
         public void Wplac(decimal kwota)
         {
             if (kwota <= 0) throw new Exception("Ujemna kwota");
-            saldo += kwota;
+            Saldo += kwota;
         }
-
         public bool Wyplac(decimal kwota)
         {
             if (kwota <= 0) throw new Exception("Ujemna kwota");
-            if (kwota > saldo) return false;
-            saldo -= kwota;
+            if (kwota > Saldo) return false;
+            Saldo -= kwota;
             return true;
         }
     }
