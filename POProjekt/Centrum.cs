@@ -29,7 +29,7 @@ namespace POProjekt
         {
             var bank = karta.Bank;
             var sukces = bank.RealizujTransakcje(karta, kwota);
-            var transakcja = new Transakcja(DateTime.Now, sukces, bank, firma, karta.Klient, karta, kwota);
+            var transakcja = new Transakcja(DateTime.Now, sukces, bank, firma, karta.Osoba, karta, kwota);
             transakcje.Add(transakcja);
             return sukces;
         }

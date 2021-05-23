@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace POProjekt
+﻿namespace POProjekt
 {
     public class Firma : Klient
     {
@@ -15,9 +13,7 @@ namespace POProjekt
             Centrum = centrum;
         }
 
-        public bool PoprosOAutoryzacje(Karta karta, decimal saldo)
-        {
-            throw new NotImplementedException();
-        }
+        public bool PoprosOAutoryzacje(Karta karta, decimal kwota)
+            => Centrum.AutoryzujTransakcje(this, karta, kwota);
     }
 }

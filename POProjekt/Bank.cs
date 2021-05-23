@@ -22,13 +22,15 @@ namespace POProjekt
         public Bank(string nazwa) : this(nazwa, new List<Karta>(), new List<Konto>()) { }
 
         private int mojaKarta(Karta karta) => karty.IndexOf(karta);
-        public Karta StworzKarteDebetowa(Klient klient)
+        public Karta StworzKarteDebetowa(Osoba osoba)
         {
             throw new NotImplementedException();
         }
-        public Karta StworzKarteKredytowa(Klient klient, decimal kredyt)
+        public Karta StworzKarteKredytowa(Osoba osoba, decimal kredyt)
         {
-            throw new NotImplementedException();
+            var karta = new Kredytowa(this, osoba, kredyt);
+            karty.Add(karta);
+            return karta;
         }
         public bool UsunKarte(Karta karta)
         {
@@ -39,7 +41,9 @@ namespace POProjekt
 
         public bool RealizujTransakcje(Karta karta, decimal kwota)
         {
-            throw new NotImplementedException();
+            if (mojaKarta(karta) == -1)
+                return false;
+            return karta.Wyplac(kwota);
         }
     }
 }
