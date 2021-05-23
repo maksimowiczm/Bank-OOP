@@ -10,7 +10,7 @@ namespace POProjekt
         {
             this.konto = konto;
         }
-        public Debetowa(Bank bank, Osoba osoba, Konto konto):base(bank, osoba)
+        public Debetowa(Bank bank, Osoba osoba, Konto konto) : base(bank, osoba)
         {
             this.konto = konto;
         }
