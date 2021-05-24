@@ -4,7 +4,7 @@ namespace POProjekt
 {
     public abstract class Klient
     {
-        protected List<Konto> konta;
+        protected List<Konto> konta = new List<Konto>();
         public IList<Konto> Konta => konta.AsReadOnly();
 
         public bool DodajKonto(Konto konto)
