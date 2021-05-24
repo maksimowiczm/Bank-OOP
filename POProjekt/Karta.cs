@@ -1,11 +1,10 @@
 ﻿using Newtonsoft.Json;
-using System;
 
 namespace POProjekt
 {
     public abstract class Karta
     {
-        private static int ilosc;
+        private static int iloscKart;
 
         public readonly Bank Bank;
         public readonly Osoba Osoba;
@@ -17,9 +16,9 @@ namespace POProjekt
             Bank = bank;
             Osoba = osoba;
             Numer = numer;
-            ilosc++;
+            iloscKart++;
         }
-        protected Karta(Bank bank, Osoba osoba) : this(bank, osoba, ilosc) { }
+        protected Karta(Bank bank, Osoba osoba) : this(bank, osoba, iloscKart) { }
 
         /// <summary> Sprawdza czy podana kwota jest dodatnia. </summary>
         protected bool ZweryfikujKwote(decimal kwota)

@@ -17,7 +17,7 @@ namespace POProjekt
             if (saldo < -kredyt)
                 throw new Exception("Za niskie saldo");
             MaksymalnyKredyt = kredyt;
-            this.Saldo = saldo;
+            Saldo = saldo;
         }
         public Kredytowa(Bank bank, Osoba osoba, decimal kredyt) : this(bank, osoba, kredyt, 0) { }
         public Kredytowa(Bank bank, Osoba osoba, decimal kredyt, decimal saldo) : base(bank, osoba)
@@ -25,7 +25,7 @@ namespace POProjekt
             if (kredyt <= 0)
                 throw new UjemnyKredyt(kredyt);
             MaksymalnyKredyt = kredyt;
-            this.Saldo = saldo;
+            Saldo = saldo;
         }
 
         public override void Wplac(decimal kwota)
