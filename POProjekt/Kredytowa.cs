@@ -23,7 +23,7 @@ namespace POProjekt
         public Kredytowa(Bank bank, Osoba osoba, decimal kredyt, decimal saldo) : base(bank, osoba)
         {
             if (kredyt <= 0)
-                throw new Exception("Niedodatni kredyt");
+                throw new UjemnyKredyt(kredyt);
             MaksymalnyKredyt = kredyt;
             this.Saldo = saldo;
         }
@@ -36,8 +36,8 @@ namespace POProjekt
         public override bool Wyplac(decimal kwota)
         {
             if (!ZweryfikujKwote(kwota))
-                return false;
-            if (Saldo - kwota < -MaksymalnyKredyt) return false;
+                throw new KwotaException(kwota);
+            if (Saldo - kwota < -MaksymalnyKredyt) throw new WyplacException(kwota);
 
             Saldo -= kwota;
             return true;

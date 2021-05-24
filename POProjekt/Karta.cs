@@ -25,7 +25,7 @@ namespace POProjekt
         protected bool ZweryfikujKwote(decimal kwota)
         {
             if (kwota <= 0)
-                throw new Exception("Niedodatnia kwota");
+                throw new KwotaException(kwota);
             return true;
         }
         public abstract void Wplac(decimal kwota);

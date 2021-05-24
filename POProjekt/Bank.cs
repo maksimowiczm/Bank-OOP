@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json; //do zapisu na dysk
-using System;
 using System.Collections.Generic;
 
 namespace POProjekt
@@ -34,8 +33,8 @@ namespace POProjekt
         /// <summary> Próbuje usunąć podane konto. </summary>
         public bool UsunKonto(Konto konto)
         {
-            if (!konta.Contains(konto)) return false;
-            if (!konto.Klient.UsunKonto(konto)) return false;
+            if (!konta.Contains(konto) || !konto.Klient.UsunKonto(konto))
+                throw new KontoNieIstnieje(konto, this);
 
             konta.Remove(konto);
             return true;
@@ -48,9 +47,9 @@ namespace POProjekt
         public Debetowa StworzKarteDebetowa(Osoba osoba, Konto konto)
         {
             if (!mojeKonto(konto))
-                throw new Exception("Nie moje konto");
+                throw new KontoNieIstnieje(konto, this);
             if (!osoba.MojeKonto(konto))
-                throw new Exception("Konto nie należy do tej osoby");
+                throw new KontoNieIstnieje(konto, osoba);
 
             var karta = new Debetowa(this, osoba, konto);
             karty.Add(karta);
@@ -70,7 +69,7 @@ namespace POProjekt
         /// <summary> Próbuje usunąć podaną kartę. </summary>
         public bool UsunKarte(Karta karta)
         {
-            if (!mojaKarta(karta)) return false;
+            if (!mojaKarta(karta)) throw new KartaNieIstnieje(karta, this);
             karty.Remove(karta);
             karta.Osoba.UsunKarte(karta);
             return true;

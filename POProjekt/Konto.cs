@@ -20,12 +20,12 @@ namespace POProjekt
 
         public void Wplac(decimal kwota)
         {
-            if (kwota <= 0) throw new Exception("Ujemna kwota");
+            if (kwota <= 0) throw new KwotaException(kwota);
             Saldo += kwota;
         }
         public bool Wyplac(decimal kwota)
         {
-            if (kwota <= 0) throw new Exception("Ujemna kwota");
+            if (kwota <= 0) throw new WyplacException(kwota);
             if (kwota > Saldo) return false;
             Saldo -= kwota;
             return true;

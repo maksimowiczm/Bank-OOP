@@ -13,7 +13,10 @@ namespace POProjekt
         /// </summary>
         public bool DodajKonto(Konto konto)
         {
-            if (konto.Klient != this || MojeKonto(konto)) return false;
+            if (konto.Klient != this)
+                throw new KontoNieIstnieje(konto, this);
+            if (MojeKonto(konto))
+                throw new KontoIstnieje(konto, this);
 
             konta.Add(konto);
             return true;
@@ -21,7 +24,8 @@ namespace POProjekt
         /// <summary> Próbuje usunąć podane konto./// </summary>
         public bool UsunKonto(Konto konto)
         {
-            if (konto.Klient != this || MojeKonto(konto)) return false;
+            if (konto.Klient != this || !MojeKonto(konto))
+                throw new KontoNieIstnieje(konto, this);
 
             konta.Remove(konto);
             return true;

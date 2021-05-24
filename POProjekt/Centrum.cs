@@ -26,6 +26,9 @@ namespace POProjekt
         /// <returns> Sukces transakcji. </returns>
         public bool AutoryzujTransakcje(Firma firma, Karta karta, decimal kwota)
         {
+            if (kwota <= 0)
+                throw new KwotaException(kwota);
+
             var bank = karta.Bank;
             var sukces = bank.RealizujTransakcje(karta, kwota);
             var transakcja = new Transakcja(DateTime.Now, sukces, bank, firma, karta.Osoba, karta, kwota);

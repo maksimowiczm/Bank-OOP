@@ -24,7 +24,7 @@ namespace POProjekt
         /// <summary> Jeśli podana karta należy do tej osoby dodaje ją do list kart. </summary>
         public bool DodajKarte(Karta karta)
         {
-            if (karta.Osoba != this || karty.Contains(karta)) return false;
+            if (karta.Osoba != this || karty.Contains(karta)) throw new KartaNieIstnieje(karta, this);
 
             karty.Add(karta);
             return true;
@@ -32,7 +32,7 @@ namespace POProjekt
         }
         public bool UsunKarte(Karta karta)
         {
-            if (!mojaKarta(karta)) return false;
+            if (!mojaKarta(karta)) throw new KartaNieIstnieje(karta, this);
 
             karty.Remove(karta);
             return true;
