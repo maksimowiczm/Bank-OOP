@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 
 namespace POProjekt
@@ -14,28 +13,26 @@ namespace POProjekt
         [JsonConstructor]
         public Osoba(string imie, string nazwisko, List<Karta> karty, List<Konto> konta)
         {
-            this.Imie = imie;
-            this.Nazwisko = nazwisko;
+            Imie = imie;
+            Nazwisko = nazwisko;
             this.karty = karty;
             this.konta = konta;
         }
         public Osoba(string imie, string nazwisko) : this(imie, nazwisko, new List<Karta>(), new List<Konto>()) { }
 
-        public bool DodajKarteDebetowa()
+        private bool mojaKarta(Karta karta) => karty.Contains(karta);
+        public bool DodajKarte(Karta karta)
         {
-            throw new NotImplementedException();
+            if (karta.Osoba != this || karty.Contains(karta)) return false;
+
+            karty.Add(karta);
+            return true;
+
         }
-        public bool DodajKarteKredytowa(Bank bank, decimal maksymalnyKredyt, decimal saldo)
-        {
-            if (maksymalnyKredyt < 0) return false;
-            if (saldo < -maksymalnyKredyt) return false;
-            throw new NotImplementedException();
-        }
-        public bool DodajKarteKredytowa(Bank bank, decimal maksymalnyKredyt) => DodajKarteKredytowa(bank, maksymalnyKredyt, 0);
-        private int mojaKarta(Karta karta) => karty.IndexOf(karta);
         public bool UsunKarte(Karta karta)
         {
-            if (mojaKarta(karta) < 0) return false;
+            if (!mojaKarta(karta)) return false;
+
             karty.Remove(karta);
             return true;
         }
