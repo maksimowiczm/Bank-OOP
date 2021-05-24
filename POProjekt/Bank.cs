@@ -22,40 +22,57 @@ namespace POProjekt
         public Bank(string nazwa) : this(nazwa, new List<Karta>(), new List<Konto>()) { }
 
         private bool mojeKonto(Konto konto) => konta.Contains(konto);
+        /// <summary> Tworzy nowe konto dla podanego klienta, dodaje je do swojej listy kont i list kont klienta. </summary>
+        /// <returns> Stworzone konto. </returns>
         public Konto StworzKonto(Klient klient)
         {
             var konto = new Konto(this, klient);
             konta.Add(konto);
+            klient.DodajKonto(konto);
             return konto;
         }
+        /// <summary> Próbuje usunąć podane konto. </summary>
         public bool UsunKonto(Konto konto)
         {
             if (!konta.Contains(konto)) return false;
+            if (!konto.Klient.UsunKonto(konto)) return false;
 
             konta.Remove(konto);
             return true;
         }
 
-        public Karta StworzKarteDebetowa(Osoba osoba, Konto konto)
+        /// <summary>
+        /// Tworzy nową kartę debetową jeśli podane konto należy do tego banku i osoby. Dodaje je do listy kart w banku i listy kart klienta.
+        /// </summary>
+        /// <returns>Karta Debetowa</returns>
+        public Debetowa StworzKarteDebetowa(Osoba osoba, Konto konto)
         {
             if (!mojeKonto(konto))
                 throw new Exception("Nie moje konto");
+            if (!osoba.MojeKonto(konto))
+                throw new Exception("Konto nie należy do tej osoby");
 
             var karta = new Debetowa(this, osoba, konto);
             karty.Add(karta);
+            osoba.DodajKarte(karta);
             return karta;
         }
-        public Karta StworzKarteKredytowa(Osoba osoba, decimal kredyt)
+        /// <summary> Tworzy nową kartę kredytową. Dodaje je do listy kart w banku i listy kart klienta. </summary>
+        /// <returns>Karta Kredytowa</returns>
+        public Kredytowa StworzKarteKredytowa(Osoba osoba, decimal kredyt)
         {
             var karta = new Kredytowa(this, osoba, kredyt);
             karty.Add(karta);
+            osoba.DodajKarte(karta);
             return karta;
         }
         private bool mojaKarta(Karta karta) => karty.Contains(karta);
+        /// <summary> Próbuje usunąć podaną kartę. </summary>
         public bool UsunKarte(Karta karta)
         {
             if (!mojaKarta(karta)) return false;
             karty.Remove(karta);
+            karta.Osoba.UsunKarte(karta);
             return true;
         }
 

@@ -14,12 +14,13 @@ namespace POProjekt
         {
             this.konto = konto;
         }
-
-        public void Wplac(decimal kwota)
+        /// <summary> Wpłaca podaną kwotę na konto tej karty. </summary>
+        public override void Wplac(decimal kwota)
         {
             ZweryfikujKwote(kwota);
             konto.Wplac(kwota);
         }
+        /// <summary> Próbuje wypłacić podaną kwotę z konta. </summary>
         public override bool Wyplac(decimal kwota)
         {
             ZweryfikujKwote(kwota);

@@ -21,6 +21,7 @@ namespace POProjekt
         public Osoba(string imie, string nazwisko) : this(imie, nazwisko, new List<Karta>(), new List<Konto>()) { }
 
         private bool mojaKarta(Karta karta) => karty.Contains(karta);
+        /// <summary> Jeśli podana karta należy do tej osoby dodaje ją do list kart. </summary>
         public bool DodajKarte(Karta karta)
         {
             if (karta.Osoba != this || karty.Contains(karta)) return false;

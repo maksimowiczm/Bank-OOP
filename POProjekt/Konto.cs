@@ -14,7 +14,7 @@ namespace POProjekt
         {
             Klient = klient;
             Bank = bank;
-            this.Saldo = saldo;
+            Saldo = saldo;
         }
         public Konto(Bank bank, Klient klient) : this(bank, klient, 0) { }
 

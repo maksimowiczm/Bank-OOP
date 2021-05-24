@@ -14,9 +14,7 @@ namespace POProjekt
         public IList<Firma> Firmy => firmy.AsReadOnly();
         public IList<Bank> Banki => banki.AsReadOnly();
 
-        public Centrum() : this(new(), new(), new(), new())
-        {
-        }
+        public Centrum() : this(new(), new(), new(), new()) { }
         public Centrum(List<Transakcja> transakcje, List<Osoba> osoby, List<Firma> firmy, List<Bank> banki)
         {
             this.transakcje = transakcje;
@@ -24,7 +22,8 @@ namespace POProjekt
             this.firmy = firmy;
             this.banki = banki;
         }
-
+        /// <summary> Prosi bank o realizację transakcji i dodaję ją do listy transakcji. </summary>
+        /// <returns> Sukces transakcji. </returns>
         public bool AutoryzujTransakcje(Firma firma, Karta karta, decimal kwota)
         {
             var bank = karta.Bank;
@@ -38,10 +37,23 @@ namespace POProjekt
         public void DodajFirme(Firma firma) => firmy.Add(firma);
         public void DodajBank(Bank bank) => banki.Add(bank);
 
-        public void Zapisz(string uri)
+        /// <summary> Zapisuje całe centrum do pliku. </summary>
+        /// <param name="nazwa">Nazwa pliku do którego ma zostać zapisane centrum.</param>
+        public bool Zapisz(string nazwa)
         {
             throw new NotImplementedException();
         }
-
+        /// <summary> Odczytuje nazwy plików z których można wczytać centrum. </summary>
+        /// <returns> Listę nazw plików które da się wczytać.</returns>
+        public List<String> Odczytaj()
+        {
+            throw new NotImplementedException();
+        }
+        /// <summary> Wczytuje centrum z pliku. </summary>
+        /// <param name="nazwa">Nazwa pliku.</param>
+        public bool Wczytaj(string nazwa)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -28,6 +28,11 @@ namespace POProjekt
             this.Saldo = saldo;
         }
 
+        public override void Wplac(decimal kwota)
+        {
+            ZweryfikujKwote(kwota);
+            Saldo += kwota;
+        }
         public override bool Wyplac(decimal kwota)
         {
             if (!ZweryfikujKwote(kwota))

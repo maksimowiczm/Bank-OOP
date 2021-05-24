@@ -21,12 +21,14 @@ namespace POProjekt
         }
         protected Karta(Bank bank, Osoba osoba) : this(bank, osoba, ilosc) { }
 
+        /// <summary> Sprawdza czy podana kwota jest dodatnia. </summary>
         protected bool ZweryfikujKwote(decimal kwota)
         {
             if (kwota <= 0)
                 throw new Exception("Niedodatnia kwota");
             return true;
         }
+        public abstract void Wplac(decimal kwota);
         public abstract bool Wyplac(decimal kwota);
     }
 }
