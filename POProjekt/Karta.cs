@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace POProjekt
 {
@@ -6,45 +7,28 @@ namespace POProjekt
     {
         private static int ilosc;
 
-        public readonly int IdBanku;
-        public readonly int IdKlienta;
-        public readonly string Numer;
-        protected decimal saldo;
-        public decimal Saldo { get => saldo; }
+        public readonly Bank Bank;
+        public readonly Osoba Osoba;
+        public readonly int Numer;
 
-        public Karta(int idBanku, int idKlienta)
-            : this(idBanku, idKlienta, 0) { }
-        public Karta(int idBanku, int idKlienta, decimal saldo)
-            : this(idBanku, idKlienta, saldo, $"{ilosc}") { }
-        public Karta(int idBanku, int idKlienta, decimal saldo, string num)
+        [JsonConstructor]
+        protected Karta(Bank bank, Osoba osoba, int numer)
         {
-            if (saldo < 0)
-                throw new Exception("Ujemne saldo");
-            if (idBanku < 0)
-                throw new Exception("Ujemny identyfikator banku");
-            if (idKlienta < 0)
-                throw new Exception("Ujemny identyfikator klienta");
-
-            IdBanku = idBanku;
-            IdKlienta = idKlienta;
-            this.saldo = saldo;
-            Numer = num;
+            Bank = bank;
+            Osoba = osoba;
+            Numer = numer;
             ilosc++;
         }
+        protected Karta(Bank bank, Osoba osoba) : this(bank, osoba, ilosc) { }
 
-        protected bool zweryfikujKwote(decimal kwota)
+        /// <summary> Sprawdza czy podana kwota jest dodatnia. </summary>
+        protected bool ZweryfikujKwote(decimal kwota)
         {
             if (kwota <= 0)
-                throw new Exception("Niedodatnia kwota");
+                throw new KwotaException(kwota);
             return true;
         }
-
-        public void Wplac(decimal kwota)
-        {
-            zweryfikujKwote(kwota);
-            saldo += kwota;
-        }
-
+        public abstract void Wplac(decimal kwota);
         public abstract bool Wyplac(decimal kwota);
     }
 }

@@ -3,48 +3,44 @@ using System;
 
 namespace POProjekt
 {
-    public class Kredytowa : Debetowa
+    public class Kredytowa : Karta
     {
         public readonly decimal MaksymalnyKredyt;
-        public decimal AktualnyKredyt => saldo >= 0 ? 0 : Math.Abs(Saldo);
-
-        public Kredytowa(int idBanku, int idKlienta, decimal kredyt)
-            : this(idBanku, idKlienta, kredyt, 0) { }
-        public Kredytowa(int idBanku, int idKlienta, decimal kredyt, decimal saldo)
-            : base(idBanku, idKlienta, 0)
-        {
-            if (kredyt <= 0)
-                throw new Exception("Niedodatni kredyt");
-            if (saldo < -kredyt)
-                throw new Exception("Za niskie saldo");
-            this.saldo = saldo;
-            MaksymalnyKredyt = kredyt;
-        }
+        public decimal Saldo { get; private set; }
 
         [JsonConstructor]
-        public Kredytowa(int idBanku, int idKlienta, decimal kredyt, decimal saldo, string num)
-            : base(idBanku, idKlienta, 0, num)
+        public Kredytowa(Bank bank, Osoba osoba, decimal kredyt, decimal saldo, int numer)
+            : base(bank, osoba, numer)
         {
             if (kredyt <= 0)
                 throw new Exception("Niedodatni kredyt");
             if (saldo < -kredyt)
                 throw new Exception("Za niskie saldo");
-            this.saldo = saldo;
             MaksymalnyKredyt = kredyt;
+            this.Saldo = saldo;
+        }
+        public Kredytowa(Bank bank, Osoba osoba, decimal kredyt) : this(bank, osoba, kredyt, 0) { }
+        public Kredytowa(Bank bank, Osoba osoba, decimal kredyt, decimal saldo) : base(bank, osoba)
+        {
+            if (kredyt <= 0)
+                throw new UjemnyKredyt(kredyt);
+            MaksymalnyKredyt = kredyt;
+            this.Saldo = saldo;
         }
 
+        public override void Wplac(decimal kwota)
+        {
+            ZweryfikujKwote(kwota);
+            Saldo += kwota;
+        }
         public override bool Wyplac(decimal kwota)
         {
-            if (!zweryfikujKwote(kwota))
-                return false;
+            if (!ZweryfikujKwote(kwota))
+                throw new KwotaException(kwota);
+            if (Saldo - kwota < -MaksymalnyKredyt) throw new WyplacException(kwota);
 
-            if (saldo - kwota >= -MaksymalnyKredyt)
-            {
-                saldo -= kwota;
-                return true;
-            }
-            else
-                return false;
+            Saldo -= kwota;
+            return true;
         }
     }
 }

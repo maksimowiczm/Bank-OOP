@@ -1,144 +1,66 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace POProjekt
 {
-    public static class Centrum
+    public class Centrum
     {
-        private static List<Transakcja> transakcje = new List<Transakcja>();
-        public static List<Transakcja> Transakcje { get => transakcje; }
+        private readonly List<Transakcja> transakcje;
+        private readonly List<Osoba> osoby;
+        private readonly List<Firma> firmy;
+        private readonly List<Bank> banki;
+        public IList<Transakcja> Transakcje => transakcje.AsReadOnly();
+        public IList<Osoba> Osoby => osoby.AsReadOnly();
+        public IList<Firma> Firmy => firmy.AsReadOnly();
+        public IList<Bank> Banki => banki.AsReadOnly();
 
-        public static bool AutoryzujTransakcje(Firma firma, Karta karta, decimal kwota)
+        public Centrum() : this(new(), new(), new(), new()) { }
+        public Centrum(List<Transakcja> transakcje, List<Osoba> osoby, List<Firma> firmy, List<Bank> banki)
         {
-            var bank = Bank.GetBank(karta.IdBanku);
-            if (bank == null)
-                return false;
+            this.transakcje = transakcje;
+            this.osoby = osoby;
+            this.firmy = firmy;
+            this.banki = banki;
+        }
+        /// <summary> Prosi bank o realizację transakcji i dodaję ją do listy transakcji. </summary>
+        /// <returns> Sukces transakcji. </returns>
+        public bool AutoryzujTransakcje(Firma firma, Karta karta, decimal kwota)
+        {
+            if (kwota <= 0)
+                throw new KwotaException(kwota);
 
+            var bank = karta.Bank;
             var sukces = bank.RealizujTransakcje(karta, kwota);
-            var transakcja = new Transakcja(DateTime.Now, sukces, bank.Id, bank.Nazwa, firma.Nazwa, karta.IdKlienta, karta.Numer, kwota);
+            var transakcja = new Transakcja(DateTime.Now, sukces, bank, firma, karta.Osoba, karta, kwota);
             transakcje.Add(transakcja);
             return sukces;
         }
-        public static void ZapiszTransakcje(string uri)
+        public List<Transakcja> ZnajdzTransakcje(string zapytanie)
         {
-            var json = JsonConvert.SerializeObject(transakcje, Formatting.Indented);
-            File.WriteAllText($"{uri}.json", json);
+            throw new NotImplementedException();
         }
 
-        private static string getName(string zapytanie, ref int from)
-        {
-            var i = from;
-            var length = zapytanie.Length;
-            if (i >= length)
-                return null;
+        public void DodajOsobe(Osoba osoba) => osoby.Add(osoba);
+        public void DodajFirme(Firma firma) => firmy.Add(firma);
+        public void DodajBank(Bank bank) => banki.Add(bank);
 
-            while (zapytanie[i] != '"')
-                i++;
-            i++;
-            var wyraz = "";
-            while (zapytanie[i] != '"')
-                wyraz += zapytanie[i++];
-            from = i;
-            return wyraz;
+        /// <summary> Zapisuje całe centrum do pliku. </summary>
+        /// <param name="nazwa">Nazwa pliku do którego ma zostać zapisane centrum.</param>
+        public bool Zapisz(string nazwa)
+        {
+            throw new NotImplementedException();
         }
-        private static List<Transakcja> UsunDuplikaty(List<Transakcja> lista)
+        /// <summary> Odczytuje nazwy plików z których można wczytać centrum. </summary>
+        /// <returns> Listę nazw plików które da się wczytać.</returns>
+        public List<string> Odczytaj()
         {
-            var bylo = new bool[transakcje.Count];
-            var nowa = new List<Transakcja>();
-
-            foreach (var transakcja in lista.Where(transakcja => bylo[transakcja.Id] == false))
-            {
-                nowa.Add(transakcja);
-                bylo[transakcja.Id] = true;
-            }
-            return nowa;
+            throw new NotImplementedException();
         }
-        public static List<Transakcja> ZnajdzTransakcje(string zapytanie)
+        /// <summary> Wczytuje centrum z pliku. </summary>
+        /// <param name="nazwa">Nazwa pliku.</param>
+        public bool Wczytaj(string nazwa)
         {
-            var connetors = new List<string>();
-            var pytanie = new Dictionary<string, string>();
-            var pokolei = new List<string>();
-
-            var wyraz = "";
-            for (var i = 0; i < zapytanie.Length; i++)
-            {
-                var znak = zapytanie[i];
-                if (znak != ' ')
-                {
-                    wyraz += znak;
-                    switch (wyraz)
-                    {
-                        case "Firma":
-                        case "Bank":
-                        case "Num":
-                        case "Klient":
-                        case "Kwota":
-                            pokolei.Add(wyraz);
-                            pytanie.Add(wyraz, getName(zapytanie, ref i));
-                            wyraz = "";
-                            break;
-                        case "AND":
-                        case "OR":
-                            connetors.Add(wyraz);
-                            wyraz = "";
-                            break;
-                    }
-                }
-            }
-
-            var aktualna = new List<Transakcja>();
-            switch (pokolei[0])
-            {
-                case "Firma":
-                    aktualna = transakcje.FindAll(t => t.NazwaFirmy == pytanie["Firma"]);
-                    break;
-                case "Bank":
-                    aktualna = transakcje.FindAll(t => t.NazwaBanku == pytanie["Bank"]);
-                    break;
-                case "Num":
-                    aktualna = transakcje.FindAll(t => t.NumKarty == pytanie["Num"]);
-                    break;
-                case "Klient":
-                    aktualna = transakcje.FindAll(t => t.IdKLienta == int.Parse(pytanie["Klient"]));
-                    break;
-                case "Kwota":
-                    aktualna = transakcje.FindAll(t => t.Kwota == decimal.Parse(pytanie["Kwota"]));
-                    break;
-            }
-
-            for (var i = 1; i < pokolei.Count; i++)
-            {
-                if (connetors[i - 1] == "AND")
-                    aktualna = pokolei[i] switch
-                    {
-                        "Firma" => aktualna.FindAll(t => t.NazwaFirmy == pytanie["Firma"]),
-                        "Bank" => aktualna.FindAll(t => t.NazwaBanku == pytanie["Bank"]),
-                        "Num" => aktualna.FindAll(t => t.NumKarty == pytanie["Num"]),
-                        "Klient" => aktualna.FindAll(t => t.IdKLienta == int.Parse(pytanie["Klient"])),
-                        "Kwota" => aktualna.FindAll(t => t.Kwota == decimal.Parse(pytanie["Kwota"])),
-                        _ => aktualna
-                    };
-                else if (connetors[i - 1] == "OR")
-                {
-                    var nowe = new List<Transakcja>();
-                    if (pokolei[i] == "Firma")
-                        nowe = transakcje.FindAll(t => t.NazwaFirmy == pytanie["Firma"]);
-                    else if (pokolei[i] == "Bank")
-                        nowe = transakcje.FindAll(t => t.NazwaBanku == pytanie["Bank"]);
-                    else if (pokolei[i] == "Num")
-                        nowe = transakcje.FindAll(t => t.NumKarty == pytanie["Num"]);
-                    else if (pokolei[i] == "Klient")
-                        nowe = transakcje.FindAll(t => t.IdKLienta == int.Parse(pytanie["Klient"]));
-                    else if (pokolei[i] == "Kwota")
-                        nowe = transakcje.FindAll(t => t.Kwota == decimal.Parse(pytanie["Kwota"]));
-                    aktualna.AddRange(nowe);
-                    aktualna = UsunDuplikaty(aktualna);
-                }
-            }
-            return aktualna;
+            throw new NotImplementedException();
         }
     }
 }

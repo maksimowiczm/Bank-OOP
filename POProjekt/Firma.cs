@@ -1,33 +1,46 @@
-﻿namespace POProjekt
+﻿using System;
+
+namespace POProjekt
 {
-    public class Firma
+    public class Firma : Klient
     {
-        private static int ilosc;
         public readonly string Nazwa;
         public readonly string Kategoria;
-        public readonly int Id;
-        public Konto Konto { get; }
-
-        public Firma(string nazwa, string kategoria, Konto konto, int id)
+        private int domyslneKonto = 0;
+        public readonly Centrum Centrum;
+        public int DomyslneKonto
         {
-            Id = id;
-            ilosc++;
+            get => domyslneKonto;
+            set
+            {
+                if (value < konta.Count)
+                    domyslneKonto = value;
+            }
+        }
+
+        public Firma(string nazwa, string kategoria, Centrum centrum)
+        {
             Nazwa = nazwa;
             Kategoria = kategoria;
-            this.Konto = konto;
+            this.Centrum = centrum;
         }
-        public Firma(string nazwa, string kategoria, Bank bank) : this(nazwa, kategoria, bank.StworzKonto(ilosc), ilosc) { }
-        public Firma(string nazwa, string kategoria, Bank bank, decimal saldo) : this(nazwa, kategoria, bank.StworzKonto(ilosc, saldo), ilosc) { }
+
+        /// <summary> Prosi centrum o autoryzację transakcji. Jeśli się uda to wpłaca kwotę transakcji na konto firmowe. </summary>
         public bool PoprosOAutoryzacje(Karta karta, decimal kwota)
         {
-            if (kwota > 0)
+            var sukces = Centrum.AutoryzujTransakcje(this, karta, kwota);
+            if (!sukces) return false;
+
+            try
             {
-                var sukces = Centrum.AutoryzujTransakcje(this, karta, kwota);
-                if (sukces)
-                    Konto.Wplac(kwota);
-                return sukces;
+                konta[DomyslneKonto].Wplac(kwota);
             }
-            else return false;
+            catch (ArgumentOutOfRangeException e)
+            {
+                throw new FirmaException(this, "Nie istnieje firmowe konto o podanym indeksie");
+            }
+
+            return true;
         }
     }
 }

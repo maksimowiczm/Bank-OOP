@@ -1,54 +1,33 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace POProjekt
 {
-    public class Klient
+    public abstract class Klient
     {
-        private static int ilosc;
-        private static List<Klient> klienci = new List<Klient>();
-        public static Klient GetKlient(int id) => klienci.Find(k => k.Id == id);
+        protected List<Konto> konta = new List<Konto>();
+        public IList<Konto> Konta => konta.AsReadOnly();
 
-        public readonly int Id;
-        public readonly string Imie;
-        public readonly string Nazwisko;
-        private List<Karta> karty;
-        public List<Karta> Karty { get => karty; }
+        public bool MojeKonto(Konto konto) => konta.Contains(konto);
+        /// <summary>
+        /// Dodaje konto jeśli jest tego klienta i nie ma już go na liście kont.
+        /// </summary>
+        public bool DodajKonto(Konto konto)
+        {
+            if (konto.Klient != this)
+                throw new KontoNieIstnieje(konto, this);
+            if (MojeKonto(konto))
+                throw new KontoIstnieje(konto, this);
 
-        [JsonConstructor]
-        public Klient(string imie, string nazwisko, int id, List<Karta> karty)
-        {
-            if (id < 0) throw new Exception("Id ujemne");
-            this.Imie = imie;
-            this.Nazwisko = nazwisko;
-            this.Id = id;
-            ilosc++;
-            this.karty = karty;
-            klienci.Add(this);
-        }
-        public Klient(string imie, string nazwisko) : this(imie, nazwisko, ilosc, new List<Karta>()) { }
-
-        public bool DodajKarteDebetowa(Bank bank) => DodajKarteDebetowa(bank, 0);
-        public bool DodajKarteDebetowa(Bank bank, decimal saldo)
-        {
-            if (saldo >= 0)
-                karty.Add(bank.StworzKarteDebetowa(this, saldo));
-            return false;
-        }
-        public bool DodajKarteKredytowa(Bank bank, decimal maksymalnyKredyt, decimal saldo)
-        {
-            if (maksymalnyKredyt < 0) return false;
-            if (saldo < -maksymalnyKredyt) return false;
-            karty.Add(bank.StworzKarteKredytowa(this, maksymalnyKredyt, saldo));
+            konta.Add(konto);
             return true;
         }
-        public bool DodajKarteKredytowa(Bank bank, decimal maksymalnyKredyt) => DodajKarteKredytowa(bank, maksymalnyKredyt, 0);
-        private int mojaKarta(Karta karta) => karty.IndexOf(karta);
-        public bool UsunKarte(Karta karta)
+        /// <summary> Próbuje usunąć podane konto./// </summary>
+        public bool UsunKonto(Konto konto)
         {
-            if (mojaKarta(karta) < 0) return false;
-            karty.Remove(karta);
+            if (konto.Klient != this || !MojeKonto(konto))
+                throw new KontoNieIstnieje(konto, this);
+
+            konta.Remove(konto);
             return true;
         }
     }

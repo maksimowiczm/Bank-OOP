@@ -1,27 +1,34 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace POProjekt
 {
     public class Konto
     {
-        public readonly int idBanku;
-        public readonly int idFirmy;
-        private decimal saldo;
-        public decimal Saldo { get => saldo; }
+        public readonly Bank Bank;
+        public readonly Klient Klient;
+        public decimal Saldo { get; private set; }
 
-        public Konto(int idBanku, int idFirmy, decimal saldo)
+        [JsonConstructor]
+        public Konto(Bank bank, Klient klient, decimal saldo)
         {
-            this.idBanku = idBanku;
-            this.idFirmy = idFirmy;
-            this.saldo = saldo;
+            Klient = klient;
+            Bank = bank;
+            Saldo = saldo;
         }
-        public Konto(int idBanku, int idFirmy) : this(idBanku, idFirmy, 0) { }
+        public Konto(Bank bank, Klient klient) : this(bank, klient, 0) { }
 
         public void Wplac(decimal kwota)
         {
-            if (kwota <= 0)
-                throw new Exception("Niedodatnia kwota");
-            saldo += kwota;
+            if (kwota <= 0) throw new KwotaException(kwota);
+            Saldo += kwota;
+        }
+        public bool Wyplac(decimal kwota)
+        {
+            if (kwota <= 0) throw new WyplacException(kwota);
+            if (kwota > Saldo) return false;
+            Saldo -= kwota;
+            return true;
         }
     }
 }
