@@ -21,10 +21,29 @@ namespace POProjekt
         }
         public Bank(string nazwa) : this(nazwa, new List<Karta>(), new List<Konto>()) { }
 
-        private int mojaKarta(Karta karta) => karty.IndexOf(karta);
-        public Karta StworzKarteDebetowa(Osoba osoba)
+        private bool mojeKonto(Konto konto) => konta.Contains(konto);
+        public Konto StworzKonto(Klient klient)
         {
-            throw new NotImplementedException();
+            var konto = new Konto(this, klient);
+            konta.Add(konto);
+            return konto;
+        }
+        public bool UsunKonto(Konto konto)
+        {
+            if (!konta.Contains(konto)) return false;
+
+            konta.Remove(konto);
+            return true;
+        }
+
+        public Karta StworzKarteDebetowa(Osoba osoba, Konto konto)
+        {
+            if (!mojeKonto(konto))
+                throw new Exception("Nie moje konto");
+
+            var karta = new Debetowa(this, osoba, konto);
+            karty.Add(karta);
+            return karta;
         }
         public Karta StworzKarteKredytowa(Osoba osoba, decimal kredyt)
         {
@@ -32,18 +51,14 @@ namespace POProjekt
             karty.Add(karta);
             return karta;
         }
+        private bool mojaKarta(Karta karta) => karty.Contains(karta);
         public bool UsunKarte(Karta karta)
         {
-            if (mojaKarta(karta) < 0) return false;
+            if (!mojaKarta(karta)) return false;
             karty.Remove(karta);
             return true;
         }
 
-        public bool RealizujTransakcje(Karta karta, decimal kwota)
-        {
-            if (mojaKarta(karta) == -1)
-                return false;
-            return karta.Wyplac(kwota);
-        }
+        public bool RealizujTransakcje(Karta karta, decimal kwota) => mojaKarta(karta) && karta.Wyplac(kwota);
     }
 }
