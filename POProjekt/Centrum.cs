@@ -35,6 +35,10 @@ namespace POProjekt
             transakcje.Add(transakcja);
             return sukces;
         }
+        public List<Transakcja> ZnajdzTransakcje(string zapytanie)
+        {
+            throw new NotImplementedException();
+        }
 
         public void DodajOsobe(Osoba osoba) => osoby.Add(osoba);
         public void DodajFirme(Firma firma) => firmy.Add(firma);
@@ -48,7 +52,7 @@ namespace POProjekt
         }
         /// <summary> Odczytuje nazwy plików z których można wczytać centrum. </summary>
         /// <returns> Listę nazw plików które da się wczytać.</returns>
-        public List<String> Odczytaj()
+        public List<string> Odczytaj()
         {
             throw new NotImplementedException();
         }
