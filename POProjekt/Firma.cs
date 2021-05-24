@@ -13,7 +13,13 @@
             Centrum = centrum;
         }
 
-        /// <summary> Prosi centrum o autoryzację transakcji. </summary>
-        public bool PoprosOAutoryzacje(Karta karta, decimal kwota) => Centrum.AutoryzujTransakcje(this, karta, kwota);
+        /// <summary> Prosi centrum o autoryzację transakcji. Jeśli się uda to wpłaca kwotę transakcji na konto firmowe. </summary>
+        public bool PoprosOAutoryzacje(Karta karta, decimal kwota)
+        {
+            var sukces = Centrum.AutoryzujTransakcje(this, karta, kwota);
+            if (sukces)
+                konta[0].Wplac(kwota);
+            return sukces;
+        }
     }
 }
