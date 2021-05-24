@@ -20,6 +20,7 @@ namespace POProjekt
             Konto = konto;
         }
     }
+    /// <summary> Podane konto jest już na liście kont w ty obiekcie </summary>
     public class KontoIstnieje : KontoException
     {
         public readonly object gdzie;
@@ -28,6 +29,7 @@ namespace POProjekt
             this.gdzie = gdzie;
         }
     }
+    /// <summary> Podane konto nie jest na liście kont w ty obiekcie </summary>
     public class KontoNieIstnieje : KontoIstnieje
     {
         public KontoNieIstnieje(Konto konto, object gdzie) : base(konto, gdzie) { }
@@ -42,6 +44,7 @@ namespace POProjekt
             Karta = karta;
         }
     }
+    /// <summary> Podana karta jest już na liście kont w ty obiekcie. </summary>
     public class KartaNieIstnieje : KartaException
     {
         public readonly object gdzie;
@@ -51,7 +54,7 @@ namespace POProjekt
             this.gdzie = gdzie;
         }
     }
-
+    /// <summary> Podana karta nie jest na liście kont w ty obiekcie. </summary>
     public class KwotaException : Exception
     {
         public readonly decimal kwota;
@@ -62,6 +65,7 @@ namespace POProjekt
         }
     }
 
+    /// <summary> Próba wpłacenia nie dodatniej kwoty na konto lub kartę. </summary>
     public class WyplacException : Exception
     {
         public readonly decimal kwota;
@@ -71,7 +75,7 @@ namespace POProjekt
             this.kwota = kwota;
         }
     }
-
+    /// <summary> Podanie złego kredytu podczas tworzenia karty kredytowej </summary>
     public class UjemnyKredyt : Exception
     {
         public readonly decimal kredyt;

@@ -57,6 +57,7 @@ namespace POProjekt
             return karta;
         }
         /// <summary> Tworzy nową kartę kredytową. Dodaje je do listy kart w banku i listy kart klienta. </summary>
+        /// <param name="kredyt">Maksymalny kredyt jaki moża wziąć karta, czyli na ile maksymalnie na minus może wyjść saldo</param>
         /// <returns>Karta Kredytowa</returns>
         public Kredytowa StworzKarteKredytowa(Osoba osoba, decimal kredyt)
         {
