@@ -2,6 +2,15 @@
 
 namespace POProjekt
 {
+    public class NieMaPliku : Exception
+    {
+        public readonly string Sciezka;
+
+        public NieMaPliku(string sciezka)
+        {
+            Sciezka = sciezka;
+        }
+    }
     public class FirmaException : Exception
     {
         public readonly Firma Firma;
