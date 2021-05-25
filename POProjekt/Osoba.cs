@@ -37,5 +37,10 @@ namespace POProjekt
             karty.Remove(karta);
             return true;
         }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is Osoba druga && druga.Imie == Imie && druga.Nazwisko == Nazwisko;
+        }
     }
 }

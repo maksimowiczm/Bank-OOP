@@ -29,5 +29,10 @@ namespace POProjekt
         }
         public abstract void Wplac(decimal kwota);
         public abstract bool Wyplac(decimal kwota);
+        public override bool Equals(object? obj)
+        {
+            var druga = obj as Karta;
+            return druga != null && druga.Numer == Numer;
+        }
     }
 }

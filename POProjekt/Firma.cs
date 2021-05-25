@@ -42,5 +42,10 @@ namespace POProjekt
 
             return true;
         }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is Firma druga && druga.Nazwa == Nazwa;
+        }
     }
 }
