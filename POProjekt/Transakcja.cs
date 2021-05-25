@@ -11,12 +11,12 @@ namespace POProjekt
         public readonly bool Sukces;
         public readonly Bank Bank;
         public readonly Firma Firma;
-        public readonly Klient Klient;
+        public readonly Osoba Osoba;
         public readonly Karta Karta;
         public readonly decimal Kwota;
 
         [JsonConstructor]
-        public Transakcja(int id, DateTime data, bool sukces, Bank bank, Firma firma, Klient klient, Karta karta, decimal kwota)
+        public Transakcja(int id, DateTime data, bool sukces, Bank bank, Firma firma, Osoba osoba, Karta karta, decimal kwota)
         {
             Id = id;
             ilosc++;
@@ -24,11 +24,11 @@ namespace POProjekt
             Sukces = sukces;
             Bank = bank;
             Firma = firma;
-            Klient = klient;
+            Osoba = osoba;
             Karta = karta;
             Kwota = kwota;
         }
-        public Transakcja(DateTime data, bool sukces, Bank bank, Firma firma, Klient klient, Karta karta, decimal kwota)
-            : this(ilosc, data, sukces, bank, firma, klient, karta, kwota) { }
+        public Transakcja(DateTime data, bool sukces, Bank bank, Firma firma, Osoba osoba, Karta karta, decimal kwota)
+            : this(ilosc, data, sukces, bank, firma, osoba, karta, kwota) { }
     }
 }
