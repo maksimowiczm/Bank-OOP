@@ -2,6 +2,7 @@
 
 namespace POProjekt
 {
+    /// <summary> Podany plik nie istnieje. </summary>
     public class NieMaPliku : Exception
     {
         public readonly string Sciezka;
@@ -11,6 +12,7 @@ namespace POProjekt
             Sciezka = sciezka;
         }
     }
+    /// <summary> Coś nie działa, jest w wiadomości co. </summary>
     public class FirmaException : Exception
     {
         public readonly Firma Firma;
