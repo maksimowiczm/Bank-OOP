@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using Newtonsoft.Json;
+using System.Linq;
 
 namespace POProjekt
 {
@@ -38,8 +39,84 @@ namespace POProjekt
             transakcje.Add(transakcja);
             return sukces;
         }
-        public List<Transakcja> ZnajdzTransakcje(string zapytanie)
+
+        /// <summary> Dzieli podany string na Listę stringów, osoba and karta and firma => {osoba, and, karta, and, firma}. </summary>
+        private static List<string> Podziel(string zapytanie)
         {
+            var lista = new List<string>();
+            var wyraz = "";
+            zapytanie = zapytanie.ToLower();
+            foreach (var ch in zapytanie.Where(ch => ch != ' '))
+            {
+                wyraz += ch;
+                if (wyraz.Length > 5)
+                    throw new ZapytanieException(zapytanie, wyraz);
+                switch (wyraz)
+                {
+                    case "osoba":
+                    case "firma":
+                    case "bank":
+                    case "data":
+                    case "kwota":
+                    case "karta":
+                    case "and":
+                    case "or":
+                        lista.Add(wyraz);
+                        wyraz = "";
+                        break;
+                }
+            }
+
+            if (lista.Where((t, i) => i % 2 == 1 && (t is not "and" or "or")).Any())
+                throw new ZapytanieException(zapytanie, lista);
+
+            return lista;
+        }
+
+        /// <summary> Zwraca listę transakcji, które posiadają podany obiekt. </summary>
+        private List<Transakcja> znajdz(object obj)
+        {
+            var lista = new List<Transakcja>();
+            if (obj.GetType() == typeof(Osoba))
+                lista.AddRange(transakcje.Where(t => t.Osoba.Equals(obj)));
+            else if (obj.GetType() == typeof(Firma))
+                lista.AddRange(transakcje.Where(t => t.Firma.Equals(obj)));
+            else if (obj.GetType() == typeof(Bank))
+                lista.AddRange(transakcje.Where(t => t.Bank.Equals(obj)));
+            else if (obj.GetType() == typeof(Kredytowa) || obj.GetType() == typeof(Debetowa))
+                lista.AddRange(transakcje.Where(t => t.Karta.Equals(obj)));
+            else if (obj.GetType() == typeof(DateTime))
+                lista.AddRange(transakcje.Where(t => t.Data.Equals(obj)));
+            else if (obj.GetType() == typeof(decimal))
+                lista.AddRange(transakcje.Where(t => t.Kwota.Equals(obj)));
+            else
+                throw new ZapytanieException("", obj);
+            return lista;
+        }
+        public List<Transakcja> ZnajdzTransakcje(Zapytanie req)
+        {
+            var zapytanie = Podziel(req.Pytanie);
+            var pary = new List<Pair>();
+            for (var i = 2; i < zapytanie.Count; i += 2)
+            {
+                object obj = zapytanie[i] switch
+                {
+                    "osoba" => req.Osoba,
+                    "firma" => req.Firma,
+                    "bank" => req.Bank,
+                    "data" => req.Data,
+                    "kwota" => req.Kwota,
+                    "karta" => req.Karta,
+                    _ => throw new ZapytanieException(req.Pytanie)
+                };
+
+                pary.Add(new Pair(zapytanie[i - 1], obj));
+            }
+            var lista = znajdz(req);
+
+
+
+
             throw new NotImplementedException();
         }
 
@@ -79,7 +156,7 @@ namespace POProjekt
                     Console.WriteLine(e);
                 }
             }
-            
+
             return pliki;
         }
         /// <summary> Wczytuje centrum z pliku. </summary>
