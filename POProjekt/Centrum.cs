@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace POProjekt
 {
@@ -14,7 +16,8 @@ namespace POProjekt
         public IList<Firma> Firmy => firmy.AsReadOnly();
         public IList<Bank> Banki => banki.AsReadOnly();
 
-        public Centrum() : this(new(), new(), new(), new()) { }
+        public Centrum() : this(new List<Transakcja>(), new List<Osoba>(), new List<Firma>(), new List<Bank>()) { }
+        [JsonConstructor]
         public Centrum(List<Transakcja> transakcje, List<Osoba> osoby, List<Firma> firmy, List<Bank> banki)
         {
             this.transakcje = transakcje;
@@ -48,19 +51,64 @@ namespace POProjekt
         /// <param name="nazwa">Nazwa pliku do którego ma zostać zapisane centrum.</param>
         public bool Zapisz(string nazwa)
         {
-            throw new NotImplementedException();
+            var json = JsonConvert.SerializeObject(this, new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented,
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                TypeNameHandling = TypeNameHandling.Objects,
+            });
+            File.WriteAllText($"{nazwa}.centrum", json);
+
+            return true;
         }
         /// <summary> Odczytuje nazwy plików z których można wczytać centrum. </summary>
         /// <returns> Listę nazw plików które da się wczytać.</returns>
-        public List<string> Odczytaj()
+        public static List<string> Odczytaj()
         {
-            throw new NotImplementedException();
+            var pliki = new List<string>();
+            var plikiCentrum = Directory.GetFiles(Environment.CurrentDirectory, "*.centrum");
+            foreach (var plik in plikiCentrum)
+            {
+                try
+                {
+                    Wczytaj(plik);
+                    pliki.Add(plik);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+            }
+            
+            return pliki;
         }
         /// <summary> Wczytuje centrum z pliku. </summary>
         /// <param name="nazwa">Nazwa pliku.</param>
-        public bool Wczytaj(string nazwa)
+        public static Centrum Wczytaj(string nazwa)
         {
-            throw new NotImplementedException();
+            var json = "";
+            try
+            {
+                json = File.ReadAllText($"{nazwa}.centrum");
+            }
+            catch (FileNotFoundException)
+            {
+                try
+                {
+                    json = File.ReadAllText(nazwa);
+                }
+                catch (FileNotFoundException)
+                {
+                    throw new NieMaPliku(nazwa);
+                }
+            }
+            var wczytane = JsonConvert.DeserializeObject<Centrum>(json, new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented,
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                TypeNameHandling = TypeNameHandling.Objects,
+            });
+            return wczytane;
         }
     }
 }
