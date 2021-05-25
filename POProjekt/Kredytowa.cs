@@ -5,7 +5,7 @@ namespace POProjekt
 {
     public class Kredytowa : Karta
     {
-        public readonly decimal MaksymalnyKredyt;
+        public readonly decimal Kredyt;
         public decimal Saldo { get; private set; }
 
         [JsonConstructor]
@@ -16,7 +16,7 @@ namespace POProjekt
                 throw new Exception("Niedodatni kredyt");
             if (saldo < -kredyt)
                 throw new Exception("Za niskie saldo");
-            MaksymalnyKredyt = kredyt;
+            Kredyt = kredyt;
             Saldo = saldo;
         }
         public Kredytowa(Bank bank, Osoba osoba, decimal kredyt) : this(bank, osoba, kredyt, 0) { }
@@ -24,7 +24,7 @@ namespace POProjekt
         {
             if (kredyt <= 0)
                 throw new UjemnyKredyt(kredyt);
-            MaksymalnyKredyt = kredyt;
+            Kredyt = kredyt;
             Saldo = saldo;
         }
 
@@ -37,7 +37,7 @@ namespace POProjekt
         {
             if (!ZweryfikujKwote(kwota))
                 throw new KwotaException(kwota);
-            if (Saldo - kwota < -MaksymalnyKredyt) throw new WyplacException(kwota);
+            if (Saldo - kwota < -Kredyt) throw new WyplacException(kwota);
 
             Saldo -= kwota;
             return true;
