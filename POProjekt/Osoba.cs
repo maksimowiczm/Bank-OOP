@@ -38,9 +38,7 @@ namespace POProjekt
             return true;
         }
 
-        public override bool Equals(object? obj)
-        {
-            return obj is Osoba druga && druga.Imie == Imie && druga.Nazwisko == Nazwisko;
-        }
+        public override bool Equals(object? obj) => obj is Osoba druga && druga.Imie == Imie && druga.Nazwisko == Nazwisko;
+        public override string ToString() => $"{Imie} {Nazwisko}";
     }
 }
