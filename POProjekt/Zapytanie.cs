@@ -4,14 +4,15 @@ namespace POProjekt
 {
     public class Zapytanie
     {
-        public string Pytanie;
-        public readonly Osoba Osoba;
-        public readonly Firma Firma;
-        public readonly Bank Bank;
-        public readonly Karta Karta;
-        public readonly DateTime? Data;
-        public readonly decimal? Kwota;
-
+        public string Pytanie { get; init; }
+        public Osoba Osoba { get; init; }
+        public Firma Firma { get; init; }
+        public Bank Bank { get; init; }
+        public Karta Karta { get; init; }
+        public DateTime? Data { get; init; }
+        public decimal? Kwota { get; init; }
+        
+        public Zapytanie() : this(null, null, null, null, null, null, null) { }
         public Zapytanie(string pytanie, Osoba osoba, Firma firma, Bank bank, Karta karta, DateTime? data, decimal? kwota)
         {
             Pytanie = pytanie;
