@@ -6,9 +6,10 @@ namespace POProjekt
     {
         public readonly string Nazwa;
         public readonly string Kategoria;
-        private int domyslneKonto = 0;
+        //public int domyslneKonto = 0;
+        public const int DomyslneKonto = 0;
         public readonly Centrum Centrum;
-        public int DomyslneKonto
+        /*public int DomyslneKonto
         {
             get => domyslneKonto;
             set
@@ -16,7 +17,7 @@ namespace POProjekt
                 if (value < konta.Count)
                     domyslneKonto = value;
             }
-        }
+        }*/
 
         public Firma(string nazwa, string kategoria, Centrum centrum)
         {
@@ -42,5 +43,8 @@ namespace POProjekt
 
             return true;
         }
+
+        public override bool Equals(object? obj) => obj is Firma druga && druga.Nazwa == Nazwa;
+        public override string ToString() => Nazwa;
     }
 }

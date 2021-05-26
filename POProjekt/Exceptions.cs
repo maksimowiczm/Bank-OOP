@@ -2,6 +2,21 @@
 
 namespace POProjekt
 {
+    public class ZapytanieException : Exception
+    {
+        public readonly string Pytanie;
+        public readonly object cos;
+
+        public ZapytanieException(string pytanie)
+        {
+            Pytanie = pytanie;
+        }
+        public ZapytanieException(string pytanie, object cos)
+        {
+            Pytanie = pytanie;
+            this.cos = cos;
+        }
+    }
     /// <summary> Podany plik nie istnieje. </summary>
     public class NieMaPliku : Exception
     {
