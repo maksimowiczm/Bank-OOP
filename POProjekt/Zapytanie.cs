@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace POProjekt
 {
@@ -13,10 +9,10 @@ namespace POProjekt
         public readonly Firma Firma;
         public readonly Bank Bank;
         public readonly Karta Karta;
-        public readonly DateTime Data;
-        public readonly decimal Kwota;
+        public readonly DateTime? Data;
+        public readonly decimal? Kwota;
 
-        public Zapytanie(string pytanie, Osoba osoba, Firma firma, Bank bank, Karta karta, DateTime data, decimal kwota)
+        public Zapytanie(string pytanie, Osoba osoba, Firma firma, Bank bank, Karta karta, DateTime? data, decimal? kwota)
         {
             Pytanie = pytanie;
             Osoba = osoba;
