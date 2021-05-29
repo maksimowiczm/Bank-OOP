@@ -67,6 +67,7 @@ namespace POProjekt
                 }
             }
 
+            //sprawdza czy zapytanie jest dobrze połączone and/or
             for (var i = 0; i < lista.Count; i++)
             {
                 if (i % 2 == 1)
