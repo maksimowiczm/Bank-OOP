@@ -10,13 +10,24 @@ namespace POProjekt
     {
         public readonly string Nazwa;
         public readonly string Kategoria;
-        public readonly Centrum Centrum;
+        private Centrum centrum;
+
+        /// <summary> Pozwala zmienić centrum tylko podczas wczytywania z pliku. </summary>
+        public Centrum Centrum
+        {
+            get => centrum;
+            set
+            {
+                if (Centrum.wczytywanie)
+                    centrum = value;
+            }
+        }
 
         public Firma(string nazwa, string kategoria, Centrum centrum)
         {
             Nazwa = nazwa;
             Kategoria = kategoria;
-            Centrum = centrum;
+            this.centrum = centrum;
         }
 
         /// <summary> Prosi centrum o autoryzację transakcji. Jeśli się uda to wpłaca kwotę transakcji na konto firmowe. </summary>
@@ -37,14 +48,21 @@ namespace POProjekt
             return true;
         }
 
-        public override bool Equals(object? obj) => obj is Firma druga && druga.Nazwa == Nazwa;
+        public override bool Equals(object obj) => obj is Firma druga && druga.Nazwa == Nazwa;
         public override string ToString() => Nazwa;
-        internal class FirmaJson : Json
+
+        public class FirmaJson : Json
         {
             public readonly string Nazwa;
             public readonly string Kategoria;
             public readonly List<int> Konta;
-
+            [JsonConstructor]
+            public FirmaJson(string nazwa, string kategoria, List<int> karty, List<int> konta, int hash) : base(hash)
+            {
+                Nazwa = nazwa;
+                Kategoria = kategoria;
+                Konta = konta;
+            }
             public FirmaJson(Firma firma) : base(firma)
             {
                 Nazwa = firma.Nazwa;
@@ -57,5 +75,6 @@ namespace POProjekt
             var json = JsonConvert.SerializeObject(new FirmaJson(this), Json.JsonSerializerSettings);
             File.WriteAllText($"{dir}/{GetHashCode()}.json", json);
         }
+        public static FirmaJson Wczytaj(string dir) => JsonConvert.DeserializeObject<FirmaJson>(File.ReadAllText(dir));
     }
 }
