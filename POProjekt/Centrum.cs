@@ -174,6 +174,93 @@ namespace POProjekt
         public void DodajFirme(Firma firma) => firmy.Add(firma);
         public void DodajBank(Bank bank) => banki.Add(bank);
 
+        /// <summary> Wczytuje centrum z dysku. </summary>
+        /// <param name="nazwa"> Nazwa folderu. </param>
+        public static Centrum Wczytaj(string nazwa)
+        {
+            if (!Directory.Exists(nazwa))
+                throw new NieMaPliku(nazwa);
+
+            wczytywanie = true;
+            var Ddebetowa = $"{nazwa}/karty/debetowa";
+            var Dkredytowa = $"{nazwa}/karty/kredytowa";
+            var Dkonta = $"{nazwa}/konta";
+            var Dbanki = $"{nazwa}/banki";
+            var Dosoby = $"{nazwa}/osoby";
+            var Dfirmy = $"{nazwa}/firmy";
+
+            var konta = Directory.GetFiles(Dkonta);
+            var kontoDic = konta.ToDictionary(s => Konto.Wczytaj(s).Hash, Konto.Wczytaj);
+
+            var debetowe = Directory.GetFiles(Ddebetowa);
+            var debetowaDic = debetowe.ToDictionary(s => Debetowa.Wczytaj(s).Hash, Debetowa.Wczytaj);
+
+            var kredytowe = Directory.GetFiles(Dkredytowa);
+            var kredytowaDic = kredytowe.ToDictionary(s => Kredytowa.Wczytaj(s).Hash, Kredytowa.Wczytaj);
+
+            var banki = Directory.GetFiles(Dbanki);
+            var bankDic = banki.ToDictionary(s => Bank.Wczytaj(s).Hash, Bank.Wczytaj);
+
+            var osoby = Directory.GetFiles(Dosoby);
+            var osobaDic = osoby.ToDictionary(s => Osoba.Wczytaj(s).Hash, Osoba.Wczytaj);
+
+            var firmy = Directory.GetFiles(Dfirmy);
+            var firmaDic = firmy.ToDictionary(s => Firma.Wczytaj(s).Hash, Firma.Wczytaj);
+
+            var RealBanki = bankDic.Values.ToDictionary(bank => bank.Hash, bank => new Bank(bank.Nazwa));
+            var RealOsoby = osobaDic.Values.ToDictionary(osoba => osoba.Hash, osoba => new Osoba(osoba.Imie, osoba.Nazwisko));
+            var RealFirmy = firmaDic.Values.ToDictionary(firma => firma.Hash, firma => new Firma(firma.Nazwa, firma.Kategoria, new Centrum()));
+
+
+            var RealKonta = new Dictionary<int, Konto>();
+            foreach (var konto in kontoDic.Values)
+            {
+                var bank = RealBanki[konto.BankHash];
+                Klient klient;
+                if (RealOsoby.ContainsKey(konto.KlientHash))
+                    klient = RealOsoby[konto.KlientHash];
+                else if (RealFirmy.ContainsKey(konto.KlientHash))
+                    klient = RealFirmy[konto.KlientHash];
+                else
+                    throw new Exception();
+
+                var RealKonto = new Konto(bank, klient, konto.Saldo);
+                klient.DodajKonto(RealKonto);
+                bank.DodajKonto(RealKonto);
+                RealKonta.Add(konto.Hash, RealKonto);
+            }
+
+            foreach (var debetowa in debetowaDic.Values)
+            {
+                var bank = RealBanki[debetowa.BankHash];
+                var osoba = RealOsoby[debetowa.OsobaHash];
+                var konto = RealKonta[debetowa.KontoHash];
+                var RealDebetowa = new Debetowa(bank, osoba, konto, debetowa.Numer);
+                osoba.DodajKarte(RealDebetowa);
+                bank.DodajKarte(RealDebetowa);
+            }
+
+            foreach (var kredytowa in kredytowaDic.Values)
+            {
+                var bank = RealBanki[kredytowa.BankHash];
+                var osoba = RealOsoby[kredytowa.OsobaHash];
+                var RealKredytowa = new Kredytowa(bank, osoba, kredytowa.Kredyt, kredytowa.Saldo, kredytowa.Numer);
+                osoba.DodajKarte(RealKredytowa);
+                bank.DodajKarte(RealKredytowa);
+            }
+
+            var ListOsoby = RealOsoby.Values.ToList();
+            var ListBanki = RealBanki.Values.ToList();
+            var ListFirmy = RealFirmy.Values.ToList();
+
+            var centrum = new Centrum(new List<Transakcja>(), ListOsoby, ListFirmy, ListBanki);
+            foreach (var firma in centrum.firmy)
+                firma.Centrum = centrum;
+
+            wczytywanie = false;
+            return centrum;
+        }
+
         /// <summary> Zapisuje całe centrum na dysk. </summary>
         /// <param name="nazwa">Nazwa folderu do którego ma zostać zapisane centrum.</param>
         public bool Zapisz(string nazwa)
