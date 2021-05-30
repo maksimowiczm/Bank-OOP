@@ -8,6 +8,8 @@ namespace POProjekt
 {
     public class Centrum
     {
+        public static bool wczytywanie { get; private set; }
+
         private readonly List<Transakcja> transakcje;
         private readonly List<Osoba> osoby;
         private readonly List<Firma> firmy;
@@ -18,7 +20,7 @@ namespace POProjekt
         public IList<Bank> Banki => banki.AsReadOnly();
 
         public Centrum() : this(new List<Transakcja>(), new List<Osoba>(), new List<Firma>(), new List<Bank>()) { }
-        [JsonConstructor]
+
         public Centrum(List<Transakcja> transakcje, List<Osoba> osoby, List<Firma> firmy, List<Bank> banki)
         {
             this.transakcje = transakcje;
@@ -26,6 +28,7 @@ namespace POProjekt
             this.firmy = firmy;
             this.banki = banki;
         }
+
         /// <summary> Prosi bank o realizację transakcji i dodaję ją do listy transakcji. </summary>
         /// <returns> Sukces transakcji. </returns>
         public bool AutoryzujTransakcje(Firma firma, Karta karta, decimal kwota)
@@ -125,6 +128,7 @@ namespace POProjekt
                 _ => throw new ZapytanieException(req.Pytanie)
             };
         }
+
         /// <summary> Zamienia Listę stringów w pary. Pomija pierwszy element. Używana do zaawansowanego Zapytania. { osoba, and, klient, or, firma } => { (and, klient), (or, firma) } </summary>
         private static List<Pair> Paruj(List<string> zapytanie, Zapytanie req)
         {
@@ -170,68 +174,47 @@ namespace POProjekt
         public void DodajFirme(Firma firma) => firmy.Add(firma);
         public void DodajBank(Bank bank) => banki.Add(bank);
 
-        /// <summary> Zapisuje całe centrum do pliku. </summary>
-        /// <param name="nazwa">Nazwa pliku do którego ma zostać zapisane centrum.</param>
+        /// <summary> Zapisuje całe centrum na dysk. </summary>
+        /// <param name="nazwa">Nazwa folderu do którego ma zostać zapisane centrum.</param>
         public bool Zapisz(string nazwa)
         {
-            var json = JsonConvert.SerializeObject(this, new JsonSerializerSettings
+            var Dkarty = $"{nazwa}/karty";
+            var Dkonta = $"{nazwa}/konta";
+            var Dbanki = $"{nazwa}/banki";
+            var Dosoby = $"{nazwa}/osoby";
+            var Dfirmy = $"{nazwa}/firmy";
+            if (Directory.Exists(nazwa))
+                Directory.Delete(nazwa, true);
+
+            Directory.CreateDirectory(Dkarty);
+            Directory.CreateDirectory($"{Dkarty}/debetowa");
+            Directory.CreateDirectory($"{Dkarty}/kredytowa");
+            Directory.CreateDirectory(Dkarty);
+            Directory.CreateDirectory(Dkonta);
+            Directory.CreateDirectory(Dbanki);
+            Directory.CreateDirectory(Dosoby);
+            Directory.CreateDirectory(Dfirmy);
+            foreach (var bank in banki)
             {
-                Formatting = Formatting.Indented,
-                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                TypeNameHandling = TypeNameHandling.Objects,
-            });
-            File.WriteAllText($"{nazwa}.centrum", json);
+                foreach (var karta in bank.Karty)
+                    karta.Zapisz(Dkarty);
+
+                foreach (var konto in bank.Konta)
+                    konto.Zapisz(Dkonta);
+
+                bank.Zapisz(Dbanki);
+            }
+            foreach (var osoba in osoby)
+                osoba.Zapisz(Dosoby);
+
+            foreach (var firma in firmy)
+                firma.Zapisz(Dfirmy);
+
+
+            var transakcjeJson = transakcje.Select(transakcja => transakcja.Json()).Cast<object>().ToList();
+            File.WriteAllText($"{nazwa}/czytelneTransakcje.json", JsonConvert.SerializeObject(transakcjeJson, Json.JsonSerializerSettings));
 
             return true;
-        }
-        /// <summary> Odczytuje nazwy plików z których można wczytać centrum. </summary>
-        /// <returns> Listę nazw plików które da się wczytać.</returns>
-        public static List<string> Odczytaj()
-        {
-            var pliki = new List<string>();
-            var plikiCentrum = Directory.GetFiles(Environment.CurrentDirectory, "*.centrum");
-            foreach (var plik in plikiCentrum)
-            {
-                try
-                {
-                    Wczytaj(plik);
-                    pliki.Add(plik);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
-            }
-
-            return pliki;
-        }
-        /// <summary> Wczytuje centrum z pliku. </summary>
-        /// <param name="nazwa">Nazwa pliku.</param>
-        public static Centrum Wczytaj(string nazwa)
-        {
-            var json = "";
-            try
-            {
-                json = File.ReadAllText($"{nazwa}.centrum");
-            }
-            catch (FileNotFoundException)
-            {
-                try
-                {
-                    json = File.ReadAllText(nazwa);
-                }
-                catch (FileNotFoundException)
-                {
-                    throw new NieMaPliku(nazwa);
-                }
-            }
-            var wczytane = JsonConvert.DeserializeObject<Centrum>(json, new JsonSerializerSettings
-            {
-                Formatting = Formatting.Indented,
-                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                TypeNameHandling = TypeNameHandling.Objects,
-            });
-            return wczytane;
         }
     }
 }
