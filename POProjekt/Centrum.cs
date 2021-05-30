@@ -179,85 +179,104 @@ namespace POProjekt
         public static Centrum Wczytaj(string nazwa)
         {
             if (!Directory.Exists(nazwa))
-                throw new NieMaPliku(nazwa);
+                throw new WczytwanieZapisException(nazwa);
 
             wczytywanie = true;
             //ścieżki do folderów z plikami.
-            string Ddebetowa = $"{nazwa}/karty/debetowa",
-                Dkredytowa = $"{nazwa}/karty/kredytowa",
-                Dkonta = $"{nazwa}/konta",
-                Dbanki = $"{nazwa}/banki",
-                Dosoby = $"{nazwa}/osoby",
-                Dfirmy = $"{nazwa}/firmy";
+            string debetowaPath = $"{nazwa}/karty/debetowa",
+                kredytowaPath = $"{nazwa}/karty/kredytowa",
+                kontaPath = $"{nazwa}/konta",
+                bankiPath = $"{nazwa}/banki",
+                osobyPath = $"{nazwa}/osoby",
+                firmyPath = $"{nazwa}/firmy";
 
             //Wczytywanie obiektów z hashami.
-            var konta = Directory.GetFiles(Dkonta);
+            var konta = Directory.GetFiles(kontaPath);
             var kontoDic = konta.ToDictionary(s => Konto.Wczytaj(s).Hash, Konto.Wczytaj);
 
-            var debetowe = Directory.GetFiles(Ddebetowa);
+            var debetowe = Directory.GetFiles(debetowaPath);
             var debetowaDic = debetowe.ToDictionary(s => Debetowa.Wczytaj(s).Hash, Debetowa.Wczytaj);
 
-            var kredytowe = Directory.GetFiles(Dkredytowa);
+            var kredytowe = Directory.GetFiles(kredytowaPath);
             var kredytowaDic = kredytowe.ToDictionary(s => Kredytowa.Wczytaj(s).Hash, Kredytowa.Wczytaj);
 
-            var banki = Directory.GetFiles(Dbanki);
+            var banki = Directory.GetFiles(bankiPath);
             var bankDic = banki.ToDictionary(s => Bank.Wczytaj(s).Hash, Bank.Wczytaj);
 
-            var osoby = Directory.GetFiles(Dosoby);
+            var osoby = Directory.GetFiles(osobyPath);
             var osobaDic = osoby.ToDictionary(s => Osoba.Wczytaj(s).Hash, Osoba.Wczytaj);
 
-            var firmy = Directory.GetFiles(Dfirmy);
+            var firmy = Directory.GetFiles(firmyPath);
             var firmaDic = firmy.ToDictionary(s => Firma.Wczytaj(s).Hash, Firma.Wczytaj);
 
             //Zamiana hashy w obiektu odpowiedniego typu.
-            var RealBanki = bankDic.Values.ToDictionary(bank => bank.Hash, bank => new Bank(bank.Nazwa));
-            var RealOsoby = osobaDic.Values.ToDictionary(osoba => osoba.Hash, osoba => new Osoba(osoba.Imie, osoba.Nazwisko));
-            var RealFirmy = firmaDic.Values.ToDictionary(firma => firma.Hash, firma => new Firma(firma.Nazwa, firma.Kategoria, new Centrum()));
-            var RealKonta = new Dictionary<int, Konto>();
+            var bankiObj = bankDic.Values.ToDictionary(bank => bank.Hash, bank => new Bank(bank.Nazwa));
+            var osobyObj = osobaDic.Values.ToDictionary(osoba => osoba.Hash, osoba => new Osoba(osoba.Imie, osoba.Nazwisko));
+            var firmyObj = firmaDic.Values.ToDictionary(firma => firma.Hash, firma => new Firma(firma.Nazwa, firma.Kategoria, new Centrum()));
+            var kontaObj = new Dictionary<int, Konto>();
 
             //Tworzenie kont z referencjami do odpowiednich obiektów.
             foreach (var konto in kontoDic.Values)
             {
-                var bank = RealBanki[konto.BankHash];
-                Klient klient;
-                if (RealOsoby.ContainsKey(konto.KlientHash))
-                    klient = RealOsoby[konto.KlientHash];
-                else if (RealFirmy.ContainsKey(konto.KlientHash))
-                    klient = RealFirmy[konto.KlientHash];
-                else
-                    throw new Exception();
+                try
+                {
+                    var bank = bankiObj[konto.BankHash];
+                    Klient klient;
+                    if (firmyObj.ContainsKey(konto.KlientHash))
+                        klient = firmyObj[konto.KlientHash];
+                    else
+                        klient = osobyObj[konto.KlientHash];
 
-                var RealKonto = new Konto(bank, klient, konto.Saldo);
-                klient.DodajKonto(RealKonto);
-                bank.DodajKonto(RealKonto);
-                RealKonta.Add(konto.Hash, RealKonto);
+                    var realKonto = new Konto(bank, klient, konto.Saldo);
+                    klient.DodajKonto(realKonto);
+                    bank.DodajKonto(realKonto);
+                    kontaObj.Add(konto.Hash, realKonto);
+                }
+                catch (Exception)
+                {
+                    throw new DeserializacjaException<Konto.KontoJson>(nazwa, konto.KlientHash, kontoDic);
+                }
             }
 
             //Tworzenie kart z referencjami do odpowiednich obiektów.
             foreach (var debetowa in debetowaDic.Values)
             {
-                var bank = RealBanki[debetowa.BankHash];
-                var osoba = RealOsoby[debetowa.OsobaHash];
-                var konto = RealKonta[debetowa.KontoHash];
-                var RealDebetowa = new Debetowa(bank, osoba, konto, debetowa.Numer);
-                osoba.DodajKarte(RealDebetowa);
-                bank.DodajKarte(RealDebetowa);
+                try
+                {
+                    var bank = bankiObj[debetowa.BankHash];
+                    var osoba = osobyObj[debetowa.OsobaHash];
+                    var konto = kontaObj[debetowa.KontoHash];
+                    var realDebetowa = new Debetowa(bank, osoba, konto, debetowa.Numer);
+                    osoba.DodajKarte(realDebetowa);
+                    bank.DodajKarte(realDebetowa);
+                }
+                catch (Exception)
+                {
+                    throw new DeserializacjaException<Debetowa.DebetowaJson>(nazwa, debetowa, debetowaDic);
+                }
             }
             foreach (var kredytowa in kredytowaDic.Values)
             {
-                var bank = RealBanki[kredytowa.BankHash];
-                var osoba = RealOsoby[kredytowa.OsobaHash];
-                var RealKredytowa = new Kredytowa(bank, osoba, kredytowa.Kredyt, kredytowa.Saldo, kredytowa.Numer);
-                osoba.DodajKarte(RealKredytowa);
-                bank.DodajKarte(RealKredytowa);
+                try
+                {
+                    var bank = bankiObj[kredytowa.BankHash];
+                    var osoba = osobyObj[kredytowa.OsobaHash];
+                    var realKredytowa = new Kredytowa(bank, osoba, kredytowa.Kredyt, kredytowa.Saldo, kredytowa.Numer);
+                    osoba.DodajKarte(realKredytowa);
+                    bank.DodajKarte(realKredytowa);
+                }
+                catch (Exception)
+                {
+                    throw new DeserializacjaException<Kredytowa.KredytowaJson>(nazwa, kredytowa, kredytowaDic);
+                }
             }
 
             //Zamiana Directory na listy
-            var ListOsoby = RealOsoby.Values.ToList();
-            var ListBanki = RealBanki.Values.ToList();
-            var ListFirmy = RealFirmy.Values.ToList();
+            var listOsoby = osobyObj.Values.ToList();
+            var listBanki = bankiObj.Values.ToList();
+            var listFirmy = firmyObj.Values.ToList();
 
-            var centrum = new Centrum(new List<Transakcja>(), ListOsoby, ListFirmy, ListBanki);
+            var centrum = new Centrum(new List<Transakcja>(), listOsoby, listFirmy, listBanki);
             //Wstawienie odpowiedniego centrum do firmy
             foreach (var firma in centrum.firmy)
                 firma.Centrum = centrum;
@@ -270,37 +289,42 @@ namespace POProjekt
         /// <param name="nazwa">Nazwa folderu do którego ma zostać zapisane centrum.</param>
         public bool Zapisz(string nazwa)
         {
-            string Dkarty = $"{nazwa}/karty",
-                Dkonta = $"{nazwa}/konta",
-                Dbanki = $"{nazwa}/banki",
-                Dosoby = $"{nazwa}/osoby",
-                Dfirmy = $"{nazwa}/firmy";
+            var paths = new Dictionary<string, string>()
+            {
+                {"kartyPath", $"{nazwa}/karty"},
+                {"kontaPath", $"{nazwa}/konta"},
+                {"bankiPath", $"{nazwa}/banki"},
+                {"osobyPath", $"{nazwa}/osoby"},
+                {"firmyPath", $"{nazwa}/firmy"},
+            };
 
             //Usuwanie plikow i folderów jeśli już istnieją
             if (Directory.Exists(nazwa))
                 Directory.Delete(nazwa, true);
 
-            Directory.CreateDirectory(Dkarty); Directory.CreateDirectory(Dkarty); 
-            Directory.CreateDirectory(Dkonta); Directory.CreateDirectory(Dbanki); 
-            Directory.CreateDirectory(Dosoby); Directory.CreateDirectory(Dfirmy);
-            Directory.CreateDirectory($"{Dkarty}/debetowa");
-            Directory.CreateDirectory($"{Dkarty}/kredytowa");
+            foreach (var pathsValue in paths.Values)
+            {
+                Directory.CreateDirectory(pathsValue);
+            }
+
+            Directory.CreateDirectory($"{paths["kartyPath"]}/debetowa");
+            Directory.CreateDirectory($"{paths["kartyPath"]}/kredytowa");
 
             foreach (var bank in banki)
             {
                 foreach (var karta in bank.Karty)
-                    karta.Zapisz(Dkarty);
+                    karta.Zapisz(paths["kartyPath"]);
 
                 foreach (var konto in bank.Konta)
-                    konto.Zapisz(Dkonta);
+                    konto.Zapisz(paths["kontaPath"]);
 
-                bank.Zapisz(Dbanki);
+                bank.Zapisz(paths["bankiPath"]);
             }
             foreach (var osoba in osoby)
-                osoba.Zapisz(Dosoby);
+                osoba.Zapisz(paths["osobyPath"]);
 
             foreach (var firma in firmy)
-                firma.Zapisz(Dfirmy);
+                firma.Zapisz(paths["firmyPath"]);
 
             var transakcjeJson = transakcje.Select(transakcja => transakcja.Json()).Cast<object>().ToList();
             File.WriteAllText($"{nazwa}/czytelneTransakcje.json", JsonConvert.SerializeObject(transakcjeJson, Json.JsonSerializerSettings));

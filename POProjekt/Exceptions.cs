@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace POProjekt
 {
@@ -17,17 +18,31 @@ namespace POProjekt
             this.cos = cos;
         }
     }
-    /// <summary> Podany plik nie istnieje. </summary>
-    public class NieMaPliku : Exception
+
+    public class WczytwanieZapisException : Exception
     {
         public readonly string Sciezka;
 
-        public NieMaPliku(string sciezka)
+        public WczytwanieZapisException(string sciezka)
         {
             Sciezka = sciezka;
         }
     }
-    /// <summary> Coś nie działa, jest w wiadomości co. </summary>
+
+    public class DeserializacjaException <T> : WczytwanieZapisException
+    {
+        public readonly object obj;
+        private Dictionary<int, T> dic;
+        public IReadOnlyDictionary<int, T> Dic => dic;
+
+        public DeserializacjaException(string sciezka, object obj, Dictionary<int, T> dic) : base(sciezka)
+        {
+            this.obj = obj;
+            this.dic = dic;
+        }
+    }
+
+    /// <summary> Coś nie działa z firma, w wiadomości jest co. </summary>
     public class FirmaException : Exception
     {
         public readonly Firma Firma;
@@ -46,6 +61,7 @@ namespace POProjekt
             Konto = konto;
         }
     }
+
     /// <summary> Podane konto jest już na liście kont w ty obiekcie </summary>
     public class KontoIstnieje : KontoException
     {
@@ -55,6 +71,7 @@ namespace POProjekt
             this.gdzie = gdzie;
         }
     }
+
     /// <summary> Podane konto nie jest na liście kont w ty obiekcie </summary>
     public class KontoNieIstnieje : KontoIstnieje
     {
@@ -70,6 +87,7 @@ namespace POProjekt
             Karta = karta;
         }
     }
+
     /// <summary> Podana karta jest już na liście kont w ty obiekcie. </summary>
     public class KartaNieIstnieje : KartaException
     {
@@ -80,6 +98,7 @@ namespace POProjekt
             this.gdzie = gdzie;
         }
     }
+
     /// <summary> Podana karta nie jest na liście kont w ty obiekcie. </summary>
     public class KwotaException : Exception
     {
@@ -101,6 +120,7 @@ namespace POProjekt
             this.kwota = kwota;
         }
     }
+
     /// <summary> Podanie złego kredytu podczas tworzenia karty kredytowej </summary>
     public class UjemnyKredyt : Exception
     {
