@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace POProjekt
 {
@@ -6,24 +10,24 @@ namespace POProjekt
     {
         public readonly string Nazwa;
         public readonly string Kategoria;
-        //public int domyslneKonto = 0;
-        public const int DomyslneKonto = 0;
-        public readonly Centrum Centrum;
-        /*public int DomyslneKonto
+        private Centrum centrum;
+
+        /// <summary> Pozwala zmienić centrum tylko podczas wczytywania z pliku. </summary>
+        public Centrum Centrum
         {
-            get => domyslneKonto;
+            get => centrum;
             set
             {
-                if (value < konta.Count)
-                    domyslneKonto = value;
+                if (Centrum.wczytywanie)
+                    centrum = value;
             }
-        }*/
+        }
 
         public Firma(string nazwa, string kategoria, Centrum centrum)
         {
             Nazwa = nazwa;
             Kategoria = kategoria;
-            this.Centrum = centrum;
+            this.centrum = centrum;
         }
 
         /// <summary> Prosi centrum o autoryzację transakcji. Jeśli się uda to wpłaca kwotę transakcji na konto firmowe. </summary>
@@ -34,17 +38,43 @@ namespace POProjekt
 
             try
             {
-                konta[DomyslneKonto].Wplac(kwota);
+                konta[0].Wplac(kwota);
             }
-            catch (ArgumentOutOfRangeException e)
+            catch (ArgumentOutOfRangeException)
             {
-                throw new FirmaException(this, "Nie istnieje firmowe konto o podanym indeksie");
+                throw new FirmaException(this, "Firma nie posiada konta");
             }
 
             return true;
         }
 
-        public override bool Equals(object? obj) => obj is Firma druga && druga.Nazwa == Nazwa;
+        public override bool Equals(object obj) => obj is Firma druga && druga.Nazwa == Nazwa;
         public override string ToString() => Nazwa;
+
+        public class FirmaJson : Json
+        {
+            public readonly string Nazwa;
+            public readonly string Kategoria;
+            public readonly List<int> Konta;
+            [JsonConstructor]
+            public FirmaJson(string nazwa, string kategoria, List<int> karty, List<int> konta, int hash) : base(hash)
+            {
+                Nazwa = nazwa;
+                Kategoria = kategoria;
+                Konta = konta;
+            }
+            public FirmaJson(Firma firma) : base(firma)
+            {
+                Nazwa = firma.Nazwa;
+                Kategoria = firma.Kategoria;
+                Konta = firma.konta.Select(konta => konta.GetHashCode()).ToList();
+            }
+        }
+        public void Zapisz(string dir)
+        {
+            var json = JsonConvert.SerializeObject(new FirmaJson(this), Json.JsonSerializerSettings);
+            File.WriteAllText($"{dir}/{GetHashCode()}.json", json);
+        }
+        public static FirmaJson Wczytaj(string dir) => JsonConvert.DeserializeObject<FirmaJson>(File.ReadAllText(dir));
     }
 }

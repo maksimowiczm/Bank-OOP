@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace POProjekt
 {
@@ -7,18 +9,14 @@ namespace POProjekt
     {
         public readonly string Imie;
         public readonly string Nazwisko;
-        private readonly List<Karta> karty;
+        private readonly List<Karta> karty = new();
         public IList<Karta> Karty => karty.AsReadOnly();
 
-        [JsonConstructor]
-        public Osoba(string imie, string nazwisko, List<Karta> karty, List<Konto> konta)
+        public Osoba(string imie, string nazwisko)
         {
             Imie = imie;
             Nazwisko = nazwisko;
-            this.karty = karty;
-            this.konta = konta;
         }
-        public Osoba(string imie, string nazwisko) : this(imie, nazwisko, new List<Karta>(), new List<Konto>()) { }
 
         private bool mojaKarta(Karta karta) => karty.Contains(karta);
         /// <summary> Jeśli podana karta należy do tej osoby dodaje ją do list kart. </summary>
@@ -38,7 +36,37 @@ namespace POProjekt
             return true;
         }
 
-        public override bool Equals(object? obj) => obj is Osoba druga && druga.Imie == Imie && druga.Nazwisko == Nazwisko;
+        public override bool Equals(object obj) => obj is Osoba druga && druga.Imie == Imie && druga.Nazwisko == Nazwisko;
         public override string ToString() => $"{Imie} {Nazwisko}";
+
+        public class OsobaJson : Json
+        {
+            public readonly string Imie;
+            public readonly string Nazwisko;
+            public readonly List<int> Karty;
+            public readonly List<int> Konta;
+
+            [JsonConstructor]
+            public OsobaJson(string imie, string nazwisko, List<int> karty, List<int> konta, int hash) : base(hash)
+            {
+                Imie = imie;
+                Nazwisko = nazwisko;
+                Karty = karty;
+                Konta = konta;
+            }
+            public OsobaJson(Osoba osoba) : base(osoba)
+            {
+                Imie = osoba.Imie;
+                Nazwisko = osoba.Nazwisko;
+                Karty = osoba.karty.Select(karta => karta.GetHashCode()).ToList();
+                Konta = osoba.konta.Select(konta => konta.GetHashCode()).ToList();
+            }
+        }
+        public void Zapisz(string dir)
+        {
+            var json = JsonConvert.SerializeObject(new OsobaJson(this), Json.JsonSerializerSettings);
+            File.WriteAllText($"{dir}/{GetHashCode()}.json", json);
+        }
+        public static OsobaJson Wczytaj(string dir) => JsonConvert.DeserializeObject<OsobaJson>(File.ReadAllText(dir));
     }
 }

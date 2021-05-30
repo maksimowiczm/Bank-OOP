@@ -5,7 +5,7 @@ namespace POProjekt
 {
     public class Transakcja
     {
-        private static int ilosc = 0;
+        private static int ilosc;
         public readonly int Id;
         public readonly DateTime Data;
         public readonly bool Sukces;
@@ -51,7 +51,7 @@ namespace POProjekt
                 this.kwota = kwota;
                 this.bankOsoby = karta.Bank.ToString();
                 this.osoba = osoba.ToString();
-                bankFirmy = firma.Konta[Firma.DomyslneKonto].Bank.ToString();
+                bankFirmy = firma.Konta[0].Bank.ToString();
                 this.firma = firma.ToString();
                 this.karta = karta.Numer;
             }

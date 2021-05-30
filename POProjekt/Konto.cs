@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.IO;
 
 namespace POProjekt
 {
@@ -8,7 +9,6 @@ namespace POProjekt
         public readonly Klient Klient;
         public decimal Saldo { get; private set; }
 
-        [JsonConstructor]
         public Konto(Bank bank, Klient klient, decimal saldo)
         {
             Klient = klient;
@@ -29,5 +29,32 @@ namespace POProjekt
             Saldo -= kwota;
             return true;
         }
+
+        public class KontoJson : Json
+        {
+            public readonly decimal Saldo;
+            public readonly int KlientHash;
+            public readonly int BankHash;
+
+            [JsonConstructor]
+            public KontoJson(int hash, decimal saldo, int klientHash, int bankHash) : base(hash)
+            {
+                Saldo = saldo;
+                KlientHash = klientHash;
+                BankHash = bankHash;
+            }
+            public KontoJson(Konto obj) : base(obj)
+            {
+                KlientHash = obj.Klient.GetHashCode();
+                BankHash = obj.Bank.GetHashCode();
+                Saldo = obj.Saldo;
+            }
+        }
+        public void Zapisz(string dir)
+        {
+            var json = JsonConvert.SerializeObject(new KontoJson(this), Json.JsonSerializerSettings);
+            File.WriteAllText($"{dir}/{GetHashCode()}.json", json);
+        }
+        public static KontoJson Wczytaj(string dir) => JsonConvert.DeserializeObject<KontoJson>(File.ReadAllText(dir));
     }
 }
