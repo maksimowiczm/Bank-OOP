@@ -182,13 +182,15 @@ namespace POProjekt
                 throw new NieMaPliku(nazwa);
 
             wczytywanie = true;
-            var Ddebetowa = $"{nazwa}/karty/debetowa";
-            var Dkredytowa = $"{nazwa}/karty/kredytowa";
-            var Dkonta = $"{nazwa}/konta";
-            var Dbanki = $"{nazwa}/banki";
-            var Dosoby = $"{nazwa}/osoby";
-            var Dfirmy = $"{nazwa}/firmy";
+            //ścieżki do folderów z plikami.
+            string Ddebetowa = $"{nazwa}/karty/debetowa",
+                Dkredytowa = $"{nazwa}/karty/kredytowa",
+                Dkonta = $"{nazwa}/konta",
+                Dbanki = $"{nazwa}/banki",
+                Dosoby = $"{nazwa}/osoby",
+                Dfirmy = $"{nazwa}/firmy";
 
+            //Wczytywanie obiektów z hashami.
             var konta = Directory.GetFiles(Dkonta);
             var kontoDic = konta.ToDictionary(s => Konto.Wczytaj(s).Hash, Konto.Wczytaj);
 
@@ -207,12 +209,13 @@ namespace POProjekt
             var firmy = Directory.GetFiles(Dfirmy);
             var firmaDic = firmy.ToDictionary(s => Firma.Wczytaj(s).Hash, Firma.Wczytaj);
 
+            //Zamiana hashy w obiektu odpowiedniego typu.
             var RealBanki = bankDic.Values.ToDictionary(bank => bank.Hash, bank => new Bank(bank.Nazwa));
             var RealOsoby = osobaDic.Values.ToDictionary(osoba => osoba.Hash, osoba => new Osoba(osoba.Imie, osoba.Nazwisko));
             var RealFirmy = firmaDic.Values.ToDictionary(firma => firma.Hash, firma => new Firma(firma.Nazwa, firma.Kategoria, new Centrum()));
-
-
             var RealKonta = new Dictionary<int, Konto>();
+
+            //Tworzenie kont z referencjami do odpowiednich obiektów.
             foreach (var konto in kontoDic.Values)
             {
                 var bank = RealBanki[konto.BankHash];
@@ -230,6 +233,7 @@ namespace POProjekt
                 RealKonta.Add(konto.Hash, RealKonto);
             }
 
+            //Tworzenie kart z referencjami do odpowiednich obiektów.
             foreach (var debetowa in debetowaDic.Values)
             {
                 var bank = RealBanki[debetowa.BankHash];
@@ -239,7 +243,6 @@ namespace POProjekt
                 osoba.DodajKarte(RealDebetowa);
                 bank.DodajKarte(RealDebetowa);
             }
-
             foreach (var kredytowa in kredytowaDic.Values)
             {
                 var bank = RealBanki[kredytowa.BankHash];
@@ -249,11 +252,13 @@ namespace POProjekt
                 bank.DodajKarte(RealKredytowa);
             }
 
+            //Zamiana Directory na listy
             var ListOsoby = RealOsoby.Values.ToList();
             var ListBanki = RealBanki.Values.ToList();
             var ListFirmy = RealFirmy.Values.ToList();
 
             var centrum = new Centrum(new List<Transakcja>(), ListOsoby, ListFirmy, ListBanki);
+            //Wstawienie odpowiedniego centrum do firmy
             foreach (var firma in centrum.firmy)
                 firma.Centrum = centrum;
 
@@ -265,22 +270,22 @@ namespace POProjekt
         /// <param name="nazwa">Nazwa folderu do którego ma zostać zapisane centrum.</param>
         public bool Zapisz(string nazwa)
         {
-            var Dkarty = $"{nazwa}/karty";
-            var Dkonta = $"{nazwa}/konta";
-            var Dbanki = $"{nazwa}/banki";
-            var Dosoby = $"{nazwa}/osoby";
-            var Dfirmy = $"{nazwa}/firmy";
+            string Dkarty = $"{nazwa}/karty",
+                Dkonta = $"{nazwa}/konta",
+                Dbanki = $"{nazwa}/banki",
+                Dosoby = $"{nazwa}/osoby",
+                Dfirmy = $"{nazwa}/firmy";
+
+            //Usuwanie plikow i folderów jeśli już istnieją
             if (Directory.Exists(nazwa))
                 Directory.Delete(nazwa, true);
 
-            Directory.CreateDirectory(Dkarty);
+            Directory.CreateDirectory(Dkarty); Directory.CreateDirectory(Dkarty); 
+            Directory.CreateDirectory(Dkonta); Directory.CreateDirectory(Dbanki); 
+            Directory.CreateDirectory(Dosoby); Directory.CreateDirectory(Dfirmy);
             Directory.CreateDirectory($"{Dkarty}/debetowa");
             Directory.CreateDirectory($"{Dkarty}/kredytowa");
-            Directory.CreateDirectory(Dkarty);
-            Directory.CreateDirectory(Dkonta);
-            Directory.CreateDirectory(Dbanki);
-            Directory.CreateDirectory(Dosoby);
-            Directory.CreateDirectory(Dfirmy);
+
             foreach (var bank in banki)
             {
                 foreach (var karta in bank.Karty)
@@ -296,7 +301,6 @@ namespace POProjekt
 
             foreach (var firma in firmy)
                 firma.Zapisz(Dfirmy);
-
 
             var transakcjeJson = transakcje.Select(transakcja => transakcja.Json()).Cast<object>().ToList();
             File.WriteAllText($"{nazwa}/czytelneTransakcje.json", JsonConvert.SerializeObject(transakcjeJson, Json.JsonSerializerSettings));
