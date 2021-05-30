@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.IO;
 
 namespace POProjekt
 {
@@ -41,6 +42,25 @@ namespace POProjekt
 
             Saldo -= kwota;
             return true;
+        }
+
+        internal class KredytowaJson : Json
+        {
+            public readonly decimal Kredyt;
+            public readonly decimal Saldo;
+            public readonly int Numer;
+
+            public KredytowaJson(Kredytowa kredytowa) : base(kredytowa)
+            {
+                Kredyt = kredytowa.Kredyt;
+                Saldo = kredytowa.Saldo;
+                Numer = kredytowa.Numer;
+            }
+        }
+        public override void Zapisz(string dir)
+        {
+            var json = JsonConvert.SerializeObject(new KredytowaJson(this), Json.JsonSerializerSettings);
+            File.WriteAllText($"{dir}/{GetHashCode()}.json", json);
         }
     }
 }

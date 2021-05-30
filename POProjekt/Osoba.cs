@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace POProjekt
 {
@@ -40,5 +42,26 @@ namespace POProjekt
 
         public override bool Equals(object? obj) => obj is Osoba druga && druga.Imie == Imie && druga.Nazwisko == Nazwisko;
         public override string ToString() => $"{Imie} {Nazwisko}";
+
+        internal class OsobaJson : Json
+        {
+            public readonly string Imie;
+            public readonly string Nazwisko;
+            public readonly List<int> karty;
+            public readonly List<int> konta;
+
+            public OsobaJson(Osoba osoba) : base(osoba)
+            {
+                Imie = osoba.Imie;
+                Nazwisko = osoba.Nazwisko;
+                karty = osoba.karty.Select(karta => karta.GetHashCode()).ToList();
+                konta = osoba.konta.Select(konta => konta.GetHashCode()).ToList();
+            }
+        }
+        public void Zapisz(string dir)
+        {
+            var json = JsonConvert.SerializeObject(new OsobaJson(this), Json.JsonSerializerSettings);
+            File.WriteAllText($"{dir}/{GetHashCode()}.json", json);
+        }
     }
 }

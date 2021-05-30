@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.IO;
 
 namespace POProjekt
 {
@@ -28,6 +29,21 @@ namespace POProjekt
             if (kwota > Saldo) return false;
             Saldo -= kwota;
             return true;
+        }
+
+        internal class KontoJson : Json
+        {
+            public readonly decimal Saldo;
+
+            public KontoJson(Konto obj) : base(obj)
+            {
+                Saldo = obj.Saldo;
+            }
+        }
+        public void Zapisz(string dir)
+        {
+            var json = JsonConvert.SerializeObject(new KontoJson(this), Json.JsonSerializerSettings);
+            File.WriteAllText($"{dir}/{GetHashCode()}.json", json);
         }
     }
 }

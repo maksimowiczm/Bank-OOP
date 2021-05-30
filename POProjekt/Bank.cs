@@ -1,5 +1,7 @@
-﻿using Newtonsoft.Json; //do zapisu na dysk
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace POProjekt
 {
@@ -14,7 +16,7 @@ namespace POProjekt
         [JsonConstructor]
         public Bank(string nazwa, List<Karta> karty, List<Konto> konta)
         {
-            this.Nazwa = nazwa;
+            Nazwa = nazwa;
             this.karty = karty;
             this.konta = konta;
         }
@@ -80,5 +82,24 @@ namespace POProjekt
 
         public override bool Equals(object? obj) => obj is Bank drugi && drugi.Nazwa == Nazwa;
         public override string ToString() => Nazwa;
+
+        internal class BankJson : Json
+        {
+            public readonly string Nazwa;
+            public readonly List<int> Karty;
+            public readonly List<int> Konta;
+
+            public BankJson(Bank bank) : base(bank)
+            {
+                Nazwa = bank.Nazwa;
+                Karty = bank.karty.Select(karta => karta.GetHashCode()).ToList();
+                Konta = bank.konta.Select(konto => konto.GetHashCode()).ToList();
+            }
+        }
+        public void Zapisz(string dir)
+        {
+            var json = JsonConvert.SerializeObject(new BankJson(this), Json.JsonSerializerSettings);
+            File.WriteAllText($"{dir}/{GetHashCode()}.json", json);
+        }
     }
 }

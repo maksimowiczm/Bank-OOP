@@ -30,6 +30,7 @@ namespace POProjekt
         public abstract void Wplac(decimal kwota);
         public abstract bool Wyplac(decimal kwota);
 
+        public abstract void Zapisz(string dir);
         public override bool Equals(object? obj) => obj is Karta druga && druga.Numer == Numer;
     }
 }
