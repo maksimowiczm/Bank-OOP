@@ -95,7 +95,8 @@ namespace POProjekt
         public bool RealizujTransakcje(Karta karta, decimal kwota) => mojaKarta(karta) && karta.Wyplac(kwota);
 
         public override bool Equals(object obj) => obj is Bank drugi && drugi.Nazwa == Nazwa;
-        public override string ToString() => Nazwa;
+
+        public override string ToString() => $"{Nazwa,25} {karty.Count,25} {konta.Count,25}";
 
         public class BankJson : Json
         {

@@ -42,7 +42,8 @@ namespace POProjekt
         }
 
         public override bool Equals(object obj) => obj is Osoba druga && druga.Imie == Imie && druga.Nazwisko == Nazwisko;
-        public override string ToString() => $"{Imie} {Nazwisko}";
+
+        public override string ToString() => $"{Imie,25}{Nazwisko,25}{karty.Count,25}{konta.Count,25}";
 
         public class OsobaJson : Json
         {

@@ -49,7 +49,8 @@ namespace POProjekt
         }
 
         public override bool Equals(object obj) => obj is Firma druga && druga.Nazwa == Nazwa;
-        public override string ToString() => Nazwa;
+
+        public override string ToString() => $"{Nazwa,25}{Kategoria,25}{konta[0].Bank.Nazwa,25}{konta[0].Saldo,25}";
 
         public class FirmaJson : Json
         {
