@@ -232,9 +232,9 @@ namespace POProjekt
                     bank.DodajKonto(realKonto);
                     kontaObj.Add(konto.Hash, realKonto);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    throw new DeserializacjaException<Konto.KontoJson>(nazwa, konto.KlientHash, kontoDic);
+                    throw new DeserializacjaException<Konto.KontoJson>(nazwa, konto.KlientHash, kontoDic, e);
                 }
             }
 
@@ -250,9 +250,9 @@ namespace POProjekt
                     osoba.DodajKarte(realDebetowa);
                     bank.DodajKarte(realDebetowa);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    throw new DeserializacjaException<Debetowa.DebetowaJson>(nazwa, debetowa, debetowaDic);
+                    throw new DeserializacjaException<Debetowa.DebetowaJson>(nazwa, debetowa, debetowaDic, e);
                 }
             }
             foreach (var kredytowa in kredytowaDic.Values)
@@ -265,9 +265,9 @@ namespace POProjekt
                     osoba.DodajKarte(realKredytowa);
                     bank.DodajKarte(realKredytowa);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    throw new DeserializacjaException<Kredytowa.KredytowaJson>(nazwa, kredytowa, kredytowaDic);
+                    throw new DeserializacjaException<Kredytowa.KredytowaJson>(nazwa, kredytowa, kredytowaDic, e);
                 }
             }
 

@@ -44,6 +44,7 @@ namespace POProjekt
                 KontoHash = kontoHash;
                 OsobaHash = osobaHash;
                 BankHash = bankHash;
+                Numer = numer;
             }
             public DebetowaJson(Debetowa debetowa) : base(debetowa)
             {

@@ -22,7 +22,12 @@ namespace POProjekt
         /// <summary> Jeśli podana karta należy do tej osoby dodaje ją do list kart. </summary>
         public bool DodajKarte(Karta karta)
         {
-            if (karta.Osoba != this || karty.Contains(karta)) throw new KartaNieIstnieje(karta, this);
+            if (Centrum.wczytywanie)
+            {
+                karty.Add(karta);
+                return true;
+            }
+            if (!karta.Osoba.Equals(this) || karty.Contains(karta)) throw new KartaNieIstnieje(karta, this);
 
             karty.Add(karta);
             return true;
