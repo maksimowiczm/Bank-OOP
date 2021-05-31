@@ -49,10 +49,10 @@ namespace POProjekt
                 this.data = data;
                 this.sukces = sukces;
                 this.kwota = kwota;
-                this.bankOsoby = karta.Bank.ToString();
-                this.osoba = osoba.ToString();
-                bankFirmy = firma.Konta[0].Bank.ToString();
-                this.firma = firma.ToString();
+                this.bankOsoby = karta.Bank.Nazwa;
+                this.osoba = osoba.Imie + osoba.Nazwisko;
+                bankFirmy = firma.Konta[0].Bank.Nazwa;
+                this.firma = firma.Nazwa;
                 this.karta = karta.Numer;
             }
         }
