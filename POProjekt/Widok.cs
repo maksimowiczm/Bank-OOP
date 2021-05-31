@@ -3,20 +3,13 @@ using System.Collections.Generic;
 
 namespace POProjekt
 {
-    public abstract class Widok
+    public static class Widok
     {
-        public List<string> lista;
-        protected int wybor;
-        protected Widok(List<string> lista)
+        public static void Wyswietl(List<string> lista)
         {
-            this.lista = lista;
-        }
-
-        public virtual void Wyswietl()
-        {
-            for (int i = 1; i <= lista.Count; i++)
+            for (int i = 0; i < lista.Count; i++)
             {
-                Console.WriteLine($"{i}. {lista[i]}");
+                Console.WriteLine($"{i + 1}. {lista[i]}");
             }
         }
     }
