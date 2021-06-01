@@ -8,7 +8,6 @@ namespace POInterfejs
     {
         private const int sleep = 0;
         private const string start = "Witaj w centrum obsługi kart płatniczych";
-
         public static void Main()
         {
             Console.WriteLine(start);
@@ -39,6 +38,12 @@ namespace POInterfejs
                         {
                             centrum = Centrum.Wczytaj(plik);
                             MenuWidok.Start(centrum);
+                        }
+                        catch (DeserializacjaException e)
+                        {
+                            Console.WriteLine("Krytyczny bład wczytywania");
+                            Console.WriteLine(e);
+                            Environment.Exit(1);
                         }
                         catch (WczytwanieZapisException)
                         {

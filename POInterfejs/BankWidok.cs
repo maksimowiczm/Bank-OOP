@@ -92,6 +92,8 @@ namespace POInterfejs
                 var klient = konto.Klient.GetType() == typeof(Firma) ? "firma" : "osoba";
                 Console.WriteLine($"{klient,5} {konto.ToString("f")}");
             }
+
+            Console.Read();
         }
     }
 }
