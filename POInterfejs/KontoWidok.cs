@@ -8,28 +8,6 @@ namespace POInterfejs
     {
         public static readonly string KontoHeader = $"{"Saldo",10} {"Bank",15}";
 
-        public static Konto WybierzKonto(Osoba osoba)
-        {
-            Console.WriteLine($"   {KontoHeader}");
-
-            Widok.Wyswietl(osoba.Konta.Select(konto => konto.ToString("b")).ToList());
-            var wybor = 0;
-            while (wybor < 1 || wybor > osoba.Karty.Count)
-                int.TryParse(Console.ReadLine(), out wybor);
-
-            return osoba.Konta[wybor - 1];
-        }
-
-        public static void DodajKonto(Centrum centrum, Klient klient)
-        {
-            Console.Clear();
-            Console.WriteLine("Wybierz bank dla nowego konta");
-            BankWidok.WybierzBank(centrum).StworzKonto(klient);
-
-            Console.WriteLine("Konto stworzone");
-            Console.Read();
-        }
-
         public static void Zarzadzaj(Konto konto)
         {
             string[] zarzadzajKontem =
@@ -67,6 +45,27 @@ namespace POInterfejs
                         break;
                 }
             }
+        }
+
+        public static void DodajKonto(Centrum centrum, Klient klient)
+        {
+            Console.Clear();
+            Console.WriteLine("Wybierz bank dla nowego konta");
+            BankWidok.WybierzBank(centrum).StworzKonto(klient);
+            Console.WriteLine("Konto stworzone");
+            Console.Read();
+        }
+
+        public static Konto WybierzKonto(Osoba osoba)
+        {
+            Console.WriteLine($"   {KontoHeader}");
+
+            Widok.Wyswietl(osoba.Konta.Select(konto => konto.ToString("b")).ToList());
+            var wybor = 0;
+            while (wybor < 1 || wybor > osoba.Karty.Count)
+                int.TryParse(Console.ReadLine(), out wybor);
+
+            return osoba.Konta[wybor - 1];
         }
     }
 }

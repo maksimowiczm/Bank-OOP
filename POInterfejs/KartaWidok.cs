@@ -6,19 +6,45 @@ namespace POInterfejs
 {
     public static class KartaWidok
     {
+        private static readonly string[] zarzadzajKarta =
+        {
+            "Wpłać",
+            "Wypłać",
+            "Powrót",
+        };
+
         public static readonly string KartaHeader =
             $"{"Typ karty",9} {"Numer",10} {"Imie",10} {"Nazwisko",15} {"Saldo",10} Maksymalny kredyt";
 
-        public static Karta WybierzKarte(Osoba osoba)
+        public static void Zarzadzaj(Karta karta)
         {
-            Console.WriteLine($"   {KartaHeader}");
-
-            Widok.Wyswietl(osoba.Karty.Select(karta => $"{(karta.GetType() == typeof(Debetowa) ? "debetowa" : "kredytowa"),9} {karta}").ToList());
             var wybor = 0;
-            while (wybor < 1 || wybor > osoba.Karty.Count)
-                int.TryParse(Console.ReadLine(), out wybor);
+            while (wybor != zarzadzajKarta.Length)
+            {
+                Widok.Wyswietl(zarzadzajKarta);
+                if (!int.TryParse(Console.ReadLine(), out wybor))
+                    continue;
 
-            return osoba.Karty[wybor - 1];
+                Console.Clear();
+                decimal kwota;
+                switch (wybor)
+                {
+                    case 1:
+                        Console.WriteLine("Podaj kwotę do wpłacenia");
+                        while (!decimal.TryParse(Console.ReadLine(), out kwota)) { }
+
+                        karta.Wplac(kwota);
+                        Console.WriteLine($"Wpłacono. Aktualne saldo {karta.Saldo}");
+                        break;
+                    case 2:
+                        Console.WriteLine("Podaj kwotę do wypłacenia");
+                        while (!decimal.TryParse(Console.ReadLine(), out kwota)) { }
+
+                        if (!karta.Wyplac(kwota))
+                            Console.WriteLine("Kwota jest zbyt duża żeby ją wypłacić");
+                        break;
+                }
+            }
         }
 
         public static void DodajKarta(Centrum centrum, Osoba osoba)
@@ -52,42 +78,16 @@ namespace POInterfejs
             Console.Read();
         }
 
-        private static readonly string[] zarzadzajKarta =
+        public static Karta WybierzKarte(Osoba osoba)
         {
-            "Wpłać",
-            "Wypłać",
-            "Powrót",
-        };
+            Console.WriteLine($"   {KartaHeader}");
 
-        public static void ZarzadzajKarta(Karta karta)
-        {
+            Widok.Wyswietl(osoba.Karty.Select(karta => $"{(karta.GetType() == typeof(Debetowa) ? "debetowa" : "kredytowa"),9} {karta}").ToList());
             var wybor = 0;
-            while (wybor != zarzadzajKarta.Length)
-            {
-                Widok.Wyswietl(zarzadzajKarta);
-                if (!int.TryParse(Console.ReadLine(), out wybor))
-                    continue;
+            while (wybor < 1 || wybor > osoba.Karty.Count)
+                int.TryParse(Console.ReadLine(), out wybor);
 
-                Console.Clear();
-                decimal kwota;
-                switch (wybor)
-                {
-                    case 1:
-                        Console.WriteLine("Podaj kwotę do wpłacenia");
-                        while (!decimal.TryParse(Console.ReadLine(), out kwota)) { }
-
-                        karta.Wplac(kwota);
-                        Console.WriteLine($"Wpłacono. Aktualne saldo {karta.Saldo}");
-                        break;
-                    case 2:
-                        Console.WriteLine("Podaj kwotę do wypłacenia");
-                        while (!decimal.TryParse(Console.ReadLine(), out kwota)) { }
-
-                        if (!karta.Wyplac(kwota))
-                            Console.WriteLine("Kwota jest zbyt duża żeby ją wypłacić");
-                        break;
-                }
-            }
+            return osoba.Karty[wybor - 1];
         }
     }
 }

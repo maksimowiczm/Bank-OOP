@@ -8,10 +8,12 @@ namespace POInterfejs
     {
         private static readonly string[] zarzadzanieFirmami =
         {
-            "Dodaj frimę",
+            "Dodaj firmę",
             "Wyświetl firmę",
             "Powrót",
         };
+
+        private static readonly string firmaHeader = $"Numer{"Nazwa",15} {"Kategoria",15} {"Bank firmy",15} {"Saldo",10}";
 
         public static void ZarzadzajFirma(Centrum centrum)
         {
@@ -36,22 +38,16 @@ namespace POInterfejs
             }
         }
 
-        private static void ZrealizujTransakcje(Centrum centrum, Firma firma)
-        {
-            MenuWidok.ZrealizujTransakcje(centrum, firma);
-        }
-
-        private static readonly string[] kategorie =
-        {
-            "Sklep",
-            "Zakład usługowy",
-            "Firmy transportowe",
-        };
-
-        private static readonly string firmaHeader = $"Numer{"Nazwa",15} {"Kategoria",15} {"Bank firmy",15} {"Saldo",10}";
+        private static void ZrealizujTransakcje(Centrum centrum, Firma firma) => MenuWidok.ZrealizujTransakcje(centrum, firma);
 
         public static void DodajFirme(Centrum centrum)
         {
+            string[] kategorie =
+            {
+                "Sklep",
+                "Zakład usługowy",
+                "Firma transportowa",
+            };
             Console.WriteLine("Podaj nazwę firmy");
             var nazwa = Console.ReadLine();
 
@@ -135,7 +131,6 @@ namespace POInterfejs
                         int.TryParse(Console.ReadLine(), out srodek);
                         break;
                 }
-
             }
         }
     }

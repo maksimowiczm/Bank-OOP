@@ -57,26 +57,19 @@ namespace POInterfejs
 
         public static bool WeryfikujCentrum(Centrum centrum)
         {
+            var stworzone = new bool[3];
             if (centrum.Banki.Count == 0)
-            {
-                Console.WriteLine("Najpierw stwórz bank");
-                Console.Read();
-                return false;
-            }
-            else if (centrum.Osoby.Count == 0)
-            {
-                Console.WriteLine("Najpierw stwórz osobę");
-                Console.Read();
-                return false;
-            }
-            else if (centrum.Firmy.Count == 0)
-            {
-                Console.WriteLine("Najpierw stwórz firmę");
-                Console.Read();
-                return false;
-            }
+                stworzone[0] = true;
+            if (centrum.Osoby.Count == 0)
+                stworzone[1] = true;
+            if (centrum.Firmy.Count == 0)
+                stworzone[2] = true;
 
-            return true;
+            if (!stworzone.Any(b => b)) return true;
+
+            Console.WriteLine($"Najpierw stwórz {(stworzone[0] ? "bank" : "")} {(stworzone[1] ? "osobę" : "")} {(stworzone[2] ? "firmę" : "")}");
+            Console.Read();
+            return false;
         }
         public static void ZrealizujTransakcje(Centrum centrum, Firma firma)
         {
@@ -90,7 +83,7 @@ namespace POInterfejs
             while (!decimal.TryParse(Console.ReadLine(), out kwota)) { }
 
             Console.Clear();
-            Console.WriteLine("Wybierz kartę do zaplaty");
+            Console.WriteLine("Wybierz kartę do zapłaty");
 
             var karta = KartaWidok.WybierzKarte(osoba);
 
@@ -98,11 +91,11 @@ namespace POInterfejs
             Console.WriteLine("Realizuj transakcję");
             Widok.Wyswietl(new string[] { "tak", "nie" });
             var wybor = 0;
-            while (wybor < 1 || wybor > 2)
+            while (wybor is < 1 or > 2)
                 int.TryParse(Console.ReadLine(), out wybor);
 
             var sukces = firma.PoprosOAutoryzacje(karta, kwota);
-            Console.WriteLine($"Transakcja {(sukces ? "" : "nie")} udana.");
+            Console.WriteLine($"Transakcja{(sukces ? "" : " nie")} udana.");
             Console.WriteLine(centrum.Transakcje.Last().ToString());
             Console.Read();
         }
@@ -123,7 +116,7 @@ namespace POInterfejs
         public static void Zapisz(Centrum centrum)
         {
             Console.Clear();
-            Console.WriteLine("Podaj nazwę zapisu:");
+            Console.WriteLine("Podaj nazwę zapisu");
             var nazwa = Console.ReadLine();
             Zapisz(centrum, nazwa);
         }

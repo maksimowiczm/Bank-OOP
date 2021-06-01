@@ -12,6 +12,8 @@ namespace POInterfejs
             "Powrót",
         };
 
+        private static readonly string bankHeader = $"Numer{"Nazwa",25} {"Ilość kart",25} {"Ilość kont",25}";
+
         public static void ZarzadzajBank(Centrum centrum)
         {
             var wybor = 0;
@@ -33,8 +35,6 @@ namespace POInterfejs
                 }
             }
         }
-
-        private static readonly string bankHeader = $"Numer{"Nazwa",25} {"Ilość kart",25} {"Ilość kont",25}";
 
         public static void DodajBank(Centrum centrum)
         {

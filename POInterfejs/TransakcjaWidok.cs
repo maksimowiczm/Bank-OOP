@@ -165,12 +165,12 @@ namespace POInterfejs
                 Console.Clear();
             }
 
-            throw new NotImplementedException();
+            throw new ZapytanieException(pytanie, new Zapytanie(pytanie, zapytanieObiekty));
         }
 
         public static void ZnajdzTransakcje(Centrum centrum)
         {
-            Console.WriteLine("Wyszukaj transakcji według:");
+            Console.WriteLine("Wyszukaj transakcje według:");
             var zapytanie = GetZapytanie(centrum);
             var transakcje = centrum.ZnajdzTransakcje(zapytanie);
             Console.Clear();

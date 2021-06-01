@@ -12,6 +12,8 @@ namespace POInterfejs
             "Powrót",
         };
 
+        private static readonly string osobaHeader = $"Numer{"Imie",25}{"Nazwisko",25}{"Ilość kart",25}{"Ilość kont",25}";
+
         public static void ZarzadzajOsoba(Centrum centrum)
         {
             var wybor = 0;
@@ -56,7 +58,7 @@ namespace POInterfejs
                 {
                     case 1:
                         Console.Clear();
-                        KartaWidok.ZarzadzajKarta(KartaWidok.WybierzKarte(osoba));
+                        KartaWidok.Zarzadzaj(KartaWidok.WybierzKarte(osoba));
                         break;
                     case 2:
                         KartaWidok.DodajKarta(centrum, osoba);
@@ -95,8 +97,6 @@ namespace POInterfejs
                 }
             }
         }
-
-        private static readonly string osobaHeader = $"Numer{"Imie",25}{"Nazwisko",25}{"Ilość kart",25}{"Ilość kont",25}";
 
         public static void DodajOsobe(Centrum centrum)
         {
