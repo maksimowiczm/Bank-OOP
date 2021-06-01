@@ -19,6 +19,15 @@ namespace POProjekt
         public IList<Firma> Firmy => firmy.AsReadOnly();
         public IList<Bank> Banki => banki.AsReadOnly();
 
+        public Karta GetKarta(int numer)
+        {
+            foreach (var bank in Banki)
+                foreach (var karta in bank.Karty)
+                    if (numer == karta.Numer)
+                        return karta;
+            throw new KartaNieIstnieje(null, this);
+        }
+
         public Centrum() : this(new List<Transakcja>(), new List<Osoba>(), new List<Firma>(), new List<Bank>()) { }
 
         public Centrum(List<Transakcja> transakcje, List<Osoba> osoby, List<Firma> firmy, List<Bank> banki)
