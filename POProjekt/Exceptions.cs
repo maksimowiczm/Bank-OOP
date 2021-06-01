@@ -29,7 +29,11 @@ namespace POProjekt
         }
     }
 
-    public class DeserializacjaException<T> : WczytwanieZapisException
+    public abstract class DeserializacjaException : WczytwanieZapisException
+    {
+        protected DeserializacjaException(string sciezka) : base(sciezka) { }
+    }
+    public class DeserializacjaException<T> : DeserializacjaException
     {
         public readonly object obj;
         private Dictionary<int, T> dic;
