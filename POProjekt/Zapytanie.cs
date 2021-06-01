@@ -12,7 +12,7 @@ namespace POProjekt
         public Karta Karta { get; init; }
         public DateTime? Data { get; init; }
         public decimal? Kwota { get; init; }
-        
+
         public Zapytanie() : this(null, null, null, null, null, null, null) { }
         public Zapytanie(string pytanie, Osoba osoba, Firma firma, Bank bank, Karta karta, DateTime? data, decimal? kwota)
         {
