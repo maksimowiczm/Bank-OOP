@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace POProjekt
+﻿namespace POProjekt
 {
     public abstract class Karta
     {
@@ -9,8 +7,8 @@ namespace POProjekt
         public readonly Bank Bank;
         public readonly Osoba Osoba;
         public readonly int Numer;
+        public abstract decimal Saldo { get; }
 
-        [JsonConstructor]
         protected Karta(Bank bank, Osoba osoba, int numer)
         {
             Bank = bank;
@@ -18,6 +16,7 @@ namespace POProjekt
             Numer = numer;
             iloscKart++;
         }
+
         protected Karta(Bank bank, Osoba osoba) : this(bank, osoba, iloscKart) { }
 
         /// <summary> Sprawdza czy podana kwota jest dodatnia. </summary>
@@ -27,10 +26,15 @@ namespace POProjekt
                 throw new KwotaException(kwota);
             return true;
         }
+
         public abstract void Wplac(decimal kwota);
+
         public abstract bool Wyplac(decimal kwota);
 
         public abstract void Zapisz(string dir);
-        public override bool Equals(object? obj) => obj is Karta druga && druga.Numer == Numer;
+
+        public override bool Equals(object obj) => obj is Karta druga && druga.Numer == Numer;
+
+        public override string ToString() => $"{Numer,10} {Osoba.ToString("s"),26}";
     }
 }

@@ -6,6 +6,7 @@ namespace POProjekt
     public class Debetowa : Karta
     {
         public readonly Konto Konto;
+        public override decimal Saldo => Konto.Saldo;
 
         public Debetowa(Bank bank, Osoba osoba, Konto konto, int numer) : base(bank, osoba, numer)
         {
@@ -54,11 +55,15 @@ namespace POProjekt
                 BankHash = debetowa.Bank.GetHashCode();
             }
         }
+
         public override void Zapisz(string dir)
         {
             var json = JsonConvert.SerializeObject(new DebetowaJson(this), Json.JsonSerializerSettings);
             File.WriteAllText($"{dir}/debetowa/{GetHashCode()}.json", json);
         }
+
         public static DebetowaJson Wczytaj(string dir) => JsonConvert.DeserializeObject<DebetowaJson>(File.ReadAllText(dir));
+
+        public override string ToString() => $"{base.ToString()} {Konto.Saldo,10}";
     }
 }
