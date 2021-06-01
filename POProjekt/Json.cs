@@ -7,7 +7,7 @@ namespace POProjekt
     {
         public static JsonSerializerSettings JsonSerializerSettings = new()
         {
-            Formatting = Formatting.Indented,
+            Formatting = Formatting.None,
         };
 
         public readonly int Hash;

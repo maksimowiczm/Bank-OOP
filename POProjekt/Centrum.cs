@@ -184,20 +184,20 @@ namespace POProjekt
         public void DodajBank(Bank bank) => banki.Add(bank);
 
         /// <summary> Wczytuje centrum z dysku. </summary>
-        /// <param name="nazwa"> Nazwa folderu. </param>
+        /// <param name="nazwa"> Nazwa pliku. </param>
         public static Centrum Wczytaj(string nazwa)
         {
             wczytywanie = true;
-            var json = "";
+            Zapis zapis;
             try
             {
-                json = File.ReadAllText($"{nazwa}.json");
+                var json = File.ReadAllText($"{nazwa}.json");
+                zapis = JsonConvert.DeserializeObject<Zapis>(json);
             }
             catch (Exception)
             {
                 throw new WczytwanieZapisException(nazwa);
             }
-            var zapis = JsonConvert.DeserializeObject<Zapis>(json);
 
             var kontoDic = zapis.Konta.ToDictionary(o => o.Hash, o => o);
             var debetowaDic = zapis.Debetowe.ToDictionary(o => o.Hash, o => o);
@@ -285,7 +285,7 @@ namespace POProjekt
         }
 
         /// <summary> Zapisuje całe centrum na dysk. </summary>
-        /// <param name="nazwa">Nazwa folderu do którego ma zostać zapisane centrum.</param>
+        /// <param name="nazwa">Nazwa pliku do którego ma zostać zapisane centrum.</param>
         public bool Zapisz(string nazwa)
         {
             var zapis = new Zapis()
@@ -303,9 +303,9 @@ namespace POProjekt
                 foreach (var karta in bank.Karty)
                 {
                     if (karta.GetType() == typeof(Kredytowa))
-                        zapis.Kredytowe.Add((karta as Kredytowa).makeJson());
+                        zapis.Kredytowe.Add((karta as Kredytowa)?.makeJson());
                     else
-                        zapis.Debetowe.Add((karta as Debetowa).makeJson());
+                        zapis.Debetowe.Add((karta as Debetowa)?.makeJson());
                 }
 
                 foreach (var konto in bank.Konta)
