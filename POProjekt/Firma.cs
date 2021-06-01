@@ -82,6 +82,7 @@ namespace POProjekt
             }
         }
 
+        public FirmaJson makeJson() => new FirmaJson(this);
         public void Zapisz(string dir)
         {
             var json = JsonConvert.SerializeObject(new FirmaJson(this), Json.JsonSerializerSettings);

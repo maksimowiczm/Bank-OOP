@@ -56,6 +56,7 @@ namespace POProjekt
             }
         }
 
+        public DebetowaJson makeJson() => new DebetowaJson(this);
         public override void Zapisz(string dir)
         {
             var json = JsonConvert.SerializeObject(new DebetowaJson(this), Json.JsonSerializerSettings);

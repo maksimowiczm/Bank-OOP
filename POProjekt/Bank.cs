@@ -130,6 +130,7 @@ namespace POProjekt
             }
         }
 
+        public BankJson makeJson() => new BankJson(this);
         public void Zapisz(string dir)
         {
             var json = JsonConvert.SerializeObject(new BankJson(this), Json.JsonSerializerSettings);

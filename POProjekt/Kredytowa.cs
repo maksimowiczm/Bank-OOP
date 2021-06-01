@@ -73,6 +73,8 @@ namespace POProjekt
             }
         }
 
+        public KredytowaJson makeJson() => new KredytowaJson(this);
+
         public override void Zapisz(string dir)
         {
             var json = JsonConvert.SerializeObject(new KredytowaJson(this), Json.JsonSerializerSettings);
