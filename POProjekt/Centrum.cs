@@ -288,42 +288,20 @@ namespace POProjekt
         /// <param name="nazwa">Nazwa folderu do którego ma zostać zapisane centrum.</param>
         public bool Zapisz(string nazwa)
         {
-            var paths = new Dictionary<string, string>()
-            {
-                {"kartyPath", $"{nazwa}/karty"},
-                {"kontaPath", $"{nazwa}/konta"},
-                {"bankiPath", $"{nazwa}/banki"},
-                {"osobyPath", $"{nazwa}/osoby"},
-                {"firmyPath", $"{nazwa}/firmy"},
-            };
-
-            //Usuwanie plikow i folderów jeśli już istnieją
-            if (Directory.Exists(nazwa))
-                Directory.Delete(nazwa, true);
-
-            foreach (var pathsValue in paths.Values)
-            {
-                Directory.CreateDirectory(pathsValue);
-            }
-
-            Directory.CreateDirectory($"{paths["kartyPath"]}/debetowa");
-            Directory.CreateDirectory($"{paths["kartyPath"]}/kredytowa");
-
             var zapis = new Zapis()
             {
-                Banki = new(),
-                Osoby = new(),
-                Firmy = new(),
-                Kredytowe = new(),
-                Debetowe = new(),
-                Konta = new(),
+                Banki = banki.Select(b => b.makeJson()).ToList(),
+                Osoby = osoby.Select(b => b.makeJson()).ToList(),
+                Firmy = firmy.Select(b => b.makeJson()).ToList(),
+                Kredytowe = new List<Kredytowa.KredytowaJson>(),
+                Debetowe = new List<Debetowa.DebetowaJson>(),
+                Konta = new List<Konto.KontoJson>(),
             };
 
             foreach (var bank in banki)
             {
                 foreach (var karta in bank.Karty)
                 {
-                    karta.Zapisz(paths["kartyPath"]);
                     if (karta.GetType() == typeof(Kredytowa))
                         zapis.Kredytowe.Add((karta as Kredytowa).makeJson());
                     else
@@ -331,31 +309,10 @@ namespace POProjekt
                 }
 
                 foreach (var konto in bank.Konta)
-                {
-                    konto.Zapisz(paths["kontaPath"]);
                     zapis.Konta.Add(konto.makeJson());
-                }
-
-                bank.Zapisz(paths["bankiPath"]);
-                zapis.Banki.Add(bank.makeJson());
             }
 
-            foreach (var osoba in osoby)
-            {
-                osoba.Zapisz(paths["osobyPath"]);
-                zapis.Osoby.Add(osoba.makeJson());
-            }
-
-            foreach (var firma in firmy)
-            {
-                firma.Zapisz(paths["firmyPath"]);
-                zapis.Firmy.Add(firma.makeJson());
-            }
             zapis.Zapisz($"{nazwa}.json");
-
-            var transakcjeJson = transakcje.Select(transakcja => transakcja.Json()).Cast<object>().ToList();
-            File.WriteAllText($"{nazwa}/czytelneTransakcje.json", JsonConvert.SerializeObject(transakcjeJson, Json.JsonSerializerSettings));
-
             return true;
         }
     }
