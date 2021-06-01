@@ -54,11 +54,15 @@ namespace POProjekt
                 BankHash = debetowa.Bank.GetHashCode();
             }
         }
+
         public override void Zapisz(string dir)
         {
             var json = JsonConvert.SerializeObject(new DebetowaJson(this), Json.JsonSerializerSettings);
             File.WriteAllText($"{dir}/debetowa/{GetHashCode()}.json", json);
         }
+
         public static DebetowaJson Wczytaj(string dir) => JsonConvert.DeserializeObject<DebetowaJson>(File.ReadAllText(dir));
+
+        public override string ToString() => $"{base.ToString()} {Konto.Saldo,10}";
     }
 }

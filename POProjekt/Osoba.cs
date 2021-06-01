@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace POProjekt
         }
 
         private bool mojaKarta(Karta karta) => karty.Contains(karta);
+
         /// <summary> Jeśli podana karta należy do tej osoby dodaje ją do list kart. </summary>
         public bool DodajKarte(Karta karta)
         {
@@ -33,6 +35,7 @@ namespace POProjekt
             return true;
 
         }
+
         public bool UsunKarte(Karta karta)
         {
             if (!mojaKarta(karta)) throw new KartaNieIstnieje(karta, this);
@@ -43,7 +46,17 @@ namespace POProjekt
 
         public override bool Equals(object obj) => obj is Osoba druga && druga.Imie == Imie && druga.Nazwisko == Nazwisko;
 
-        public override string ToString() => $"{Imie,25}{Nazwisko,25}{karty.Count,25}{konta.Count,25}";
+        public override string ToString() => ToString("s");
+
+        public string ToString(string type)
+        {
+            return type switch
+            {
+                "f" => $"{Imie,25}{Nazwisko,25}{karty.Count,25}{konta.Count,25}",
+                "s" => $"{Imie,10} {Nazwisko,15}",
+                _ => throw new Exception(type)
+            };
+        }
 
         public class OsobaJson : Json
         {
@@ -68,11 +81,13 @@ namespace POProjekt
                 Konta = osoba.konta.Select(konta => konta.GetHashCode()).ToList();
             }
         }
+
         public void Zapisz(string dir)
         {
             var json = JsonConvert.SerializeObject(new OsobaJson(this), Json.JsonSerializerSettings);
             File.WriteAllText($"{dir}/{GetHashCode()}.json", json);
         }
+
         public static OsobaJson Wczytaj(string dir) => JsonConvert.DeserializeObject<OsobaJson>(File.ReadAllText(dir));
     }
 }

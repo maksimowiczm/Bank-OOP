@@ -34,6 +34,7 @@ namespace POProjekt
             ZweryfikujKwote(kwota);
             Saldo += kwota;
         }
+
         public override bool Wyplac(decimal kwota)
         {
             if (!ZweryfikujKwote(kwota))
@@ -70,11 +71,15 @@ namespace POProjekt
                 OsobaHash = kredytowa.Osoba.GetHashCode();
             }
         }
+
         public override void Zapisz(string dir)
         {
             var json = JsonConvert.SerializeObject(new KredytowaJson(this), Json.JsonSerializerSettings);
             File.WriteAllText($"{dir}/kredytowa/{GetHashCode()}.json", json);
         }
+
         public static KredytowaJson Wczytaj(string dir) => JsonConvert.DeserializeObject<KredytowaJson>(File.ReadAllText(dir));
+
+        public override string ToString() => $"{base.ToString()} {Saldo,10} {Kredyt,10}";
     }
 }

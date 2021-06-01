@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.IO;
 
 namespace POProjekt
@@ -15,6 +16,7 @@ namespace POProjekt
             Bank = bank;
             Saldo = saldo;
         }
+
         public Konto(Bank bank, Klient klient) : this(bank, klient, 0) { }
 
         public void Wplac(decimal kwota)
@@ -22,6 +24,7 @@ namespace POProjekt
             if (kwota <= 0) throw new KwotaException(kwota);
             Saldo += kwota;
         }
+
         public bool Wyplac(decimal kwota)
         {
             if (kwota <= 0) throw new WyplacException(kwota);
@@ -50,11 +53,24 @@ namespace POProjekt
                 Saldo = obj.Saldo;
             }
         }
+
         public void Zapisz(string dir)
         {
             var json = JsonConvert.SerializeObject(new KontoJson(this), Json.JsonSerializerSettings);
             File.WriteAllText($"{dir}/{GetHashCode()}.json", json);
         }
         public static KontoJson Wczytaj(string dir) => JsonConvert.DeserializeObject<KontoJson>(File.ReadAllText(dir));
+
+        public override string ToString() => ToString("s");
+
+        public string ToString(string type)
+        {
+            return type switch
+            {
+                "f" => $"{Klient,25} {Saldo,10}",
+                "s" => $"{Saldo,10}",
+                _ => throw new Exception(type)
+            };
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -24,6 +25,7 @@ namespace POProjekt
             if (Centrum.wczytywanie)
                 konta.Add(konto);
         }
+
         private bool mojeKonto(Konto konto) => konta.Contains(konto);
 
         /// <summary> Tworzy nowe konto dla podanego klienta, dodaje je do swojej listy kont i list kont klienta. </summary>
@@ -96,7 +98,17 @@ namespace POProjekt
 
         public override bool Equals(object obj) => obj is Bank drugi && drugi.Nazwa == Nazwa;
 
-        public override string ToString() => $"{Nazwa,25} {karty.Count,25} {konta.Count,25}";
+        public override string ToString() => ToString("f");
+
+        public string ToString(string type)
+        {
+            return type switch
+            {
+                "f" => $"{Nazwa,25} {karty.Count,25} {konta.Count,25}",
+                "s" => $"{Nazwa,10}",
+                _ => throw new Exception(type)
+            };
+        }
 
         public class BankJson : Json
         {
@@ -117,11 +129,13 @@ namespace POProjekt
                 Konta = bank.konta.Select(konto => konto.GetHashCode()).ToList();
             }
         }
+
         public void Zapisz(string dir)
         {
             var json = JsonConvert.SerializeObject(new BankJson(this), Json.JsonSerializerSettings);
             File.WriteAllText($"{dir}/{GetHashCode()}.json", json);
         }
+
         public static BankJson Wczytaj(string dir) => JsonConvert.DeserializeObject<BankJson>(File.ReadAllText(dir));
     }
 }

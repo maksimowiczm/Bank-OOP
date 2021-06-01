@@ -50,7 +50,17 @@ namespace POProjekt
 
         public override bool Equals(object obj) => obj is Firma druga && druga.Nazwa == Nazwa;
 
-        public override string ToString() => $"{Nazwa,25}{Kategoria,25}{konta[0].Bank.Nazwa,25}{konta[0].Saldo,25}";
+        public override string ToString() => ToString("s");
+
+        public string ToString(string type)
+        {
+            return type switch
+            {
+                "f" => $"{Nazwa,15} {Kategoria,15} {konta[0].Bank.Nazwa,15} {konta[0].ToString("s"),10}",
+                "s" => $"{Nazwa,10} {Kategoria,15}",
+                _ => throw new Exception(type)
+            };
+        }
 
         public class FirmaJson : Json
         {
@@ -58,7 +68,7 @@ namespace POProjekt
             public readonly string Kategoria;
             public readonly List<int> Konta;
             [JsonConstructor]
-            public FirmaJson(string nazwa, string kategoria, List<int> karty, List<int> konta, int hash) : base(hash)
+            public FirmaJson(string nazwa, string kategoria, List<int> konta, int hash) : base(hash)
             {
                 Nazwa = nazwa;
                 Kategoria = kategoria;
@@ -71,11 +81,13 @@ namespace POProjekt
                 Konta = firma.konta.Select(konta => konta.GetHashCode()).ToList();
             }
         }
+
         public void Zapisz(string dir)
         {
             var json = JsonConvert.SerializeObject(new FirmaJson(this), Json.JsonSerializerSettings);
             File.WriteAllText($"{dir}/{GetHashCode()}.json", json);
         }
+
         public static FirmaJson Wczytaj(string dir) => JsonConvert.DeserializeObject<FirmaJson>(File.ReadAllText(dir));
     }
 }
