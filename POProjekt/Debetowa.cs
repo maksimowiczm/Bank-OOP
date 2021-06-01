@@ -6,6 +6,7 @@ namespace POProjekt
     public class Debetowa : Karta
     {
         public readonly Konto Konto;
+        public override decimal Saldo => Konto.Saldo;
 
         public Debetowa(Bank bank, Osoba osoba, Konto konto, int numer) : base(bank, osoba, numer)
         {

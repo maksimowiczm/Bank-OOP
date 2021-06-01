@@ -7,7 +7,8 @@ namespace POProjekt
     public class Kredytowa : Karta
     {
         public readonly decimal Kredyt;
-        public decimal Saldo { get; private set; }
+        private decimal saldo;
+        public override decimal Saldo => saldo;
 
         public Kredytowa(Bank bank, Osoba osoba, decimal kredyt, decimal saldo, int numer) : base(bank, osoba, numer)
         {
@@ -16,7 +17,7 @@ namespace POProjekt
             if (saldo < -kredyt)
                 throw new Exception("Za niskie saldo");
             Kredyt = kredyt;
-            Saldo = saldo;
+            this.saldo = saldo;
         }
 
         public Kredytowa(Bank bank, Osoba osoba, decimal kredyt) : this(bank, osoba, kredyt, 0) { }
@@ -26,13 +27,13 @@ namespace POProjekt
             if (kredyt <= 0)
                 throw new UjemnyKredyt(kredyt);
             Kredyt = kredyt;
-            Saldo = saldo;
+            this.saldo = saldo;
         }
 
         public override void Wplac(decimal kwota)
         {
             ZweryfikujKwote(kwota);
-            Saldo += kwota;
+            saldo += kwota;
         }
 
         public override bool Wyplac(decimal kwota)
@@ -41,7 +42,7 @@ namespace POProjekt
                 throw new KwotaException(kwota);
             if (Saldo - kwota < -Kredyt) throw new WyplacException(kwota);
 
-            Saldo -= kwota;
+            saldo -= kwota;
             return true;
         }
 
