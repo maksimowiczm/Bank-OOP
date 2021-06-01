@@ -7,6 +7,7 @@
         public readonly Bank Bank;
         public readonly Osoba Osoba;
         public readonly int Numer;
+        public abstract decimal Saldo { get; }
 
         protected Karta(Bank bank, Osoba osoba, int numer)
         {
