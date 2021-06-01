@@ -69,6 +69,7 @@ namespace POProjekt
             {
                 "f" => $"{Klient,25} {Saldo,10}",
                 "s" => $"{Saldo,10}",
+                "b" => $"{Saldo,10} {Bank.ToString("s"),15}",
                 _ => throw new Exception(type)
             };
         }
