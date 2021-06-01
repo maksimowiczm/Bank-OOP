@@ -54,6 +54,8 @@ namespace POProjekt
             }
         }
 
+        public KontoJson makeJson() => new KontoJson(this);
+
         public void Zapisz(string dir)
         {
             var json = JsonConvert.SerializeObject(new KontoJson(this), Json.JsonSerializerSettings);

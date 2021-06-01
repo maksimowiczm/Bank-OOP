@@ -187,38 +187,25 @@ namespace POProjekt
         /// <param name="nazwa"> Nazwa folderu. </param>
         public static Centrum Wczytaj(string nazwa)
         {
-            if (!Directory.Exists(nazwa))
-                throw new WczytwanieZapisException(nazwa);
-
             wczytywanie = true;
-            //ścieżki do folderów z plikami.
-            string debetowaPath = $"{nazwa}/karty/debetowa",
-                kredytowaPath = $"{nazwa}/karty/kredytowa",
-                kontaPath = $"{nazwa}/konta",
-                bankiPath = $"{nazwa}/banki",
-                osobyPath = $"{nazwa}/osoby",
-                firmyPath = $"{nazwa}/firmy";
+            var json = "";
+            try
+            {
+                json = File.ReadAllText($"{nazwa}.json");
+            }
+            catch (Exception)
+            {
+                throw new WczytwanieZapisException(nazwa);
+            }
+            var zapis = JsonConvert.DeserializeObject<Zapis>(json);
 
-            //Wczytywanie obiektów z hashami.
-            var konta = Directory.GetFiles(kontaPath);
-            var kontoDic = konta.ToDictionary(s => Konto.Wczytaj(s).Hash, Konto.Wczytaj);
+            var kontoDic = zapis.Konta.ToDictionary(o => o.Hash, o => o);
+            var debetowaDic = zapis.Debetowe.ToDictionary(o => o.Hash, o => o);
+            var kredytowaDic = zapis.Kredytowe.ToDictionary(o => o.Hash, o => o);
+            var bankDic = zapis.Banki.ToDictionary(o => o.Hash, o => o);
+            var osobaDic = zapis.Osoby.ToDictionary(o => o.Hash, o => o);
+            var firmaDic = zapis.Firmy.ToDictionary(o => o.Hash, o => o);
 
-            var debetowe = Directory.GetFiles(debetowaPath);
-            var debetowaDic = debetowe.ToDictionary(s => Debetowa.Wczytaj(s).Hash, Debetowa.Wczytaj);
-
-            var kredytowe = Directory.GetFiles(kredytowaPath);
-            var kredytowaDic = kredytowe.ToDictionary(s => Kredytowa.Wczytaj(s).Hash, Kredytowa.Wczytaj);
-
-            var banki = Directory.GetFiles(bankiPath);
-            var bankDic = banki.ToDictionary(s => Bank.Wczytaj(s).Hash, Bank.Wczytaj);
-
-            var osoby = Directory.GetFiles(osobyPath);
-            var osobaDic = osoby.ToDictionary(s => Osoba.Wczytaj(s).Hash, Osoba.Wczytaj);
-
-            var firmy = Directory.GetFiles(firmyPath);
-            var firmaDic = firmy.ToDictionary(s => Firma.Wczytaj(s).Hash, Firma.Wczytaj);
-
-            //Zamiana hashy w obiektu odpowiedniego typu.
             var bankiObj = bankDic.Values.ToDictionary(bank => bank.Hash, bank => new Bank(bank.Nazwa));
             var osobyObj = osobaDic.Values.ToDictionary(osoba => osoba.Hash, osoba => new Osoba(osoba.Imie, osoba.Nazwisko));
             var firmyObj = firmaDic.Values.ToDictionary(firma => firma.Hash, firma => new Firma(firma.Nazwa, firma.Kategoria, new Centrum()));
@@ -233,8 +220,10 @@ namespace POProjekt
                     Klient klient;
                     if (firmyObj.ContainsKey(konto.KlientHash))
                         klient = firmyObj[konto.KlientHash];
-                    else
+                    else if (osobyObj.ContainsKey(konto.KlientHash))
                         klient = osobyObj[konto.KlientHash];
+                    else
+                        throw new Exception();
 
                     var realKonto = new Konto(bank, klient, konto.Saldo);
                     klient.DodajKonto(realKonto);
@@ -292,52 +281,38 @@ namespace POProjekt
 
             wczytywanie = false;
             return centrum;
+            throw new NotImplementedException();
         }
 
         /// <summary> Zapisuje całe centrum na dysk. </summary>
         /// <param name="nazwa">Nazwa folderu do którego ma zostać zapisane centrum.</param>
         public bool Zapisz(string nazwa)
         {
-            var paths = new Dictionary<string, string>()
+            var zapis = new Zapis()
             {
-                {"kartyPath", $"{nazwa}/karty"},
-                {"kontaPath", $"{nazwa}/konta"},
-                {"bankiPath", $"{nazwa}/banki"},
-                {"osobyPath", $"{nazwa}/osoby"},
-                {"firmyPath", $"{nazwa}/firmy"},
+                Banki = banki.Select(b => b.makeJson()).ToList(),
+                Osoby = osoby.Select(b => b.makeJson()).ToList(),
+                Firmy = firmy.Select(b => b.makeJson()).ToList(),
+                Kredytowe = new List<Kredytowa.KredytowaJson>(),
+                Debetowe = new List<Debetowa.DebetowaJson>(),
+                Konta = new List<Konto.KontoJson>(),
             };
-
-            //Usuwanie plikow i folderów jeśli już istnieją
-            if (Directory.Exists(nazwa))
-                Directory.Delete(nazwa, true);
-
-            foreach (var pathsValue in paths.Values)
-            {
-                Directory.CreateDirectory(pathsValue);
-            }
-
-            Directory.CreateDirectory($"{paths["kartyPath"]}/debetowa");
-            Directory.CreateDirectory($"{paths["kartyPath"]}/kredytowa");
 
             foreach (var bank in banki)
             {
                 foreach (var karta in bank.Karty)
-                    karta.Zapisz(paths["kartyPath"]);
+                {
+                    if (karta.GetType() == typeof(Kredytowa))
+                        zapis.Kredytowe.Add((karta as Kredytowa).makeJson());
+                    else
+                        zapis.Debetowe.Add((karta as Debetowa).makeJson());
+                }
 
                 foreach (var konto in bank.Konta)
-                    konto.Zapisz(paths["kontaPath"]);
-
-                bank.Zapisz(paths["bankiPath"]);
+                    zapis.Konta.Add(konto.makeJson());
             }
-            foreach (var osoba in osoby)
-                osoba.Zapisz(paths["osobyPath"]);
 
-            foreach (var firma in firmy)
-                firma.Zapisz(paths["firmyPath"]);
-
-            var transakcjeJson = transakcje.Select(transakcja => transakcja.Json()).Cast<object>().ToList();
-            File.WriteAllText($"{nazwa}/czytelneTransakcje.json", JsonConvert.SerializeObject(transakcjeJson, Json.JsonSerializerSettings));
-
+            zapis.Zapisz($"{nazwa}.json");
             return true;
         }
     }

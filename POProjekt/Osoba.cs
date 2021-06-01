@@ -82,6 +82,7 @@ namespace POProjekt
             }
         }
 
+        public OsobaJson makeJson() => new OsobaJson(this);
         public void Zapisz(string dir)
         {
             var json = JsonConvert.SerializeObject(new OsobaJson(this), Json.JsonSerializerSettings);
