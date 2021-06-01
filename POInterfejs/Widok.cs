@@ -1,7 +1,7 @@
-﻿using System;
+﻿using POProjekt;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using POProjekt;
 
 namespace POInterfejs
 {
@@ -119,7 +119,7 @@ namespace POInterfejs
         }
         public static void ZrealizujTransakcje(Centrum centrum)
         {
-            if(!WeryfikujCentrum(centrum))
+            if (!WeryfikujCentrum(centrum))
                 return;
             Console.Clear();
             Console.WriteLine("Wybierz firmę do transakcji");
@@ -356,7 +356,7 @@ namespace POInterfejs
 
         public static void WyswietlBank(Centrum centrum)
         {
-            if(!MenuWidok.WeryfikujCentrum(centrum))
+            if (!MenuWidok.WeryfikujCentrum(centrum))
                 return;
             Console.WriteLine("Podaj numer banku, który chcesz wyświetlić");
             var wybor = 0;
@@ -521,7 +521,7 @@ namespace POInterfejs
                 "Zarządzaj kartami",
                 "Powrót",
             };
-            
+
             Console.WriteLine("Podaj numer osoby, którą chcesz wyświetlić");
 
             var wybor = 0;
@@ -665,7 +665,7 @@ namespace POInterfejs
         {
             if (!MenuWidok.WeryfikujCentrum(centrum))
                 return;
-            
+
             Console.WriteLine("Podaj numer firmy, którą chcesz wyświetlić");
             var wybor = 0;
             var firma = WybierzFirme(centrum, ref wybor);
