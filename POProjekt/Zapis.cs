@@ -12,7 +12,7 @@ namespace POProjekt
         public List<Bank.BankJson> Banki { get; init; }
         public List<Osoba.OsobaJson> Osoby { get; init; }
         public List<Firma.FirmaJson> Firmy { get; init; }
-        public List<Transakcja.TransakcjaJson> Transakcje { get; init; }
+        public List<Transakcja> Transakcje { get; init; }
 
         public void Zapisz(string plik)
         {

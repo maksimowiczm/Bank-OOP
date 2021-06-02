@@ -106,6 +106,7 @@ namespace POProjekt
             {
                 "f" => $"{Nazwa,25} {karty.Count,25} {konta.Count,25}",
                 "s" => $"{Nazwa,10}",
+                "j" => Nazwa,
                 _ => throw new Exception(type)
             };
         }

@@ -9,57 +9,41 @@ namespace POProjekt
         public readonly int Id;
         public readonly DateTime Data;
         public readonly bool Sukces;
-        public readonly Bank Bank;
-        public readonly Firma Firma;
-        public readonly Osoba Osoba;
-        public readonly Karta Karta;
         public readonly decimal Kwota;
+        public readonly string BankOsoby;
+        public readonly string Osoba;
+        public readonly string BankFirmy;
+        public readonly string Firma;
+        public readonly int Karta;
 
-        public Transakcja(int id, DateTime data, bool sukces, Bank bank, Firma firma, Osoba osoba, Karta karta, decimal kwota)
+        [JsonConstructor]
+        public Transakcja(int id, DateTime data, bool sukces, decimal kwota, string bankOsoby, string osoba, string bankFirmy, string firma, int karta)
         {
             Id = id;
             ilosc++;
             Data = data;
             Sukces = sukces;
-            Bank = bank;
-            Firma = firma;
-            Osoba = osoba;
-            Karta = karta;
             Kwota = kwota;
+            BankOsoby = bankOsoby;
+            Osoba = osoba;
+            BankFirmy = bankFirmy;
+            Firma = firma;
+            Karta = karta;
         }
-        public Transakcja(DateTime data, bool sukces, Bank bank, Firma firma, Osoba osoba, Karta karta, decimal kwota)
-            : this(ilosc, data, sukces, bank, firma, osoba, karta, kwota) { }
 
-        public class TransakcjaJson
+        public Transakcja(DateTime data, bool sukces, decimal kwota, Firma firma, Osoba osoba, Karta karta)
         {
-            public int id;
-            public string data;
-            public bool sukces;
-            public decimal kwota;
-            public string bankOsoby;
-            public string osoba;
-            public string bankFirmy;
-            public string firma;
-            public int karta;
+            Id = ilosc++;
+            Data = data;
+            Sukces = sukces;
+            Kwota = kwota;
+            BankOsoby = karta.Bank.Nazwa;
+            Osoba = osoba.ToString("j");
+            BankFirmy = firma.Konta[0].Bank.Nazwa;
+            Firma = firma.Nazwa;
+            Karta = karta.Numer;
+        }
 
-            public TransakcjaJson(int id, string data, bool sukces, decimal kwota, Osoba osoba, Firma firma, Karta karta)
-            {
-                this.id = id;
-                this.data = data;
-                this.sukces = sukces;
-                this.kwota = kwota;
-                bankOsoby = karta.Bank.Nazwa;
-                this.osoba = osoba.Imie + osoba.Nazwisko;
-                bankFirmy = firma.Konta[0].Bank.Nazwa;
-                this.firma = firma.Nazwa;
-                this.karta = karta.Numer;
-            }
-        }
-        public TransakcjaJson makeJson() => new(Id, Data.ToString("G"), Sukces, Kwota, Osoba, Firma, Karta);
-        public override string ToString()
-        {
-            var TrasakcjaJson = new TransakcjaJson(Id, Data.ToString("G"), Sukces, Kwota, Osoba, Firma, Karta);
-            return JsonConvert.SerializeObject(TrasakcjaJson, Formatting.Indented);
-        }
+        public override string ToString() => JsonConvert.SerializeObject(this, Formatting.Indented);
     }
 }

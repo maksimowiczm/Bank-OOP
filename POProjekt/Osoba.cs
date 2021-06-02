@@ -54,6 +54,7 @@ namespace POProjekt
             {
                 "f" => $"{Imie,25}{Nazwisko,25}{karty.Count,25}{konta.Count,25}",
                 "s" => $"{Imie,10} {Nazwisko,15}",
+                "j" => $"{Imie} {Nazwisko}",
                 "b" => $"{Imie,25} {Nazwisko,15}",
                 _ => throw new Exception(type)
             };

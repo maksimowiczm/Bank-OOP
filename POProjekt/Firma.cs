@@ -58,6 +58,7 @@ namespace POProjekt
             {
                 "f" => $"{Nazwa,25} {Kategoria,15} {konta[0].Bank.Nazwa,15} {konta[0].ToString("s"),10}",
                 "s" => $"{Nazwa,10} {Kategoria,15}",
+                "j" => Nazwa,
                 "b" => $"{Nazwa,25} {Kategoria,15}",
                 _ => throw new Exception(type)
             };
