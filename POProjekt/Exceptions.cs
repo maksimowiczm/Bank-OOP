@@ -6,16 +6,16 @@ namespace POProjekt
     public class ZapytanieException : Exception
     {
         public readonly string Pytanie;
-        public readonly object cos;
+        public readonly object Cos;
 
         public ZapytanieException(string pytanie)
         {
             Pytanie = pytanie;
         }
-        public ZapytanieException(string pytanie, object cos)
+        public ZapytanieException(Zapytanie zapytanie) : this(zapytanie.Pytanie)
         {
-            Pytanie = pytanie;
-            this.cos = cos;
+            Pytanie = zapytanie.Pytanie;
+            Cos = zapytanie;
         }
     }
 
