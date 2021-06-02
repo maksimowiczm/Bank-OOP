@@ -13,14 +13,16 @@ namespace POInterfejs
             "Powrót",
         };
 
-        public static readonly string KartaHeader =
-            $"{"Typ karty",9} {"Numer",10} {"Imie",10} {"Nazwisko",15} {"Saldo",10} Maksymalny kredyt";
+        public static readonly string KartaHeader = $"{"Typ karty",9} {"Numer",10} {"Imie",10} {"Nazwisko",15} {"Saldo",10} Maksymalny kredyt";
+        public static readonly string KartaHeaderS = $"{"Numer",10} {"Imie",10} {"Nazwisko",15} {"Saldo",10} Maksymalny kredyt";
 
         public static void Zarzadzaj(Karta karta)
         {
             var wybor = 0;
             while (wybor != zarzadzajKarta.Length)
             {
+                Console.WriteLine(KartaHeaderS);
+                Console.WriteLine(karta);
                 Widok.Wyswietl(zarzadzajKarta);
                 if (!int.TryParse(Console.ReadLine(), out wybor))
                     continue;
@@ -56,11 +58,12 @@ namespace POInterfejs
             while (wybor is < 1 or > 2)
                 int.TryParse(Console.ReadLine(), out wybor);
 
-            Console.WriteLine("Wybierz bank dla karty");
-            var bank = BankWidok.WybierzBank(centrum);
+            var bank = new Bank("");
             switch (wybor)
             {
                 case 1:
+                    Console.WriteLine("Wybierz bank dla karty");
+                    bank = BankWidok.WybierzBank(centrum);
                     Console.WriteLine("Podaj maksymalny kredyt");
                     decimal kredyt;
                     while (!decimal.TryParse(Console.ReadLine(), out kredyt)) { }
@@ -68,13 +71,13 @@ namespace POInterfejs
                     bank.StworzKarteKredytowa(osoba, kredyt);
                     break;
                 case 2:
-                    Console.WriteLine("Wybierz konto karty");
-                    var konto = KontoWidok.WybierzKonto(osoba);
+                    Console.WriteLine("Najpierw stwórz konto");
+                    var konto = KontoWidok.DodajKonto(centrum, osoba, ref bank);
                     bank.StworzKarteDebetowa(osoba, konto);
                     break;
             }
-
             Console.WriteLine("Karta stworzona");
+            Console.Read();
             Console.Read();
         }
 

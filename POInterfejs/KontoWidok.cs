@@ -47,6 +47,15 @@ namespace POInterfejs
             }
         }
 
+        public static Konto DodajKonto(Centrum centrum, Klient klient, ref Bank bank)
+        {
+            Console.Clear();
+            Console.WriteLine("Wybierz bank dla nowego konta");
+            bank = BankWidok.WybierzBank(centrum);
+            Console.WriteLine("Konto stworzone");
+            Console.Read();
+            return bank.StworzKonto(klient);
+        }
         public static void DodajKonto(Centrum centrum, Klient klient)
         {
             Console.Clear();
