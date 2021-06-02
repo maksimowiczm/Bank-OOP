@@ -81,16 +81,16 @@ namespace POInterfejs
             Console.WriteLine(KartaWidok.KartaHeader);
             foreach (var karta in bank.Karty)
             {
-                var typ = karta.GetType() == typeof(Kredytowa) ? "kredytowa" : "debetowa";
+                var typ = karta.GetType() == typeof(Kredytowa) ? "Kredytowa" : "Debetowa";
                 Console.WriteLine($"{typ,9} {karta}");
             }
 
             Console.WriteLine("\nKonta");
-            Console.WriteLine($"{"Klient",32} {"Saldo",10}");
+            Console.WriteLine($"typ   {"Klient",41} {"Saldo",10}");
             foreach (var konto in bank.Konta)
             {
-                var klient = konto.Klient.GetType() == typeof(Firma) ? "firma" : "osoba";
-                Console.WriteLine($"{klient,5} {konto.ToString("f")}");
+                var klient = konto.Klient.GetType() == typeof(Firma) ? "Firma" : "Osoba";
+                Console.WriteLine($"{klient,5} {konto.ToString("B")}");
             }
 
             Console.Read();
