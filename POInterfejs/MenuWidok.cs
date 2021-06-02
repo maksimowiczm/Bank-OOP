@@ -77,6 +77,13 @@ namespace POInterfejs
             Console.WriteLine("Wybierz osobę do transakcji");
             var osoba = OsobaWidok.WybierzOsobe(centrum);
 
+            if (osoba.Karty.Count == 0)
+            {
+                Console.WriteLine("Osoba nie posiada kart");
+                Console.Read();
+                return;
+            }
+
             Console.Clear();
             Console.WriteLine("Podaj Kwotę transakcji");
             decimal kwota;
