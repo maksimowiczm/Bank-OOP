@@ -47,22 +47,22 @@ namespace POProjekt
 
             var bank = karta.Bank;
             var sukces = bank.RealizujTransakcje(karta, kwota);
-            var transakcja = new Transakcja(DateTime.Now, sukces, bank, firma, karta.Osoba, karta, kwota);
+            var transakcja = new Transakcja(DateTime.Now, sukces, kwota, firma, karta.Osoba, karta);
             transakcje.Add(transakcja);
             return sukces;
         }
 
-        /// <summary> Dzieli podany string (wyrazy odzielone spacją) na Listę stringów. "osoba and karta and firma" => {osoba, and, karta, and, firma}. </summary>
         private static List<string> Podziel(string zapytanie)
         {
             var lista = new List<string>();
+
             var wyraz = "";
             zapytanie = zapytanie.ToLower();
             foreach (var ch in zapytanie.Where(ch => ch != ' '))
             {
                 wyraz += ch;
                 if (wyraz.Length > 5)
-                    throw new ZapytanieException(zapytanie, wyraz);
+                    throw new ZapytanieException(zapytanie);
                 switch (wyraz)
                 {
                     case "osoba":
@@ -79,104 +79,68 @@ namespace POProjekt
                 }
             }
 
-            //sprawdza czy zapytanie jest dobrze połączone and/or
-            for (var i = 0; i < lista.Count; i++)
+            return lista;
+        }
+
+        private List<Transakcja> Znajdz(string s, List<Transakcja> lista, Zapytanie req)
+        {
+            var nowaLista = new List<Transakcja>();
+            switch (s)
             {
-                if (i % 2 == 1)
-                    switch (lista[i])
-                    {
-                        case "and":
-                        case "or":
-                            continue;
-                        default:
-                            throw new ZapytanieException(zapytanie, lista);
-                    }
-                switch (lista[i])
-                {
-                    case "osoba":
-                    case "firma":
-                    case "bank":
-                    case "data":
-                    case "kwota":
-                    case "karta":
-                        continue;
-                    default:
-                        throw new ZapytanieException(zapytanie, lista);
-                }
+                case "osoba":
+                    nowaLista.AddRange(lista.Where(t => t.Osoba == req.Osoba.ToString("j")));
+                    break;
+                case "firma":
+                    nowaLista.AddRange(lista.Where(t => t.Firma == req.Firma.ToString("j")));
+                    break;
+                case "bank":
+                    nowaLista.AddRange(lista.Where(t => t.BankOsoby == req.Bank.ToString("j")));
+                    nowaLista.AddRange(lista.Where(t => t.BankFirmy == req.Bank.ToString("j")));
+                    break;
+                case "data":
+                    var data = req.Data ?? throw new ZapytanieException(req);
+                    nowaLista.AddRange(lista.Where(t =>
+                        t.Data.Day == data.Day && t.Data.Month == data.Month && t.Data.Year == data.Year));
+                    break;
+                case "kwota":
+                    nowaLista.AddRange(lista.Where(t => t.Kwota == req.Kwota));
+                    break;
+                case "karta":
+                    nowaLista.AddRange(lista.Where(t => t.Karta == req.Karta.Numer));
+                    break;
             }
 
-            return lista;
+            return nowaLista;
         }
-
-        /// <summary> Zwraca listę transakcji, które posiadają podany obiekt. </summary>
-        private static List<Transakcja> Znajdz(object obj, List<Transakcja> transakcje)
-        {
-            var lista = new List<Transakcja>();
-
-            lista.AddRange(transakcje.Where(t => t.Osoba.Equals(obj)));
-            lista.AddRange(transakcje.Where(t => t.Firma.Equals(obj)));
-            lista.AddRange(transakcje.Where(t => t.Bank.Equals(obj)));
-            lista.AddRange(transakcje.Where(t => t.Karta.Equals(obj)));
-            lista.AddRange(transakcje.Where(t => obj is DateTime data && (t.Data.Day == data.Day && t.Data.Month == data.Month && t.Data.Year == data.Year)));
-            lista.AddRange(transakcje.Where(t => t.Kwota.Equals(obj)));
-
-            return lista;
-        }
-
-        /// <summary> Zamienia podanego stringa w obiekt z Zapytania. </summary>
-        private static object Obiektuj(string wyraz, Zapytanie req)
-        {
-            return wyraz switch
-            {
-                "osoba" => req.Osoba,
-                "firma" => req.Firma,
-                "bank" => req.Bank,
-                "data" => req.Data,
-                "kwota" => req.Kwota,
-                "karta" => req.Karta,
-                _ => throw new ZapytanieException(req.Pytanie)
-            };
-        }
-
-        /// <summary> Zamienia Listę stringów w pary. Pomija pierwszy element. Używana do zaawansowanego Zapytania. { osoba, and, klient, or, firma } => { (and, klient), (or, firma) } </summary>
-        private static List<Pair> Paruj(List<string> zapytanie, Zapytanie req)
-        {
-            var pary = new List<Pair>();
-            for (var i = 2; i < zapytanie.Count; i += 2)
-                pary.Add(new Pair(zapytanie[i - 1], Obiektuj(zapytanie[i], req)));
-
-            return pary;
-        }
-
-        /// <summary> Znajduje i zwraca listę transakcji, które spełniają podane warunki. </summary>
         public List<Transakcja> ZnajdzTransakcje(Zapytanie req)
         {
-            var zapytanie = Podziel(req.Pytanie);
+            var zapytanieStrings = Podziel(req.Pytanie);
+            var aktualneTransakcje = Znajdz(zapytanieStrings[0], transakcje, req);
 
-            //Tworzy początkową listę transakcji na podstawie pierwszego wyrazu z zapytania.
-            var obj = Obiektuj(zapytanie[0], req);
-            var lista = Znajdz(obj, transakcje);
 
-            if (zapytanie.Count <= 2) return lista;
-
-            var pary = Paruj(zapytanie, req);
-            foreach (var pair in pary)
+            for (var i = 2; i <= zapytanieStrings.Count; i += 2)
             {
-                //W zależności od połączenia zapytania (or/and) dodaje transakcje do listy.
-                switch (pair.Andor)
+                var s = zapytanieStrings[i - 1];
+                switch (s)
                 {
-                    case "or":
-                        lista.AddRange(Znajdz(pair.Obj, transakcje));
-                        break;
                     case "and":
-                        lista = Znajdz(pair.Obj, lista);
+                        aktualneTransakcje = Znajdz(zapytanieStrings[i], aktualneTransakcje, req);
                         break;
+                    case "or":
+                        aktualneTransakcje.AddRange(Znajdz(zapytanieStrings[i], transakcje, req));
+                        break;
+                    default:
+                        throw new ZapytanieException(req);
                 }
-                //Usuwa duplikaty transakcji z listy.
-                lista = lista.Distinct().ToList();
+
+                if (transakcje.Count == 0)
+                    return aktualneTransakcje;
             }
 
-            return lista;
+            aktualneTransakcje = aktualneTransakcje.Distinct().ToList();
+
+
+            return aktualneTransakcje;
         }
 
         public void DodajOsobe(Osoba osoba) => osoby.Add(osoba);
@@ -274,7 +238,7 @@ namespace POProjekt
             var listBanki = bankiObj.Values.ToList();
             var listFirmy = firmyObj.Values.ToList();
 
-            var centrum = new Centrum(new List<Transakcja>(), listOsoby, listFirmy, listBanki);
+            var centrum = new Centrum(zapis.Transakcje, listOsoby, listFirmy, listBanki);
             //Wstawienie odpowiedniego centrum do firmy
             foreach (var firma in centrum.firmy)
                 firma.Centrum = centrum;
@@ -293,7 +257,7 @@ namespace POProjekt
                 Banki = banki.Select(b => b.makeJson()).ToList(),
                 Osoby = osoby.Select(b => b.makeJson()).ToList(),
                 Firmy = firmy.Select(b => b.makeJson()).ToList(),
-                Transakcje = transakcje.Select(t => t.makeJson()).ToList(),
+                Transakcje = transakcje,
                 Kredytowe = new List<Kredytowa.KredytowaJson>(),
                 Debetowe = new List<Debetowa.DebetowaJson>(),
                 Konta = new List<Konto.KontoJson>(),
