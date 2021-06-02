@@ -67,7 +67,7 @@ namespace POInterfejs
 
             if (!stworzone.Any(b => b)) return true;
 
-            Console.WriteLine($"Najpierw stwórz {(stworzone[0] ? "bank" : "")} {(stworzone[1] ? "osobę" : "")} {(stworzone[2] ? "firmę" : "")}");
+            Console.WriteLine($"Najpierw stwórz: {(stworzone[0] ? "bank/" : "")}{(stworzone[1] ? "osobę/" : "")}{(stworzone[2] ? "firmę" : "")}");
             Console.Read();
             return false;
         }
