@@ -13,9 +13,9 @@ namespace POProjekt
         public Kredytowa(Bank bank, Osoba osoba, decimal kredyt, decimal saldo, int numer) : base(bank, osoba, numer)
         {
             if (kredyt <= 0)
-                throw new Exception("Niedodatni kredyt");
+                throw new UjemnyKredyt(kredyt);
             if (saldo < -kredyt)
-                throw new Exception("Za niskie saldo");
+                throw new KwotaException(saldo);
             Kredyt = kredyt;
             this.saldo = saldo;
         }
