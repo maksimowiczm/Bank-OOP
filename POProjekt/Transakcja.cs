@@ -15,7 +15,6 @@ namespace POProjekt
         public readonly Karta Karta;
         public readonly decimal Kwota;
 
-        [JsonConstructor]
         public Transakcja(int id, DateTime data, bool sukces, Bank bank, Firma firma, Osoba osoba, Karta karta, decimal kwota)
         {
             Id = id;
@@ -49,14 +48,14 @@ namespace POProjekt
                 this.data = data;
                 this.sukces = sukces;
                 this.kwota = kwota;
-                this.bankOsoby = karta.Bank.Nazwa;
+                bankOsoby = karta.Bank.Nazwa;
                 this.osoba = osoba.Imie + osoba.Nazwisko;
                 bankFirmy = firma.Konta[0].Bank.Nazwa;
                 this.firma = firma.Nazwa;
                 this.karta = karta.Numer;
             }
         }
-        public TransakcjaJson Json() => new(Id, Data.ToString("G"), Sukces, Kwota, Osoba, Firma, Karta);
+        public TransakcjaJson makeJson() => new(Id, Data.ToString("G"), Sukces, Kwota, Osoba, Firma, Karta);
         public override string ToString()
         {
             var TrasakcjaJson = new TransakcjaJson(Id, Data.ToString("G"), Sukces, Kwota, Osoba, Firma, Karta);
