@@ -13,19 +13,20 @@ namespace POProjekt
         public DateTime? Data { get; init; }
         public decimal? Kwota { get; init; }
 
-        public Zapytanie() : this(null, null, null, null, null, null, null) { }
-        public Zapytanie(string pytanie, Osoba osoba, Firma firma, Bank bank, Karta karta, DateTime? data, decimal? kwota)
+        private List<object> objects = new List<object>();
+        public IList<object> Objects => objects.AsReadOnly();
+
+        public Zapytanie()
         {
-            Pytanie = pytanie;
-            Osoba = osoba;
-            Firma = firma;
-            Bank = bank;
-            Karta = karta;
-            Data = data;
-            Kwota = kwota;
+            objects.Add(Osoba);
+            objects.Add(Firma);
+            objects.Add(Bank);
+            objects.Add(Karta);
+            objects.Add(Data);
+            objects.Add(Kwota);
         }
 
-        public Zapytanie(string pytanie, IEnumerable<object> obj)
+        public Zapytanie(string pytanie, List<object> obj)
         {
             Pytanie = pytanie;
             foreach (var o in obj)
@@ -52,6 +53,8 @@ namespace POProjekt
                         break;
                 }
             }
+
+            objects = obj;
         }
     }
 }
