@@ -11,7 +11,7 @@ namespace POInterfejs
             "Zarządzanie bankami",
             "Zarządzanie osobami",
             "Zarządzanie firmami",
-            "Zarządzanie trasakcjami",
+            "Zarządzanie transakcjami",
             "Zrealizuj transakcję",
             "Zapisz",
             "Wyjdz",
