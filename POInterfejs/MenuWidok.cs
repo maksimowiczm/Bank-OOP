@@ -93,6 +93,8 @@ namespace POInterfejs
             var wybor = 0;
             while (wybor is < 1 or > 2)
                 int.TryParse(Console.ReadLine(), out wybor);
+            if (wybor == 2)
+                return;
 
             var sukces = firma.PoprosOAutoryzacje(karta, kwota);
             Console.WriteLine($"Transakcja{(sukces ? "" : " nie")} udana.");
