@@ -134,7 +134,6 @@ namespace POInterfejs
 
             while (wybor != typy.Length)
             {
-                times++;
                 Console.WriteLine(pytanie);
                 Widok.WyswietlIndex(typy);
 
@@ -146,6 +145,14 @@ namespace POInterfejs
                     Console.Write("Nie można użyć pustego zapytania");
                     throw new Exception();
                 }
+                if (done[wybor - 1])
+                {
+                    Console.WriteLine($@"Nie możesz użyć ""{typy[wybor - 1]}"" drugi raz");
+                    Console.Read();
+                    Console.Clear();
+                    continue;
+                }
+                times++;
                 pytanie += typy[wybor - 1];
                 done[wybor - 1] = true;
                 zapytanieObiekty.Add(GetObject(centrum, wybor));
@@ -165,7 +172,7 @@ namespace POInterfejs
                 Console.Clear();
             }
 
-            throw new ZapytanieException(pytanie, new Zapytanie(pytanie, zapytanieObiekty));
+            throw new ZapytanieException(pytanie);
         }
 
         public static void ZnajdzTransakcje(Centrum centrum)
@@ -174,6 +181,7 @@ namespace POInterfejs
             var zapytanie = GetZapytanie(centrum);
             var transakcje = centrum.ZnajdzTransakcje(zapytanie);
             Console.Clear();
+            Console.WriteLine("Znalezione transakcje: ");
             Widok.Wyswietl(transakcje.Select(transakcja => transakcja.ToString()));
             Console.Read();
         }
