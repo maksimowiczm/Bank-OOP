@@ -63,8 +63,6 @@ namespace POProjekt
             File.WriteAllText($"{dir}/debetowa/{GetHashCode()}.json", json);
         }
 
-        public static DebetowaJson Wczytaj(string dir) => JsonConvert.DeserializeObject<DebetowaJson>(File.ReadAllText(dir));
-
-        public override string ToString() => $"{base.ToString()} {Konto.Saldo,10}";
+        public static DebetowaJson Wczytaj(string dir) => JsonConvert.DeserializeObject<DebetowaJson>(File.ReadAllText(dir))
     }
 }

@@ -83,6 +83,6 @@ namespace POProjekt
 
         public static KredytowaJson Wczytaj(string dir) => JsonConvert.DeserializeObject<KredytowaJson>(File.ReadAllText(dir));
 
-        public override string ToString() => $"{base.ToString()} {Saldo,10} {Kredyt,10}";
+        public override string ToString() => $"{base.ToString()} {Kredyt,10}";
     }
 }

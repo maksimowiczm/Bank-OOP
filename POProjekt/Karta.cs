@@ -35,6 +35,6 @@
 
         public override bool Equals(object obj) => obj is Karta druga && druga.Numer == Numer;
 
-        public override string ToString() => $"{Numer,10} {Osoba.ToString("s"),26}";
+        public override string ToString() => $"{Numer,10} {Osoba.ToString("s"),26} {Saldo,10}";
     }
 }
