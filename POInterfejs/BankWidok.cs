@@ -20,7 +20,7 @@ namespace POInterfejs
             while (wybor != zarzadzanieBankami.Length)
             {
                 Console.Clear();
-                Widok.Wyswietl(zarzadzanieBankami);
+                Widok.WyswietlIndex(zarzadzanieBankami);
                 if (!int.TryParse(Console.ReadLine(), out wybor)) continue;
 
                 Console.Clear();

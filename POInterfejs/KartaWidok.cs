@@ -23,7 +23,7 @@ namespace POInterfejs
             {
                 Console.WriteLine(KartaHeaderS);
                 Console.WriteLine(karta);
-                Widok.Wyswietl(zarzadzajKarta);
+                Widok.WyswietlIndex(zarzadzajKarta);
                 if (!int.TryParse(Console.ReadLine(), out wybor))
                     continue;
 
@@ -53,7 +53,7 @@ namespace POInterfejs
         {
             Console.Clear();
             Console.WriteLine("Wybierz typ karty");
-            Widok.Wyswietl(new[] { "Kredytowa", "Debetowa", });
+            Widok.WyswietlIndex(new[] { "Kredytowa", "Debetowa", });
             var wybor = 0;
             while (wybor is < 1 or > 2)
                 int.TryParse(Console.ReadLine(), out wybor);
@@ -85,7 +85,7 @@ namespace POInterfejs
         {
             Console.WriteLine($"   {KartaHeader}");
 
-            Widok.Wyswietl(osoba.Karty.Select(karta => $"{(karta.GetType() == typeof(Debetowa) ? "Debetowa" : "Kredytowa"),9} {karta}").ToList());
+            Widok.WyswietlIndex(osoba.Karty.Select(karta => $"{(karta.GetType() == typeof(Debetowa) ? "Debetowa" : "Kredytowa"),9} {karta}").ToList());
             var wybor = 0;
             while (wybor < 1 || wybor > osoba.Karty.Count)
                 int.TryParse(Console.ReadLine(), out wybor);

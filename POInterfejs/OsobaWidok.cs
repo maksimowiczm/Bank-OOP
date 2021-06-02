@@ -20,7 +20,7 @@ namespace POInterfejs
             while (wybor != zarzadzanieOsobami.Length)
             {
                 Console.Clear();
-                Widok.Wyswietl(zarzadzanieOsobami);
+                Widok.WyswietlIndex(zarzadzanieOsobami);
                 if (!int.TryParse(Console.ReadLine(), out wybor)) continue;
 
                 Console.Clear();
@@ -50,7 +50,7 @@ namespace POInterfejs
             while (wybor != zarzadzajKartmi.Length)
             {
                 Console.Clear();
-                Widok.Wyswietl(zarzadzajKartmi);
+                Widok.WyswietlIndex(zarzadzajKartmi);
                 if (!int.TryParse(Console.ReadLine(), out wybor))
                     continue;
 
@@ -81,7 +81,7 @@ namespace POInterfejs
             while (wybor != zarzadzajKontami.Length)
             {
                 Console.Clear();
-                Widok.Wyswietl(zarzadzajKontami);
+                Widok.WyswietlIndex(zarzadzajKontami);
                 if (!int.TryParse(Console.ReadLine(), out wybor))
                     continue;
 
@@ -171,7 +171,7 @@ namespace POInterfejs
 
 
                 Console.WriteLine('\n');
-                Widok.Wyswietl(opcje);
+                Widok.WyswietlIndex(opcje);
 
                 if (!int.TryParse(Console.ReadLine(), out srodek))
                     continue;

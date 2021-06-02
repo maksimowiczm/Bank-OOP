@@ -21,7 +21,7 @@ namespace POInterfejs
             var wybor = 0;
             while (wybor != zarzadzajKontem.Length)
             {
-                Widok.Wyswietl(zarzadzajKontem);
+                Widok.WyswietlIndex(zarzadzajKontem);
                 if (!int.TryParse(Console.ReadLine(), out wybor))
                     continue;
 
@@ -69,7 +69,7 @@ namespace POInterfejs
         {
             Console.WriteLine($"   {KontoHeader}");
 
-            Widok.Wyswietl(osoba.Konta.Select(konto => konto.ToString("b")).ToList());
+            Widok.WyswietlIndex(osoba.Konta.Select(konto => konto.ToString("b")).ToList());
             var wybor = 0;
             while (wybor < 1 || wybor > osoba.Karty.Count)
                 int.TryParse(Console.ReadLine(), out wybor);

@@ -89,7 +89,7 @@ namespace POInterfejs
 
             Console.Clear();
             Console.WriteLine("Realizuj transakcję");
-            Widok.Wyswietl(new string[] { "tak", "nie" });
+            Widok.WyswietlIndex(new string[] { "tak", "nie" });
             var wybor = 0;
             while (wybor is < 1 or > 2)
                 int.TryParse(Console.ReadLine(), out wybor);
@@ -111,7 +111,7 @@ namespace POInterfejs
             ZrealizujTransakcje(centrum, firma);
         }
 
-        public static void Wyswietl() => Widok.Wyswietl(menu);
+        public static void Wyswietl() => Widok.WyswietlIndex(menu);
 
         public static void Zapisz(Centrum centrum, string nazwa) => centrum.Zapisz(nazwa);
 

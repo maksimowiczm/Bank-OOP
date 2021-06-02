@@ -24,7 +24,7 @@ namespace POInterfejs
             while (wybor != startMenu.Length)
             {
                 Console.Clear();
-                Widok.Wyswietl(startMenu);
+                Widok.WyswietlIndex(startMenu);
                 int.TryParse(Console.ReadLine(), out wybor);
                 switch (wybor)
                 {

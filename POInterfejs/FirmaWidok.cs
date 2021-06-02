@@ -21,7 +21,7 @@ namespace POInterfejs
             while (wybor != zarzadzanieFirmami.Length)
             {
                 Console.Clear();
-                Widok.Wyswietl(zarzadzanieFirmami);
+                Widok.WyswietlIndex(zarzadzanieFirmami);
 
                 if (!int.TryParse(Console.ReadLine(), out wybor)) continue;
 
@@ -52,14 +52,14 @@ namespace POInterfejs
             var nazwa = Console.ReadLine();
 
             Console.WriteLine("Wybierz kategorię firmy");
-            Widok.Wyswietl(kategorie);
+            Widok.WyswietlIndex(kategorie);
             var kategoria = 0;
             while (kategoria is < 1 or > 3)
                 int.TryParse(Console.ReadLine(), out kategoria);
             var nowaFirma = new Firma(nazwa, kategorie[kategoria - 1], centrum);
 
             Console.WriteLine("Wybierz bank, w którym firma będzie posiadać konto");
-            Widok.Wyswietl(centrum.Banki.Select(bank => bank.ToString()).ToList());
+            Widok.WyswietlIndex(centrum.Banki.Select(bank => bank.ToString()).ToList());
             var bank = 0;
             while (bank < 1 || bank > centrum.Banki.Count)
                 int.TryParse(Console.ReadLine(), out bank);
@@ -113,9 +113,9 @@ namespace POInterfejs
                 Console.WriteLine($"{wybor,3}. {firma.ToString("f")}");
                 Console.WriteLine("Konto firmy");
                 Console.WriteLine($"   {KontoWidok.KontoHeader}");
-                Widok.Wyswietl(new string[] { firma.Konta[0].ToString("b") });
+                Widok.WyswietlIndex(new string[] { firma.Konta[0].ToString("b") });
 
-                Widok.Wyswietl(opcje);
+                Widok.WyswietlIndex(opcje);
                 if (!int.TryParse(Console.ReadLine(), out srodek))
                     continue;
 

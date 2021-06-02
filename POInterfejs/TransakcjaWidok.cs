@@ -26,7 +26,7 @@ namespace POInterfejs
                     return;
                 }
                 Console.Clear();
-                Widok.Wyswietl(zarzadzanieTransakcjami);
+                Widok.WyswietlIndex(zarzadzanieTransakcjami);
 
                 if (!int.TryParse(Console.ReadLine(), out wybor)) continue;
 
@@ -136,7 +136,7 @@ namespace POInterfejs
             {
                 times++;
                 Console.WriteLine(pytanie);
-                Widok.Wyswietl(typy);
+                Widok.WyswietlIndex(typy);
 
                 wybor = 0;
                 while (wybor < 1 || wybor > typy.Length)
@@ -155,7 +155,7 @@ namespace POInterfejs
 
                 wybor = 0;
                 Console.Clear();
-                Widok.Wyswietl(plus);
+                Widok.WyswietlIndex(plus);
                 while (wybor < 1 || wybor > plus.Length)
                     int.TryParse(Console.ReadLine(), out wybor);
 
@@ -174,7 +174,7 @@ namespace POInterfejs
             var zapytanie = GetZapytanie(centrum);
             var transakcje = centrum.ZnajdzTransakcje(zapytanie);
             Console.Clear();
-            Widok.Wyswietl(transakcje.Select(transakcja => transakcja.ToString()).ToList());
+            Widok.WyswietlIndex(transakcje.Select(transakcja => transakcja.ToString()).ToList());
             Console.Read();
         }
     }
