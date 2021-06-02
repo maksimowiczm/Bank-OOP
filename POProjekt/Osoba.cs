@@ -48,12 +48,13 @@ namespace POProjekt
 
         public override string ToString() => ToString("s");
 
-        public string ToString(string type)
+        public override string ToString(string type)
         {
             return type switch
             {
                 "f" => $"{Imie,25}{Nazwisko,25}{karty.Count,25}{konta.Count,25}",
                 "s" => $"{Imie,10} {Nazwisko,15}",
+                "b" => $"{Imie,25} {Nazwisko,15}",
                 _ => throw new Exception(type)
             };
         }

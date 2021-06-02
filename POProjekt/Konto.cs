@@ -70,6 +70,7 @@ namespace POProjekt
             return type switch
             {
                 "f" => $"{Klient,25} {Saldo,10}",
+                "B" => $"{Klient.ToString("b"),26} {Saldo,10}",
                 "s" => $"{Saldo,10}",
                 "b" => $"{Saldo,10} {Bank.ToString("s"),15}",
                 _ => throw new Exception(type)

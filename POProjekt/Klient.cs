@@ -30,5 +30,7 @@ namespace POProjekt
             konta.Remove(konto);
             return true;
         }
+
+        public abstract string ToString(string s);
     }
 }
