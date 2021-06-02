@@ -85,7 +85,7 @@ namespace POInterfejs
         {
             Console.WriteLine($"   {KartaHeader}");
 
-            Widok.Wyswietl(osoba.Karty.Select(karta => $"{(karta.GetType() == typeof(Debetowa) ? "debetowa" : "kredytowa"),9} {karta}").ToList());
+            Widok.Wyswietl(osoba.Karty.Select(karta => $"{(karta.GetType() == typeof(Debetowa) ? "Debetowa" : "Kredytowa"),9} {karta}").ToList());
             var wybor = 0;
             while (wybor < 1 || wybor > osoba.Karty.Count)
                 int.TryParse(Console.ReadLine(), out wybor);

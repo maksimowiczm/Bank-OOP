@@ -77,7 +77,7 @@ namespace POInterfejs
             Console.WriteLine(bankHeader);
             Console.WriteLine($"{wybor,3}. {bank}");
 
-            Console.WriteLine("\nKarty");
+            Console.WriteLine("\nKarty:");
             Console.WriteLine(KartaWidok.KartaHeader);
             foreach (var karta in bank.Karty)
             {
@@ -85,8 +85,8 @@ namespace POInterfejs
                 Console.WriteLine($"{typ,9} {karta}");
             }
 
-            Console.WriteLine("\nKonta");
-            Console.WriteLine($"typ   {"Klient",41} {"Saldo",10}");
+            Console.WriteLine("\nKonta:");
+            Console.WriteLine($"Typ   {"Klient",41} {"Saldo",10}");
             foreach (var konto in bank.Konta)
             {
                 var klient = konto.Klient.GetType() == typeof(Firma) ? "Firma" : "Osoba";
