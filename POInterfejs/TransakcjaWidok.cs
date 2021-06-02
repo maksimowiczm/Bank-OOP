@@ -174,7 +174,7 @@ namespace POInterfejs
             var zapytanie = GetZapytanie(centrum);
             var transakcje = centrum.ZnajdzTransakcje(zapytanie);
             Console.Clear();
-            Widok.WyswietlIndex(transakcje.Select(transakcja => transakcja.ToString()).ToList());
+            Widok.Wyswietl(transakcje.Select(transakcja => transakcja.ToString()));
             Console.Read();
         }
     }
