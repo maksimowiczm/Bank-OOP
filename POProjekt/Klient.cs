@@ -7,7 +7,7 @@ namespace POProjekt
         protected List<Konto> konta = new List<Konto>();
         public IList<Konto> Konta => konta.AsReadOnly();
 
-        public bool MojeKonto(Konto konto) => konta.Contains(konto);
+        public bool MojeKonto(Konto konto) => konta.Contains(konto) || konto.Klient == this;
         /// <summary>
         /// Dodaje konto jeśli jest tego klienta i nie ma już go na liście kont.
         /// </summary>
@@ -15,7 +15,7 @@ namespace POProjekt
         {
             if (konto.Klient != this)
                 throw new KontoNieIstnieje(konto, this);
-            if (MojeKonto(konto))
+            if (!MojeKonto(konto))
                 throw new KontoIstnieje(konto, this);
 
             konta.Add(konto);
