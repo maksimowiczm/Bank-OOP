@@ -17,6 +17,7 @@ namespace POInterfejs
             {
                 "Stwórz nowe centurm",
                 "Wczytaj istniejące centrum z pliku",
+                "Wczytaj autozapis",
                 "Wyjdź",
             };
             var wybor = 0;
@@ -34,24 +35,32 @@ namespace POInterfejs
                     case 2:
                         Console.WriteLine("Podaj nazwę pliku");
                         var plik = Console.ReadLine();
-                        try
-                        {
-                            centrum = Centrum.Wczytaj(plik);
-                            MenuWidok.Start(centrum);
-                        }
-                        catch (DeserializacjaException e)
-                        {
-                            Console.WriteLine("Krytyczny bład wczytywania");
-                            Console.WriteLine(e);
-                            Environment.Exit(1);
-                        }
-                        catch (WczytwanieZapisException)
-                        {
-                            Console.WriteLine("Bład wczytywania");
-                            Console.Read();
-                        }
+                        Wczytaj(centrum, plik);
+                        break;
+                    case 3:
+                        Wczytaj(centrum, "autozapis");
                         break;
                 }
+            }
+        }
+
+        private static void Wczytaj(Centrum centrum, string plik)
+        {
+            try
+            {
+                centrum = Centrum.Wczytaj(plik);
+                MenuWidok.Start(centrum);
+            }
+            catch (DeserializacjaException e)
+            {
+                Console.WriteLine("Krytyczny bład wczytywania");
+                Console.WriteLine(e);
+                Environment.Exit(1);
+            }
+            catch (WczytwanieZapisException)
+            {
+                Console.WriteLine("Bład wczytywania");
+                Console.Read();
             }
         }
     }

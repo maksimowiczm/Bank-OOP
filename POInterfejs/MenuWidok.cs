@@ -27,6 +27,9 @@ namespace POInterfejs
 
                 if (!int.TryParse(Console.ReadLine(), out wybor)) continue;
 
+                try { Zapisz(centrum, "autozapis"); }
+                catch (Exception e) { Console.WriteLine(e); }
+
                 switch (wybor)
                 {
                     case 1:
