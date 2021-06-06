@@ -23,7 +23,7 @@ namespace POProjekt
                 konta.Add(konto);
         }
 
-        private bool mojeKonto(Konto konto) => konto.Bank == this;
+        private bool mojeKonto(Konto konto) => konta.Contains(konto);
 
         /// <summary> Tworzy nowe konto dla podanego klienta, dodaje je do swojej listy kont i list kont klienta. </summary>
         /// <returns> Stworzone konto. </returns>
@@ -63,7 +63,7 @@ namespace POProjekt
             return karta;
         }
 
-        private bool mojaKarta(Karta karta) => karta.Bank == this;
+        private bool mojaKarta(Karta karta) => karty.Contains(karta) || karta.Bank == this;
 
         /// <summary> Używane tylko do wczytywania z pliku. Dodaje podaną kartę do listy kart w banku. </summary>
         public void DodajKarte(Karta karta)
