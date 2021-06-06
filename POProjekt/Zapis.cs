@@ -22,7 +22,7 @@ namespace POProjekt
     }
 
     /// <summary> Używana do zapisu/odczytu z dysku. </summary>
-    public class Json
+    public abstract class Json
     {
         public static JsonSerializerSettings JsonSerializerSettings = new()
         {
@@ -31,12 +31,12 @@ namespace POProjekt
 
         public readonly int Hash;
 
-        public Json(int hash)
+        protected Json(int hash)
         {
             Hash = hash;
         }
 
-        public Json(object obj)
+        protected Json(object obj)
         {
             Hash = obj.GetHashCode();
         }
