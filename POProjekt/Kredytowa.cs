@@ -40,7 +40,7 @@ namespace POProjekt
         {
             if (!ZweryfikujKwote(kwota))
                 throw new KwotaException(kwota);
-            if (Saldo - kwota < -Kredyt) throw new WyplacException(kwota);
+            if (Saldo - kwota < -Kredyt) return false;
 
             saldo -= kwota;
             return true;
