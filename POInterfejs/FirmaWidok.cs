@@ -13,7 +13,7 @@ namespace POInterfejs
             "Powrót",
         };
 
-        private static readonly string firmaHeader = $"Numer{"Nazwa",25} {"Kategoria",15} {"Bank firmy",15} {"Saldo",10}";
+        private static readonly string firmaHeader = $"Numer{"Nazwa",25} {"Kategoria",20} {"Bank firmy",15} {"Saldo",10}";
 
         public static void ZarzadzajFirma(Centrum centrum)
         {

@@ -37,7 +37,7 @@ namespace POProjekt
         {
             return type switch
             {
-                "f" => $"{Nazwa,25} {Kategoria,15} {konta[0].Bank.Nazwa,15} {konta[0].ToString("s"),10}",
+                "f" => $"{Nazwa,25} {Kategoria,20} {konta[0].Bank.Nazwa,15} {konta[0].ToString("s"),10}",
                 "s" => $"{Nazwa,10} {Kategoria,15}",
                 "j" => Nazwa,
                 "b" => $"{Nazwa,25} {Kategoria,15}",
