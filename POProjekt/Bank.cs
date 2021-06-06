@@ -1,8 +1,5 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace POProjekt
 {
@@ -38,16 +35,6 @@ namespace POProjekt
             return konto;
         }
 
-        /// <summary> Próbuje usunąć podane konto. </summary>
-        public bool UsunKonto(Konto konto)
-        {
-            if (!konta.Contains(konto) || !konto.Klient.UsunKonto(konto))
-                throw new KontoNieIstnieje(konto, this);
-
-            konta.Remove(konto);
-            return true;
-        }
-
         /// <summary>
         /// Tworzy nową kartę debetową jeśli podane konto należy do tego banku i osoby. Dodaje je do listy kart w banku i listy kart klienta.
         /// </summary>
@@ -76,22 +63,13 @@ namespace POProjekt
             return karta;
         }
 
+        private bool mojaKarta(Karta karta) => karty.Contains(karta) || karta.Bank == this;
+
         /// <summary> Używane tylko do wczytywania z pliku. Dodaje podaną kartę do listy kart w banku. </summary>
         public void DodajKarte(Karta karta)
         {
             if (Centrum.wczytywanie)
                 karty.Add(karta);
-        }
-
-        private bool mojaKarta(Karta karta) => karty.Contains(karta);
-
-        /// <summary> Próbuje usunąć podaną kartę. </summary>
-        public bool UsunKarte(Karta karta)
-        {
-            if (!mojaKarta(karta)) throw new KartaNieIstnieje(karta, this);
-            karty.Remove(karta);
-            karta.Osoba.UsunKarte(karta);
-            return true;
         }
 
         public bool RealizujTransakcje(Karta karta, decimal kwota) => mojaKarta(karta) && karta.Wyplac(kwota);
@@ -111,33 +89,6 @@ namespace POProjekt
             };
         }
 
-        public class BankJson : Json
-        {
-            public readonly string Nazwa;
-            public readonly List<int> Karty;
-            public readonly List<int> Konta;
-            [JsonConstructor]
-            public BankJson(string nazwa, List<int> karty, List<int> konta, int hash) : base(hash)
-            {
-                Nazwa = nazwa;
-                Karty = karty;
-                Konta = konta;
-            }
-            public BankJson(Bank bank) : base(bank)
-            {
-                Nazwa = bank.Nazwa;
-                Karty = bank.karty.Select(karta => karta.GetHashCode()).ToList();
-                Konta = bank.konta.Select(konto => konto.GetHashCode()).ToList();
-            }
-        }
-
         public BankJson makeJson() => new BankJson(this);
-        public void Zapisz(string dir)
-        {
-            var json = JsonConvert.SerializeObject(new BankJson(this), Json.JsonSerializerSettings);
-            File.WriteAllText($"{dir}/{GetHashCode()}.json", json);
-        }
-
-        public static BankJson Wczytaj(string dir) => JsonConvert.DeserializeObject<BankJson>(File.ReadAllText(dir));
     }
 }

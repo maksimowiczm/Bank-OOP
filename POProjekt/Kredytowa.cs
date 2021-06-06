@@ -45,43 +45,8 @@ namespace POProjekt
             saldo -= kwota;
             return true;
         }
-
-        public class KredytowaJson : Json
-        {
-            public readonly decimal Kredyt;
-            public readonly decimal Saldo;
-            public readonly int Numer;
-            public readonly int BankHash;
-            public readonly int OsobaHash;
-
-            [JsonConstructor]
-            public KredytowaJson(decimal kredyt, decimal saldo, int numer, int hash, int bankHash, int osobaHash) : base(hash)
-            {
-                Kredyt = kredyt;
-                Saldo = saldo;
-                Numer = numer;
-                BankHash = bankHash;
-                OsobaHash = osobaHash;
-            }
-            public KredytowaJson(Kredytowa kredytowa) : base(kredytowa)
-            {
-                Kredyt = kredytowa.Kredyt;
-                Saldo = kredytowa.Saldo;
-                Numer = kredytowa.Numer;
-                BankHash = kredytowa.Bank.GetHashCode();
-                OsobaHash = kredytowa.Osoba.GetHashCode();
-            }
-        }
-
+        
         public KredytowaJson makeJson() => new KredytowaJson(this);
-
-        public override void Zapisz(string dir)
-        {
-            var json = JsonConvert.SerializeObject(new KredytowaJson(this), Json.JsonSerializerSettings);
-            File.WriteAllText($"{dir}/kredytowa/{GetHashCode()}.json", json);
-        }
-
-        public static KredytowaJson Wczytaj(string dir) => JsonConvert.DeserializeObject<KredytowaJson>(File.ReadAllText(dir));
 
         public override string ToString() => $"{base.ToString()} {Kredyt,10}";
     }

@@ -21,15 +21,6 @@ namespace POProjekt
             konta.Add(konto);
             return true;
         }
-        /// <summary> Próbuje usunąć podane konto./// </summary>
-        public bool UsunKonto(Konto konto)
-        {
-            if (konto.Klient != this || !MojeKonto(konto))
-                throw new KontoNieIstnieje(konto, this);
-
-            konta.Remove(konto);
-            return true;
-        }
 
         public abstract string ToString(string s);
     }

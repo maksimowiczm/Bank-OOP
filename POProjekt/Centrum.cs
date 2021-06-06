@@ -49,7 +49,19 @@ namespace POProjekt
             var sukces = bank.RealizujTransakcje(karta, kwota);
             var transakcja = new Transakcja(DateTime.Now, sukces, kwota, firma, karta.Osoba, karta);
             transakcje.Add(transakcja);
-            return sukces;
+
+            if (!sukces) return false;
+
+            try
+            {
+                firma.Konta[0].Wplac(kwota);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                throw new FirmaException(firma, "Firma nie posiada konta");
+            }
+
+            return true;
         }
 
         private static List<string> Podziel(string zapytanie)
@@ -112,11 +124,11 @@ namespace POProjekt
 
             return nowaLista;
         }
+
         public List<Transakcja> ZnajdzTransakcje(Zapytanie req)
         {
             var zapytanieStrings = Podziel(req.Pytanie);
             var aktualneTransakcje = Znajdz(zapytanieStrings[0], transakcje, req);
-
 
             for (var i = 2; i <= zapytanieStrings.Count; i += 2)
             {
@@ -138,7 +150,6 @@ namespace POProjekt
             }
 
             aktualneTransakcje = aktualneTransakcje.Distinct().ToList();
-
 
             return aktualneTransakcje;
         }
@@ -196,7 +207,7 @@ namespace POProjekt
                 }
                 catch (Exception e)
                 {
-                    throw new DeserializacjaException<Konto.KontoJson>(nazwa, konto.KlientHash, kontoDic, e);
+                    throw new DeserializacjaException<KontoJson>(nazwa, konto.KlientHash, kontoDic, e);
                 }
             }
 
@@ -214,7 +225,7 @@ namespace POProjekt
                 }
                 catch (Exception e)
                 {
-                    throw new DeserializacjaException<Debetowa.DebetowaJson>(nazwa, debetowa, debetowaDic, e);
+                    throw new DeserializacjaException<DebetowaJson>(nazwa, debetowa, debetowaDic, e);
                 }
             }
             foreach (var kredytowa in kredytowaDic.Values)
@@ -229,7 +240,7 @@ namespace POProjekt
                 }
                 catch (Exception e)
                 {
-                    throw new DeserializacjaException<Kredytowa.KredytowaJson>(nazwa, kredytowa, kredytowaDic, e);
+                    throw new DeserializacjaException<KredytowaJson>(nazwa, kredytowa, kredytowaDic, e);
                 }
             }
 
@@ -245,7 +256,6 @@ namespace POProjekt
 
             wczytywanie = false;
             return centrum;
-            throw new NotImplementedException();
         }
 
         /// <summary> Zapisuje całe centrum na dysk. </summary>
@@ -258,9 +268,9 @@ namespace POProjekt
                 Osoby = osoby.Select(b => b.makeJson()).ToList(),
                 Firmy = firmy.Select(b => b.makeJson()).ToList(),
                 Transakcje = transakcje,
-                Kredytowe = new List<Kredytowa.KredytowaJson>(),
-                Debetowe = new List<Debetowa.DebetowaJson>(),
-                Konta = new List<Konto.KontoJson>(),
+                Kredytowe = new List<KredytowaJson>(),
+                Debetowe = new List<DebetowaJson>(),
+                Konta = new List<KontoJson>(),
             };
 
             foreach (var bank in banki)

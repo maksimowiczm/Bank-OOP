@@ -1,7 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.IO;
-
-namespace POProjekt
+﻿namespace POProjekt
 {
     public class Debetowa : Karta
     {
@@ -32,37 +29,6 @@ namespace POProjekt
             return Konto.Wyplac(kwota);
         }
 
-        public class DebetowaJson : Json
-        {
-            public readonly int KontoHash;
-            public readonly int Numer;
-            public readonly int OsobaHash;
-            public readonly int BankHash;
-
-            [JsonConstructor]
-            public DebetowaJson(int kontoHash, int numer, int osobaHash, int bankHash, int hash) : base(hash)
-            {
-                KontoHash = kontoHash;
-                OsobaHash = osobaHash;
-                BankHash = bankHash;
-                Numer = numer;
-            }
-            public DebetowaJson(Debetowa debetowa) : base(debetowa)
-            {
-                KontoHash = debetowa.Konto.GetHashCode();
-                Numer = debetowa.Numer;
-                OsobaHash = debetowa.Osoba.GetHashCode();
-                BankHash = debetowa.Bank.GetHashCode();
-            }
-        }
-
         public DebetowaJson makeJson() => new DebetowaJson(this);
-        public override void Zapisz(string dir)
-        {
-            var json = JsonConvert.SerializeObject(new DebetowaJson(this), Json.JsonSerializerSettings);
-            File.WriteAllText($"{dir}/debetowa/{GetHashCode()}.json", json);
-        }
-
-        public static DebetowaJson Wczytaj(string dir) => JsonConvert.DeserializeObject<DebetowaJson>(File.ReadAllText(dir));
     }
 }

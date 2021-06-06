@@ -31,8 +31,6 @@
 
         public abstract bool Wyplac(decimal kwota);
 
-        public abstract void Zapisz(string dir);
-
         public override bool Equals(object obj) => obj is Karta druga && druga.Numer == Numer;
 
         public override string ToString() => $"{Numer,10} {Osoba.ToString("s"),26} {Saldo,10}";
