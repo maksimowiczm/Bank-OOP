@@ -23,7 +23,7 @@ namespace POProjekt
                 konta.Add(konto);
         }
 
-        private bool mojeKonto(Konto konto) => konta.Contains(konto);
+        private bool mojeKonto(Konto konto) => konta.Contains(konto) || konto.Bank == this;
 
         /// <summary> Tworzy nowe konto dla podanego klienta, dodaje je do swojej listy kont i list kont klienta. </summary>
         /// <returns> Stworzone konto. </returns>
