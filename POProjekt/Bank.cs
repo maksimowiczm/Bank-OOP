@@ -63,7 +63,7 @@ namespace POProjekt
             return karta;
         }
 
-        private bool mojaKarta(Karta karta) => karty.Contains(karta) || karta.Bank == this;
+        private bool mojaKarta(Karta karta) => karty.Contains(karta);
 
         /// <summary> Używane tylko do wczytywania z pliku. Dodaje podaną kartę do listy kart w banku. </summary>
         public void DodajKarte(Karta karta)

@@ -16,8 +16,6 @@ namespace POProjekt
             Nazwisko = nazwisko;
         }
 
-        private bool mojaKarta(Karta karta) => karty.Contains(karta);
-
         /// <summary> Jeśli podana karta należy do tej osoby dodaje ją do list kart. </summary>
         public bool DodajKarte(Karta karta)
         {
