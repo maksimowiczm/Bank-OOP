@@ -267,7 +267,7 @@ namespace POProjekt
                 Banki = banki.Select(b => b.makeJson()).ToList(),
                 Osoby = osoby.Select(b => b.makeJson()).ToList(),
                 Firmy = firmy.Select(b => b.makeJson()).ToList(),
-                Transakcje = transakcje,
+                Transakcje = transakcje ?? new List<Transakcja>(),
                 Kredytowe = new List<KredytowaJson>(),
                 Debetowe = new List<DebetowaJson>(),
                 Konta = new List<KontoJson>(),
