@@ -1,0 +1,4 @@
+Newtonsoft.Json
+https://www.newtonsoft.com/json/help/html/SerializingJSON.htm
+
+Biblioteka zawiera różne klasy używane do serializacji i deserializacji json. Znacznie ułatwia zapis i odczyt obiektów na dysk.
