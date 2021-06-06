@@ -107,7 +107,7 @@ namespace POInterfejs
                 return;
 
             var sukces = firma.PoprosOAutoryzacje(karta, kwota);
-            Console.WriteLine($"Transakcja{(sukces ? "" : " nie")} udana.");
+            Console.WriteLine($"Transakcja {(sukces ? "" : " nie")}udana.");
             Console.WriteLine(centrum.Transakcje.Last().ToString());
             Console.Read();
         }
