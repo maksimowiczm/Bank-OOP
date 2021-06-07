@@ -7,6 +7,6 @@ Newtonsoft.Json
 https://www.newtonsoft.com/json/help/html/SerializingJSON.htm
 Biblioteka zawiera różne klasy używane do serializacji i deserializacji json. Znacznie ułatwia zapis i odczyt obiektów na dysk.
 
-Syste.IO
+System.IO
 https://docs.microsoft.com/en-us/dotnet/api/system.io.file?view=net-5.0
 Biblioteka zawiera różne klasy używane do zapisu i odczytu plików. Pozwala również na kontrolę folderów
