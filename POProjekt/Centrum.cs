@@ -174,6 +174,7 @@ namespace POProjekt
                 throw new WczytwanieZapisException(nazwa);
             }
 
+            //dic[hash] = obiektJson
             var kontoDic = zapis.Konta.ToDictionary(o => o.Hash, o => o);
             var debetowaDic = zapis.Debetowe.ToDictionary(o => o.Hash, o => o);
             var kredytowaDic = zapis.Kredytowe.ToDictionary(o => o.Hash, o => o);
@@ -181,6 +182,7 @@ namespace POProjekt
             var osobaDic = zapis.Osoby.ToDictionary(o => o.Hash, o => o);
             var firmaDic = zapis.Firmy.ToDictionary(o => o.Hash, o => o);
 
+            //dic[hash] = obiekt
             var bankiObj = bankDic.Values.ToDictionary(bank => bank.Hash, bank => new Bank(bank.Nazwa));
             var osobyObj = osobaDic.Values.ToDictionary(osoba => osoba.Hash, osoba => new Osoba(osoba.Imie, osoba.Nazwisko));
             var firmyObj = firmaDic.Values.ToDictionary(firma => firma.Hash, firma => new Firma(firma.Nazwa, firma.Kategoria, new Centrum()));
