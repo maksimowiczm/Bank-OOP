@@ -1,0 +1,360 @@
+{
+  "Kredytowe": [
+    {
+      "Kredyt": 9000.0,
+      "Saldo": 700.0,
+      "Numer": 3,
+      "BankHash": 40026340,
+      "OsobaHash": 24981566,
+      "Hash": 15832433
+    },
+    {
+      "Kredyt": 3000.0,
+      "Saldo": -200.0,
+      "Numer": 0,
+      "BankHash": 60429346,
+      "OsobaHash": 10232270,
+      "Hash": 64879470
+    },
+    {
+      "Kredyt": 3500.0,
+      "Saldo": 49999.0,
+      "Numer": 1,
+      "BankHash": 60429346,
+      "OsobaHash": 10232270,
+      "Hash": 47044325
+    },
+    {
+      "Kredyt": 1200.0,
+      "Saldo": 600.0,
+      "Numer": 10,
+      "BankHash": 60429346,
+      "OsobaHash": 25059790,
+      "Hash": 20745743
+    },
+    {
+      "Kredyt": 5000.0,
+      "Saldo": 19990.0,
+      "Numer": 12,
+      "BankHash": 60429346,
+      "OsobaHash": 24211521,
+      "Hash": 52493967
+    }
+  ],
+  "Debetowe": [
+    {
+      "KontoHash": 52136226,
+      "Numer": 5,
+      "OsobaHash": 24981566,
+      "BankHash": 60890569,
+      "Hash": 11144211
+    },
+    {
+      "KontoHash": 66572856,
+      "Numer": 6,
+      "OsobaHash": 24981566,
+      "BankHash": 60890569,
+      "Hash": 33189039
+    },
+    {
+      "KontoHash": 62284798,
+      "Numer": 8,
+      "OsobaHash": 10240961,
+      "BankHash": 60890569,
+      "Hash": 30265903
+    },
+    {
+      "KontoHash": 23692278,
+      "Numer": 9,
+      "OsobaHash": 25059790,
+      "BankHash": 60890569,
+      "Hash": 3957675
+    },
+    {
+      "KontoHash": 8274172,
+      "Numer": 4,
+      "OsobaHash": 24981566,
+      "BankHash": 40026340,
+      "Hash": 24692740
+    },
+    {
+      "KontoHash": 59182880,
+      "Numer": 11,
+      "OsobaHash": 24211521,
+      "BankHash": 40026340,
+      "Hash": 20908074
+    },
+    {
+      "KontoHash": 62883878,
+      "Numer": 14,
+      "OsobaHash": 10232270,
+      "BankHash": 40026340,
+      "Hash": 53954942
+    },
+    {
+      "KontoHash": 2683661,
+      "Numer": 2,
+      "OsobaHash": 10232270,
+      "BankHash": 60429346,
+      "Hash": 6993202
+    },
+    {
+      "KontoHash": 24152954,
+      "Numer": 7,
+      "OsobaHash": 23507505,
+      "BankHash": 60429346,
+      "Hash": 62938818
+    },
+    {
+      "KontoHash": 16049999,
+      "Numer": 13,
+      "OsobaHash": 25059790,
+      "BankHash": 60429346,
+      "Hash": 29578451
+    }
+  ],
+  "Konta": [
+    {
+      "Saldo": 2367.1,
+      "KlientHash": 16577099,
+      "BankHash": 60890569,
+      "Hash": 35619075
+    },
+    {
+      "Saldo": 32132132.0,
+      "KlientHash": 24981566,
+      "BankHash": 60890569,
+      "Hash": 52136226
+    },
+    {
+      "Saldo": 1.0,
+      "KlientHash": 24981566,
+      "BankHash": 60890569,
+      "Hash": 66572856
+    },
+    {
+      "Saldo": 100.0,
+      "KlientHash": 10240961,
+      "BankHash": 60890569,
+      "Hash": 62284798
+    },
+    {
+      "Saldo": 323.13,
+      "KlientHash": 25059790,
+      "BankHash": 60890569,
+      "Hash": 23692278
+    },
+    {
+      "Saldo": 985.0,
+      "KlientHash": 14976165,
+      "BankHash": 60890569,
+      "Hash": 11903911
+    },
+    {
+      "Saldo": 30321321.0,
+      "KlientHash": 24981566,
+      "BankHash": 40026340,
+      "Hash": 8274172
+    },
+    {
+      "Saldo": 10.1,
+      "KlientHash": 24981566,
+      "BankHash": 40026340,
+      "Hash": 7358688
+    },
+    {
+      "Saldo": 384.0,
+      "KlientHash": 10232270,
+      "BankHash": 40026340,
+      "Hash": 66228199
+    },
+    {
+      "Saldo": 60.0,
+      "KlientHash": 24211521,
+      "BankHash": 40026340,
+      "Hash": 59182880
+    },
+    {
+      "Saldo": 255.0,
+      "KlientHash": 10232270,
+      "BankHash": 40026340,
+      "Hash": 62883878
+    },
+    {
+      "Saldo": 2760.0,
+      "KlientHash": 567760,
+      "BankHash": 40026340,
+      "Hash": 29083993
+    },
+    {
+      "Saldo": 35123.0,
+      "KlientHash": 10232270,
+      "BankHash": 60429346,
+      "Hash": 2683661
+    },
+    {
+      "Saldo": 234688.0,
+      "KlientHash": 23507505,
+      "BankHash": 60429346,
+      "Hash": 24152954
+    },
+    {
+      "Saldo": 500.3,
+      "KlientHash": 25059790,
+      "BankHash": 60429346,
+      "Hash": 16049999
+    }
+  ],
+  "Banki": [
+    {
+      "Nazwa": "PKO",
+      "Karty": [11144211, 33189039, 30265903, 3957675],
+      "Konta": [35619075, 52136226, 66572856, 62284798, 23692278, 11903911],
+      "Hash": 60890569
+    },
+    {
+      "Nazwa": "BGż",
+      "Karty": [24692740, 20908074, 53954942, 15832433],
+      "Konta": [8274172, 7358688, 66228199, 59182880, 62883878, 29083993],
+      "Hash": 40026340
+    },
+    {
+      "Nazwa": "MONKAS",
+      "Karty": [6993202, 62938818, 29578451, 64879470, 47044325, 20745743, 52493967],
+      "Konta": [2683661, 24152954, 16049999],
+      "Hash": 60429346
+    }
+  ],
+  "Osoby": [
+    {
+      "Imie": "Mateusz",
+      "Nazwisko": "Kula",
+      "Karty": [53954942, 6993202, 64879470, 47044325],
+      "Konta": [66228199, 62883878, 2683661],
+      "Hash": 10232270
+    },
+    {
+      "Imie": "Anna ",
+      "Nazwisko": "Kot",
+      "Karty": [11144211, 33189039, 24692740, 15832433],
+      "Konta": [52136226, 66572856, 8274172, 7358688],
+      "Hash": 24981566
+    },
+    {
+      "Imie": "Władysław",
+      "Nazwisko": "Stokrotka",
+      "Karty": [62938818],
+      "Konta": [24152954],
+      "Hash": 23507505
+    },
+    {
+      "Imie": "Klaudia",
+      "Nazwisko": "Zawiasek",
+      "Karty": [30265903],
+      "Konta": [62284798],
+      "Hash": 10240961
+    },
+    {
+      "Imie": "Łukasz",
+      "Nazwisko": "Rzemiaiwa",
+      "Karty": [3957675, 29578451, 20745743],
+      "Konta": [23692278, 16049999],
+      "Hash": 25059790
+    },
+    {
+      "Imie": "Julia",
+      "Nazwisko": "Bruk",
+      "Karty": [20908074, 52493967],
+      "Konta": [59182880],
+      "Hash": 24211521
+    }
+  ],
+  "Firmy": [
+    {
+      "Nazwa": "Ogrodniki",
+      "Kategoria": "Firma transportowa",
+      "Konta": [35619075],
+      "Hash": 16577099
+    },
+    {
+      "Nazwa": "Rito",
+      "Kategoria": "Sklep",
+      "Konta": [11903911],
+      "Hash": 14976165
+    },
+    {
+      "Nazwa": "Macarionii",
+      "Kategoria": "Zakład usługowy",
+      "Konta": [29083993],
+      "Hash": 567760
+    }
+  ],
+  "Transakcje": [
+    {
+      "Id": 0,
+      "Data": "2021-05-06T16:26:29.4513215+02:00",
+      "Sukces": false,
+      "Kwota": 12312.0,
+      "BankOsoby": "MONKAS",
+      "Osoba": "Władysław Stokrotka",
+      "BankFirmy": "PKO",
+      "Firma": "Ogrodniki ",
+      "Karta": 7
+    },
+    {
+      "Id": 1,
+      "Data": "2021-05-06T16:37:40.3382106+02:00",
+      "Sukces": true,
+      "Kwota": 300.0,
+      "BankOsoby": "BGż",
+      "Osoba": "Anna  Kot",
+      "BankFirmy": "BGż",
+      "Firma": "Macarionii",
+      "Karta": 3
+    },
+    {
+      "Id": 2,
+      "Data": "2021-05-06T16:39:57.8370802+02:00",
+      "Sukces": true,
+      "Kwota": 312.0,
+      "BankOsoby": "MONKAS",
+      "Osoba": "Władysław Stokrotka",
+      "BankFirmy": "PKO",
+      "Firma": "Ogrodniki ",
+      "Karta": 7
+    },
+    {
+      "Id": 3,
+      "Data": "2021-06-06T16:41:07.8904956+02:00",
+      "Sukces": true,
+      "Kwota": 50.0,
+      "BankOsoby": "BGż",
+      "Osoba": "Mateusz Kula",
+      "BankFirmy": "BGż",
+      "Firma": "Macarionii",
+      "Karta": 14
+    },
+    {
+      "Id": 4,
+      "Data": "2021-06-06T16:41:35.8256149+02:00",
+      "Sukces": true,
+      "Kwota": 10.0,
+      "BankOsoby": "MONKAS",
+      "Osoba": "Julia Bruk",
+      "BankFirmy": "BGż",
+      "Firma": "Macarionii",
+      "Karta": 12
+    },
+    {
+      "Id": 5,
+      "Data": "2021-06-06T16:41:52.7915223+02:00",
+      "Sukces": true,
+      "Kwota": 2000.0,
+      "BankOsoby": "PKO",
+      "Osoba": "Łukasz Rzemiaiwa",
+      "BankFirmy": "PKO",
+      "Firma": "Ogrodniki ",
+      "Karta": 9
+    }
+  ]
+}
