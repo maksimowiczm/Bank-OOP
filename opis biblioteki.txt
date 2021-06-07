@@ -1,4 +1,5 @@
-Newtonsoft.Json
-https://www.newtonsoft.com/json/help/html/SerializingJSON.htm
+System.Linq
+https://docs.microsoft.com/pl-pl/dotnet/api/system.linq?view=net-5.0
+https://docs.microsoft.com/pl-pl/dotnet/api/system.linq.enumerable?view=net-5.0
 
-Biblioteka zawiera różne klasy używane do serializacji i deserializacji json. Znacznie ułatwia zapis i odczyt obiektów na dysk.
+Biblioteka zwiera różne klasy używanych do działań na listach. W programowanie używana jest głównie klasa Enumerable. Metody tej klasy ułatwiają wyszukiwanie konkretnych obiektów i łączenie ich w listy, tablice lub słowniki.
